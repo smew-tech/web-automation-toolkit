@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMEW Automation Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .action-card {
+            cursor: grab;
+            position: relative;
+        }
+
+        .action-card:active {
+            cursor: grabbing;
+        }
+
+        .action-card:hover::after {
+            content: attr(data-tooltip-text);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #334155;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        #canvas-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #canvas-container.panning,
+        #canvas-container.panning .workflow-node {
+            cursor: grabbing;
+        }
+
+        #canvas-container.pannable,
+        #canvas-container.pannable .workflow-node {
+            cursor: grab;
+        }
+
+        #transform-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-origin: 0 0;
+        }
+
+        #connection-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .connector-group>* {
+            pointer-events: all;
+        }
+
+        .connector-path {
+            stroke-width: 1.5px;
+            fill: none;
+            stroke-dasharray: 3 4;
+            cursor: pointer;
+        }
+
+        .connector-hitbox {
+            stroke: transparent;
+            stroke-width: 12px;
+            fill: none;
+            cursor: pointer;
+        }
+
+        .connector-path-temp {
+            stroke: #3b82f6;
+            /* blue-500 */
+            stroke-width: 2px;
+            stroke-dasharray: 4 4;
+            fill: none;
+            pointer-events: none;
+            transition: stroke 0.1s ease;
+        }
+
+        .connector-path-temp.valid-target {
+            stroke: #22c55e;
+        }
+
+        /* green-500 */
+        .connector-path-temp.invalid-target {
+            stroke: #ef4444;
+        }
+
+        /* red-500 */
+
+        .workflow-node {
+            position: absolute;
+            width: 220px;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            cursor: move;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .selected-node {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+        }
+
+        .node-header {
+            padding: 0.5rem 0.75rem;
+            font-weight: 600;
+        }
+
+        .node-content {
+            padding: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .node-port {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background-color: white;
+            border: 2px solid #94a3b8;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+
+        .workflow-node:hover .node-port,
+        .workflow-node.selected-node .node-port {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .dark .node-port {
+            background-color: #374151;
+            border-color: #6b7280;
+        }
+
+        .node-port.output-port:hover {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+
+        /* Blue for output */
+        .dark .node-port.output-port:hover {
+            background-color: #2563eb;
+        }
+
+        .node-port.input-port:hover {
+            border-color: #16a34a;
+            background-color: #dcfce7;
+        }
+
+        /* Green for input */
+        .dark .node-port.input-port:hover {
+            background-color: #166534;
+        }
+
+        .port-right {
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .port-bottom {
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .port-left {
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .port-top {
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .port-if-then {
+            top: 33.33%;
+            right: -8px;
+            transform: translateY(-50%);
+        }
+
+        .port-if-else {
+            top: 66.67%;
+            right: -8px;
+            transform: translateY(-50%);
+        }
+
+        .port-label {
+            position: absolute;
+            font-size: 11px;
+            font-weight: 600;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+
+        .label-then {
+            right: 12px;
+            top: 33.33%;
+            transform: translateY(-50%);
+            color: #22c55e;
+        }
+
+        /* green-500 */
+        .label-else {
+            right: 12px;
+            top: 66.67%;
+            transform: translateY(-50%);
+            color: #ef4444;
+        }
+
+        /* red-500 */
+
+        .port-tooltip {
+            position: absolute;
+            background-color: #334155;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+            z-index: 100;
+            pointer-events: none;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+        }
+
+        .selected-node .port-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .port-top+.port-tooltip {
+            bottom: 105%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-6px);
+        }
+
+        .port-bottom+.port-tooltip {
+            top: 105%;
+            left: 50%;
+            transform: translateX(-50%) translateY(6px);
+        }
+
+        .port-left+.port-tooltip {
+            right: 102%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-6px);
+        }
+
+        .port-right+.port-tooltip {
+            left: 102%;
+            top: 50%;
+            transform: translateY(-50%) translateX(6px);
+        }
+
+        .port-if-then+.port-tooltip {
+            left: 102%;
+            top: 33.33%;
+            transform: translateY(-50%) translateX(6px);
+        }
+
+        .port-if-else+.port-tooltip {
+            left: 102%;
+            top: 66.67%;
+            transform: translateY(-50%) translateX(6px);
+        }
+
+        details>summary {
+            list-style: none;
+        }
+
+        details>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details[open] .details-marker {
+            transform: rotate(90deg);
+        }
+
+        /* Áp dụng cho các trình duyệt WebKit (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Áp dụng cho Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #94a3b8 #f1f5f9;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 dark:bg-gray-900 text-slate-800 dark:text-gray-200 h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-white dark:bg-gray-800 border-b border-slate-200 dark:border-gray-700 z-20 flex-shrink-0">
+        <div class="px-4 py-2 flex justify-between items-center">
+            <h1 class="text-lg font-bold text-slate-900 dark:text-gray-100"><i class="fas fa-sitemap text-blue-600"></i>
+                SMEW Automation Builder</h1>
+            <div class="flex items-center space-x-2">
+                <button id="test-button"
+                    class="bg-green-500 text-white font-semibold px-3 py-1.5 rounded-md hover:bg-green-600 transition-colors active:scale-95 text-sm disabled:opacity-50 disabled:cursor-not-allowed"><i
+                        class="fas fa-play mr-2"></i>Test</button>
+                <button id="import-button"
+                    class="bg-sky-500 text-white font-semibold px-3 py-1.5 rounded-md hover:bg-sky-600 transition-colors active:scale-95 text-sm"><i
+                        class="fas fa-upload mr-2"></i>Import</button>
+                <input type="file" id="import-file" class="hidden" accept=".json">
+                <button id="export-button"
+                    class="bg-slate-700 text-white font-semibold px-3 py-1.5 rounded-md hover:bg-slate-800 transition-colors active:scale-95 text-sm"><i
+                        class="fas fa-download mr-2"></i>Export</button>
+                <button id="clear-button"
+                    class="bg-red-500 text-white font-semibold px-2.5 py-1.5 rounded-md hover:bg-red-600 transition-colors active:scale-95 text-sm"><i
+                        class="fas fa-trash"></i></button>
+                <button id="theme-toggle-button"
+                    class="text-slate-500 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-gray-700 rounded-md p-1.5 transition-colors">
+                    <i class="fas fa-sun block dark:hidden"></i>
+                    <i class="fas fa-moon hidden dark:block"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4 grid grid-cols-1 lg:grid-cols-12 gap-4" style="min-height: 0;">
+
+        <aside
+            class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-2 flex flex-col overflow-hidden">
+            <div class="flex-grow min-h-0 overflow-y-auto pr-1">
+                <details open class="text-slate-800 dark:text-gray-200">
+                    <summary
+                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Logic
+                    </summary>
+                    <div class="grid grid-cols-3 gap-2 p-2">
+                        <div class="action-card" draggable="true" data-action-type="if" data-tooltip-text="Điều Kiện">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-indigo-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-code-branch text-indigo-500 dark:text-indigo-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="forEach"
+                            data-tooltip-text="Vòng Lặp">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-sync-alt text-purple-500 dark:text-purple-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="setVariable"
+                            data-tooltip-text="Gán Biến">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-pink-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-equals text-pink-500 dark:text-pink-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="stop" data-tooltip-text="Dừng">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-stop-circle text-red-500 dark:text-red-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="comment"
+                            data-tooltip-text="Ghi Chú">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-comment-dots text-gray-500 dark:text-gray-400 text-xl"></i></div>
+                        </div>
+                    </div>
+                </details>
+
+                <details open class="text-slate-800 dark:text-gray-200">
+                    <summary
+                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Điều Hướng
+                    </summary>
+                    <div class="grid grid-cols-3 gap-2 p-2">
+                        <div class="action-card" draggable="true" data-action-type="goto"
+                            data-tooltip-text="Truy cập URL">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-sky-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-link text-sky-500 dark:text-sky-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="reload"
+                            data-tooltip-text="Tải Lại Trang">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-redo text-green-500 dark:text-green-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="goBack"
+                            data-tooltip-text="Lùi Lại Trang">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-slate-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-arrow-left text-slate-500 dark:text-slate-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="goForward"
+                            data-tooltip-text="Tới Trang Trước">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-slate-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-arrow-right text-slate-500 dark:text-slate-400 text-xl"></i></div>
+                        </div>
+                    </div>
+                </details>
+
+                <details open class="text-slate-800 dark:text-gray-200">
+                    <summary
+                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Tương Tác
+                    </summary>
+                    <div class="grid grid-cols-3 gap-2 p-2">
+                        <div class="action-card" draggable="true" data-action-type="click" data-tooltip-text="Nhấp">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-amber-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-hand-pointer text-amber-500 dark:text-amber-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="fill" data-tooltip-text="Điền">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-violet-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-keyboard text-violet-500 dark:text-violet-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="clearInput"
+                            data-tooltip-text="Xóa Ô Nhập Liệu">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-eraser text-red-500 dark:text-red-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="setCheckboxState"
+                            data-tooltip-text="Trạng thái Checkbox">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-check-square text-blue-500 dark:text-blue-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="selectOption"
+                            data-tooltip-text="Chọn Dropdown">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-orange-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-list-ul text-orange-500 dark:text-orange-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="hover"
+                            data-tooltip-text="Di chuột qua">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-cyan-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-mouse-pointer text-cyan-500 dark:text-cyan-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="press"
+                            data-tooltip-text="Nhấn Phím">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-teal-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-arrow-turn-down text-teal-500 dark:text-teal-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="uploadFile"
+                            data-tooltip-text="Tải Lên Tệp">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-fuchsia-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-file-upload text-fuchsia-500 dark:text-fuchsia-400 text-xl"></i></div>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="text-slate-800 dark:text-gray-200">
+                    <summary
+                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Chờ Đợi
+                    </summary>
+                    <div class="grid grid-cols-3 gap-2 p-2">
+                        <div class="action-card" draggable="true" data-action-type="waitTimeout"
+                            data-tooltip-text="Chờ Thời Gian">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-clock text-gray-500 dark:text-gray-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="waitElement"
+                            data-tooltip-text="Chờ Phần Tử">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-binoculars text-blue-500 dark:text-blue-400 text-xl"></i></div>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="text-slate-800 dark:text-gray-200">
+                    <summary
+                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Trích Xuất
+                    </summary>
+                    <div class="grid grid-cols-3 gap-2 p-2">
+                        <div class="action-card" draggable="true" data-action-type="getText"
+                            data-tooltip-text="Lấy Văn bản">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-rose-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-quote-left text-rose-500 dark:text-rose-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="getAttribute"
+                            data-tooltip-text="Lấy Thuộc tính">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-lime-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-at text-lime-500 dark:text-lime-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="getInputValue"
+                            data-tooltip-text="Lấy Giá trị Input">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-i-cursor text-purple-500 dark:text-purple-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="screenshot"
+                            data-tooltip-text="Chụp Ảnh">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-camera text-gray-500 dark:text-gray-400 text-xl"></i></div>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="text-slate-800 dark:text-gray-200">
+                    <summary
+                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Kiểm Tra
+                    </summary>
+                    <div class="grid grid-cols-3 gap-2 p-2">
+                        <div class="action-card" draggable="true" data-action-type="assertVisible"
+                            data-tooltip-text="Kiểm tra Hiển thị">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-eye text-green-500 dark:text-green-400 text-xl"></i></div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertText"
+                            data-tooltip-text="Kiểm tra Văn bản">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-yellow-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-check-double text-yellow-500 dark:text-yellow-400 text-xl"></i></div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </aside>
+
+        <section
+            class="lg:col-span-7 bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 flex flex-col p-0">
+            <div id="canvas-container" class="flex-grow rounded-b-lg bg-slate-50 dark:bg-gray-900/50">
+                <div id="transform-container">
+                    <div id="node-container"></div>
+                </div>
+                <svg id="connection-svg">
+                    <defs>
+                        <marker id="end-circle" markerWidth="12" markerHeight="12" refX="6" refY="6" orient="auto">
+                            <circle cx="6" cy="6" r="4" class="fill-green-500" />
+                        </marker>
+                        <marker id="end-circle-temp" markerWidth="12" markerHeight="12" refX="6" refY="6" orient="auto">
+                            <circle cx="6" cy="6" r="4" class="fill-blue-600" />
+                        </marker>
+                        <marker id="end-circle-valid" markerWidth="12" markerHeight="12" refX="6" refY="6"
+                            orient="auto">
+                            <circle cx="6" cy="6" r="4" class="fill-green-500" />
+                        </marker>
+                        <marker id="end-circle-invalid" markerWidth="12" markerHeight="12" refX="6" refY="6"
+                            orient="auto">
+                            <circle cx="6" cy="6" r="4" class="fill-red-500" />
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        </section>
+
+        <aside id="right-sidebar"
+            class="lg:col-span-3 bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-4 flex flex-col">
+            <div id="properties-panel-container" class="flex flex-col h-full">
+                <h2
+                    class="text-lg font-semibold mb-4 pb-2 border-b border-slate-200 dark:border-gray-700 text-slate-900 dark:text-gray-100">
+                    <i class="fas fa-sliders-h mr-2 text-slate-500 dark:text-gray-400"></i>Thuộc tính</h2>
+                <div id="properties-panel" class="flex-grow overflow-y-auto">
+                    <p class="text-slate-500 dark:text-gray-400 text-center mt-8">Chọn một khối để xem thuộc tính.</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Element Selector Modal -->
+    <div id="selector-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+        <div
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-slate-200 dark:border-gray-700">
+            <div class="p-4 border-b border-slate-200 dark:border-gray-700 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-gray-100"><i
+                        class="fas fa-crosshairs mr-2 text-blue-500"></i>Công Cụ Chọn Phần Tử</h3>
+                <button id="close-selector-modal"
+                    class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">URL trang web mục
+                        tiêu</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="selector-url-input"
+                            class="flex-grow px-3 py-2 border border-slate-300 dark:border-gray-600 bg-slate-50 dark:bg-gray-700 text-slate-800 dark:text-gray-200 rounded-md"
+                            readonly>
+                        <button id="open-url-btn"
+                            class="bg-blue-500 text-white font-semibold px-3 py-2 rounded-md hover:bg-blue-600 transition-colors active:scale-95 text-sm"><i
+                                class="fas fa-external-link-alt mr-2"></i>Mở Tab</button>
+                    </div>
+                    <p id="url-not-found-msg" class="text-sm text-red-500 mt-1 hidden">Không tìm thấy hành động "Truy
+                        cập URL" trước đó. Vui lòng thêm vào luồng công việc.</p>
+                </div>
+
+                <div
+                    class="bg-slate-50 dark:bg-gray-900/50 p-4 rounded-md border border-slate-200 dark:border-gray-700">
+                    <h4 class="font-semibold mb-2 text-slate-800 dark:text-gray-200">Hướng dẫn:</h4>
+                    <ol class="list-decimal list-inside space-y-2 text-sm text-slate-600 dark:text-gray-400">
+                        <li>Nhấn nút "Mở Tab" để xem trang web trong một tab mới.</li>
+                        <li>Trên tab mới, **nhấp chuột phải** vào phần tử bạn muốn chọn (ví dụ: nút bấm, ô nhập liệu).
+                        </li>
+                        <li>Từ menu ngữ cảnh, chọn **"Inspect"** (Kiểm tra).</li>
+                        <li>Trong bảng điều khiển (DevTools) vừa mở ra, nhấp chuột phải vào dòng code HTML được tô sáng.
+                        </li>
+                        <li>Đi đến **Copy** &rarr; **Copy selector**.</li>
+                        <li>Quay lại đây và dán bộ chọn vào ô bên dưới.</li>
+                    </ol>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">Dán bộ chọn
+                        (selector) vào đây</label>
+                    <textarea id="selector-paste-area" rows="2"
+                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="CSS Selector sẽ được dán vào đây..."></textarea>
+                </div>
+            </div>
+            <div
+                class="p-4 border-t border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800/50 flex justify-end">
+                <button id="confirm-selector-btn"
+                    class="bg-green-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-green-600 transition-colors active:scale-95"><i
+                        class="fas fa-check mr-2"></i>Xác nhận lựa chọn</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleButton = document.getElementById('theme-toggle-button');
+            const htmlEl = document.documentElement;
+
+            const applyTheme = (isDark) => {
+                htmlEl.classList.toggle('dark', isDark);
+                localStorage.theme = isDark ? 'dark' : 'light';
+            };
+
+            themeToggleButton.addEventListener('click', () => applyTheme(!htmlEl.classList.contains('dark')));
+            applyTheme(localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches));
+
+            let nodes = [];
+            let connections = [];
+            let selectedNodeId = null;
+            let dragInfo = {};
+            let tempConnection = { active: false, startNode: null, startPort: null, path: null };
+            let scale = 1, panX = 0, panY = 0, isPanning = false, isSpacePressed = false, panStart = { x: 0, y: 0 };
+            let isTesting = false;
+            let isTestStopped = false;
+            let activeSelectorInputId = null;
+
+            const canvasContainer = document.getElementById('canvas-container');
+            const transformContainer = document.getElementById('transform-container');
+            const nodeContainer = document.getElementById('node-container');
+            const svg = document.getElementById('connection-svg');
+            const propertiesPanelContainer = document.getElementById('properties-panel-container');
+            const clearButton = document.getElementById('clear-button');
+            const exportButton = document.getElementById('export-button');
+            const importButton = document.getElementById('import-button');
+            const importFileInput = document.getElementById('import-file');
+            const testButton = document.getElementById('test-button');
+
+            // Element Selector Modal Elements
+            const selectorModal = document.getElementById('selector-modal');
+            const closeSelectorModalBtn = document.getElementById('close-selector-modal');
+            const selectorUrlInput = document.getElementById('selector-url-input');
+            const openUrlBtn = document.getElementById('open-url-btn');
+            const urlNotFoundMsg = document.getElementById('url-not-found-msg');
+            const selectorPasteArea = document.getElementById('selector-paste-area');
+            const confirmSelectorBtn = document.getElementById('confirm-selector-btn');
+
+            const ACTION_CONFIG = {
+                'start': { icon: 'fa-play-circle text-green-500 dark:text-green-400', name: 'Bắt đầu', params: [] },
+                'if': { icon: 'fa-code-branch text-indigo-500 dark:text-indigo-400', name: 'Điều Kiện', params: [{ id: 'condition', label: 'Điều kiện', type: 'text', placeholder: 'biến == "giá trị"' }] },
+                'forEach': { icon: 'fa-sync-alt text-purple-500 dark:text-purple-400', name: 'Vòng Lặp', params: [{ id: 'list', label: 'Mảng hoặc Số Lần', type: 'text', placeholder: 'myArray | 5' }, { id: 'variable', label: 'Biến phần tử', type: 'text', placeholder: 'item' }] },
+                'setVariable': { icon: 'fa-equals text-pink-500 dark:text-pink-400', name: 'Gán Biến', params: [{ id: 'variable', label: 'Tên biến', type: 'text', placeholder: 'myVar' }, { id: 'value', label: 'Giá trị', type: 'text', placeholder: '"Hello World!"' }] },
+                'stop': { icon: 'fa-stop-circle text-red-500 dark:text-red-400', name: 'Dừng', params: [] },
+                'comment': { icon: 'fa-comment-dots text-gray-500 dark:text-gray-400', name: 'Ghi Chú', params: [{ id: 'text', label: 'Nội dung', type: 'text', placeholder: 'Ghi chú ở đây...' }] },
+                'goto': { icon: 'fa-link text-sky-500 dark:text-sky-400', name: 'Truy cập URL', params: [{ id: 'url', label: 'URL', type: 'text', placeholder: 'https://example.com' }] },
+                'reload': { icon: 'fa-redo text-green-500 dark:text-green-400', name: 'Tải Lại Trang', params: [] },
+                'goBack': { icon: 'fa-arrow-left text-slate-500 dark:text-slate-400', name: 'Lùi Lại Trang', params: [] },
+                'goForward': { icon: 'fa-arrow-right text-slate-500 dark:text-slate-400', name: 'Tới Trang Trước', params: [] },
+                'click': { icon: 'fa-hand-pointer text-amber-500 dark:text-amber-400', name: 'Nhấp', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '.btn-primary' }, { id: 'type', label: 'Loại Click', type: 'select', options: [{ value: 'left', text: 'Trái' }, { value: 'right', text: 'Phải' }, { value: 'double', text: 'Double Click' }] }] },
+                'fill': { icon: 'fa-keyboard text-violet-500 dark:text-violet-400', name: 'Điền', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '#username' }, { id: 'value', label: 'Giá trị', type: 'text', placeholder: 'Nhập giá trị...' }] },
+                'clearInput': { icon: 'fa-eraser text-red-500 dark:text-red-400', name: 'Xóa Ô Nhập Liệu', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '#search' }] },
+                'setCheckboxState': { icon: 'fa-check-square text-blue-500 dark:text-blue-400', name: 'Đặt trạng thái Checkbox', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '#terms' }, { id: 'state', label: 'Trạng thái', type: 'select', options: [{ value: 'check', text: 'Check' }, { value: 'uncheck', text: 'Uncheck' }] }] },
+                'selectOption': { icon: 'fa-list-ul text-orange-500 dark:text-orange-400', name: 'Chọn Dropdown', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '#country' }, { id: 'value', label: 'Giá trị', type: 'text', placeholder: 'Vietnam' }] },
+                'hover': { icon: 'fa-mouse-pointer text-cyan-500 dark:text-cyan-400', name: 'Di chuột qua', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '.menu-item' }] },
+                'press': { icon: 'fa-arrow-down-to-bracket text-teal-500 dark:text-teal-400', name: 'Nhấn Phím', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: 'input[name="q"]' }, { id: 'key', label: 'Phím', type: 'text', placeholder: 'Enter' }] },
+                'uploadFile': { icon: 'fa-file-upload text-fuchsia-500 dark:text-fuchsia-400', name: 'Tải Lên Tệp', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: 'input[type="file"]' }, { id: 'filePath', label: 'Đường dẫn tệp', type: 'text', placeholder: 'C:\\Users\\...\\file.txt' }] },
+                'waitTimeout': { icon: 'fa-clock text-gray-500 dark:text-gray-400', name: 'Chờ Thời Gian', params: [{ id: 'timeout', label: 'Thời gian (ms)', type: 'number', placeholder: '1000' }] },
+                'waitElement': { icon: 'fa-binoculars text-blue-500 dark:text-blue-400', name: 'Chờ Phần Tử', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '#loading-spinner' }] },
+                'getText': { icon: 'fa-quote-left text-rose-500 dark:text-rose-400', name: 'Lấy Văn bản', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: 'h1' }, { id: 'variable', label: 'Tên biến', type: 'text', placeholder: 'pageTitle' }] },
+                'getAttribute': { icon: 'fa-at text-lime-500 dark:text-lime-400', name: 'Lấy Thuộc tính', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: 'a.product' }, { id: 'attribute', label: 'Tên thuộc tính', type: 'text', placeholder: 'href' }, { id: 'variable', label: 'Tên biến', type: 'text', placeholder: 'productUrl' }] },
+                'getInputValue': { icon: 'fa-i-cursor text-purple-500 dark:text-purple-400', name: 'Lấy Giá trị Input', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '#firstname' }, { id: 'variable', label: 'Tên biến', type: 'text', placeholder: 'firstName' }] },
+                'screenshot': { icon: 'fa-camera text-gray-500 dark:text-gray-400', name: 'Chụp Ảnh', params: [{ id: 'filename', label: 'Tên tệp', type: 'text', placeholder: 'screenshot.png' }, { id: 'selector', label: 'Bộ chọn (tùy chọn)', type: 'selector', placeholder: 'Chụp 1 phần tử' }] },
+                'assertVisible': { icon: 'fa-eye text-green-500 dark:text-green-400', name: 'Kiểm tra Hiển thị', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: '.welcome-message' }] },
+                'assertText': { icon: 'fa-check-double text-yellow-500 dark:text-yellow-400', name: 'Kiểm tra Văn bản', params: [{ id: 'selector', label: 'Bộ chọn', type: 'selector', placeholder: 'h1' }, { id: 'text', label: 'Văn bản mong muốn', type: 'text', placeholder: 'Chào mừng' }] }
+            };
+
+            function createNode(type, x, y) {
+                const id = `node_${Date.now()}${Math.floor(Math.random() * 1000)}`;
+                const node = { id, type, x, y, params: {} };
+                if (ACTION_CONFIG[type] && ACTION_CONFIG[type].params) {
+                    ACTION_CONFIG[type].params.forEach(p => {
+                        node.params[p.id] = p.options ? p.options[0].value : '';
+                    });
+                }
+                return node;
+            }
+
+            const PORT_TOOLTIPS = {
+                'in': 'Đầu vào',
+                'out': 'Đầu ra',
+                'then': 'Then',
+                'else': 'Else',
+                'next': 'Tiếp theo',
+                'loopBody': 'Vòng lặp',
+                'in_top': 'Đầu vào',
+                'in_left': 'Đầu vào',
+                'out_right': 'Đầu ra',
+                'out_bottom': 'Đầu ra',
+            };
+            const createPortWithTooltip = (position, type, name) => {
+                const tooltipText = PORT_TOOLTIPS[name] || name;
+                return `<div class="node-port ${position} ${type}-port" data-port-name="${name}"></div><span class="port-tooltip">${tooltipText}</span>`;
+            };
+
+            function renderNodes() {
+                nodeContainer.innerHTML = '';
+                nodes.forEach(node => {
+                    const config = ACTION_CONFIG[node.type];
+                    if (!config) return;
+                    const el = document.createElement('div');
+                    el.id = node.id;
+                    const isSelected = node.id === selectedNodeId;
+                    el.className = `workflow-node bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 text-slate-800 dark:text-gray-200 ${isSelected ? 'selected-node' : ''}`;
+                    el.style.left = `${node.x}px`;
+                    el.style.top = `${node.y}px`;
+
+                    let contentHTML = `<div class="node-header border-b border-slate-200 dark:border-gray-600"><i class="fas ${config.icon} mr-2"></i>${config.name}</div>`;
+                    if (config.params.length > 0) {
+                        const summary = Object.values(node.params).find(v => v) || 'Chưa cấu hình';
+                        contentHTML += `<div class="node-content text-slate-600 dark:text-gray-400 text-xs truncate"><strong>${config.params[0].label}:</strong> ${summary}</div>`;
+                    }
+                    el.innerHTML = contentHTML;
+
+                    let portsHTML = '';
+                    let labelsHTML = '';
+
+                    switch (node.type) {
+                        case 'start':
+                            portsHTML = createPortWithTooltip('port-right', 'output', 'out');
+                            break;
+                        case 'stop':
+                            portsHTML = createPortWithTooltip('port-left', 'input', 'in');
+                            break;
+                        case 'comment':
+                            portsHTML = '';
+                            break;
+                        case 'if':
+                            portsHTML = `${createPortWithTooltip('port-left', 'input', 'in')}${createPortWithTooltip('port-if-then', 'output', 'then')}${createPortWithTooltip('port-if-else', 'output', 'else')}`;
+                            labelsHTML = `<span class="port-label label-then">THEN</span><span class="port-label label-else">ELSE</span>`;
+                            break;
+                        case 'forEach':
+                            portsHTML = `${createPortWithTooltip('port-left', 'input', 'in')}${createPortWithTooltip('port-right', 'output', 'next')}${createPortWithTooltip('port-bottom', 'output', 'loopBody')}`;
+                            labelsHTML = `<span class="port-label" style="top: 50%; right: 14px; transform: translateY(-50%); color: #22c55e;">NEXT</span><span class="port-label" style="bottom: -24px; left: 50%; transform: translateX(-50%); color: #8b5cf6;">LOOP</span>`;
+                            break;
+                        default:
+                            portsHTML = `${createPortWithTooltip('port-top', 'input', 'in_top')}${createPortWithTooltip('port-left', 'input', 'in_left')}${createPortWithTooltip('port-right', 'output', 'out_right')}${createPortWithTooltip('port-bottom', 'output', 'out_bottom')}`;
+                            break;
+                    }
+                    el.innerHTML += portsHTML + labelsHTML;
+
+                    el.addEventListener('mousedown', e => onNodeMouseDown(e, node));
+                    el.querySelectorAll('.node-port').forEach(p => p.addEventListener('mousedown', onPortMouseDown));
+                    nodeContainer.appendChild(el);
+                });
+            }
+
+            function drawCurve(x1, y1, x2, y2) {
+                const handleOffset = Math.max(50, Math.abs(x2 - x1) * 0.4);
+                return `M ${x1},${y1} C ${x1 + handleOffset},${y1} ${x2 - handleOffset},${y2} ${x2},${y2}`;
+            }
+
+            function getPortPosition(nodeId, portName) {
+                const portEl = document.querySelector(`#${nodeId} [data-port-name="${portName}"]`);
+                if (!portEl) return null;
+                const canvasRect = canvasContainer.getBoundingClientRect();
+                const portRect = portEl.getBoundingClientRect();
+                return {
+                    x: (portRect.left - canvasRect.left + portRect.width / 2) / scale,
+                    y: (portRect.top - canvasRect.top + portRect.height / 2) / scale
+                };
+            }
+
+            function renderConnections() {
+                svg.innerHTML = svg.querySelector('defs').outerHTML;
+                connections.forEach((conn, index) => {
+                    if (dragInfo.type === 'connection_active' && dragInfo.index === index) return;
+                    const startPos = getPortPosition(conn.fromNode, conn.fromPort);
+                    const endPos = getPortPosition(conn.toNode, conn.toPort);
+                    if (!startPos || !endPos) return;
+                    const d = drawCurve(startPos.x, startPos.y, endPos.x, endPos.y);
+                    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    group.classList.add('connector-group');
+                    const hitbox = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    hitbox.setAttribute('d', d);
+                    hitbox.classList.add('connector-hitbox');
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute('d', d);
+                    path.classList.add('connector-path', 'stroke-slate-400', 'dark:stroke-gray-500');
+                    path.setAttribute('marker-end', 'url(#end-circle)');
+                    group.appendChild(hitbox);
+                    group.appendChild(path);
+                    group.addEventListener('mousedown', (e) => onConnectionPathMouseDown(e, conn, index));
+                    group.addEventListener('dblclick', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        connections.splice(index, 1);
+                        renderAll();
+                    });
+                    svg.appendChild(group);
+                });
+                if (tempConnection.path) svg.appendChild(tempConnection.path);
+            }
+
+            function onMouseMove(e) {
+                if (dragInfo.type === 'connection') {
+                    const dx = e.clientX - dragInfo.startX;
+                    const dy = e.clientY - dragInfo.startY;
+                    if (Math.sqrt(dx * dx + dy * dy) > 5) {
+                        dragInfo.type = 'connection_active';
+                        tempConnection.active = true;
+                        tempConnection.startNode = dragInfo.connection.fromNode;
+                        tempConnection.startPort = dragInfo.connection.fromPort;
+                        const startPos = getPortPosition(tempConnection.startNode, tempConnection.startPort);
+                        if (startPos) {
+                            tempConnection.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            tempConnection.path.setAttribute('d', drawCurve(startPos.x, startPos.y, startPos.x, startPos.y));
+                            tempConnection.path.classList.add('connector-path-temp');
+                            tempConnection.path.setAttribute('marker-end', 'url(#end-circle-temp)');
+                            svg.appendChild(tempConnection.path);
+                        }
+                        renderConnections();
+                    }
+                }
+                if (dragInfo.type === 'node') {
+                    const rect = canvasContainer.getBoundingClientRect();
+                    dragInfo.target.x = (e.clientX - rect.left - panX) / scale - dragInfo.offsetX;
+                    dragInfo.target.y = (e.clientY - rect.top - panY) / scale - dragInfo.offsetY;
+                    renderAll();
+                }
+                if (isPanning) {
+                    panX += e.clientX - panStart.x;
+                    panY += e.clientY - panStart.y;
+                    panStart.x = e.clientX;
+                    panStart.y = e.clientY;
+                    applyTransform();
+                }
+                if (tempConnection.active && tempConnection.path) {
+                    const startPos = getPortPosition(tempConnection.startNode, tempConnection.startPort);
+                    if (!startPos) return;
+                    const svgRect = svg.getBoundingClientRect();
+                    const endX = (e.clientX - svgRect.left) / scale;
+                    const endY = (e.clientY - svgRect.top) / scale;
+                    tempConnection.path.setAttribute('d', drawCurve(startPos.x, startPos.y, endX, endY));
+                    const endPort = e.target.closest('.node-port');
+                    tempConnection.path.classList.remove('valid-target', 'invalid-target');
+                    let isValidTarget = false;
+                    if (endPort && window.getComputedStyle(endPort).visibility === 'visible') {
+                        const endNodeId = endPort.closest('.workflow-node').id;
+                        const isInputPort = endPort.classList.contains('input-port');
+                        const isDifferentNode = endNodeId !== tempConnection.startNode;
+                        if (isInputPort && isDifferentNode) {
+                            const isNodeInputOccupied = connections.some((c, i) => (dragInfo.type !== 'connection_active' || dragInfo.index !== i) && c.toNode === endNodeId);
+                            if (!isNodeInputOccupied) isValidTarget = true;
+                        }
+                    }
+                    if (isValidTarget) {
+                        tempConnection.path.classList.add('valid-target');
+                        tempConnection.path.setAttribute('marker-end', 'url(#end-circle-valid)');
+                    } else if (endPort) {
+                        tempConnection.path.classList.add('invalid-target');
+                        tempConnection.path.setAttribute('marker-end', 'url(#end-circle-invalid)');
+                    } else {
+                        tempConnection.path.setAttribute('marker-end', 'url(#end-circle-temp)');
+                    }
+                }
+            }
+
+            function onMouseUp(e) {
+                if (tempConnection.active) {
+                    const endPort = e.target.closest('.node-port');
+                    let isValidTarget = false;
+                    if (endPort && window.getComputedStyle(endPort).visibility === 'visible') {
+                        const endNodeId = endPort.closest('.workflow-node').id;
+                        const isInputPort = endPort.classList.contains('input-port');
+                        const isDifferentNode = endNodeId !== tempConnection.startNode;
+                        if (isInputPort && isDifferentNode) {
+                            const isNodeInputOccupied = connections.some((c, i) => (dragInfo.type !== 'connection_active' || dragInfo.index !== i) && c.toNode === endNodeId);
+                            if (!isNodeInputOccupied) isValidTarget = true;
+                        }
+                    }
+                    if (isValidTarget) {
+                        const newConnection = { fromNode: tempConnection.startNode, fromPort: tempConnection.startPort, toNode: endPort.closest('.workflow-node').id, toPort: endPort.dataset.portName };
+                        if (dragInfo.type === 'connection_active') {
+                            connections.splice(dragInfo.index, 1, newConnection);
+                        } else {
+                            connections.push(newConnection);
+                        }
+                    }
+                    if (tempConnection.path) tempConnection.path.remove();
+                    tempConnection.path = null;
+                    tempConnection.active = false;
+                    renderAll();
+                }
+                dragInfo = {};
+                if (isPanning) {
+                    isPanning = false;
+                    canvasContainer.classList.remove('panning');
+                }
+            }
+
+            function renderAll(data = null) {
+                if (data) {
+                    nodes = data.nodes;
+                    connections = data.connections;
+                }
+                renderNodes();
+                requestAnimationFrame(() => {
+                    applyTransform();
+                    if (!isTesting) renderPropertiesPanel();
+                });
+            }
+
+            function onNodeMouseDown(e, node) {
+                if (isTesting || e.target.classList.contains('node-port') || isSpacePressed) return;
+                selectedNodeId = node.id;
+                const rect = canvasContainer.getBoundingClientRect();
+                dragInfo = { type: 'node', target: node, offsetX: (e.clientX - rect.left - panX) / scale - node.x, offsetY: (e.clientY - rect.top - panY) / scale - node.y };
+                renderAll();
+            }
+
+            function onPortMouseDown(e) {
+                e.stopPropagation();
+                if (isTesting || isSpacePressed) return;
+                const port = e.currentTarget;
+                const startNodeId = port.closest('.workflow-node').id;
+                const startPortName = port.dataset.portName;
+                const startNode = nodes.find(n => n.id === startNodeId);
+                if (!port.classList.contains('output-port')) return;
+                const isStandardNode = !['if', 'forEach'].includes(startNode.type);
+                if (isStandardNode) {
+                    if (connections.some(c => c.fromNode === startNodeId)) return;
+                } else {
+                    if (connections.some(c => c.fromNode === startNodeId && c.fromPort === startPortName)) return;
+                }
+                tempConnection.active = true;
+                tempConnection.startNode = startNodeId;
+                tempConnection.startPort = startPortName;
+                const startPos = getPortPosition(tempConnection.startNode, tempConnection.startPort);
+                if (!startPos) return;
+                tempConnection.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                tempConnection.path.setAttribute('d', drawCurve(startPos.x, startPos.y, startPos.x, startPos.y));
+                tempConnection.path.classList.add('connector-path-temp');
+                tempConnection.path.setAttribute('marker-end', 'url(#end-circle-temp)');
+                svg.appendChild(tempConnection.path);
+            }
+
+            function onConnectionPathMouseDown(e, connectionToModify, index) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isTesting) return;
+                dragInfo = { type: 'connection', index: index, connection: connectionToModify, startX: e.clientX, startY: e.clientY };
+            }
+
+            function openSelectorTool(inputId) {
+                activeSelectorInputId = inputId;
+                selectorPasteArea.value = '';
+
+                const startNode = nodes.find(n => n.id === selectedNodeId);
+                let targetUrl = '';
+
+                // Simplified: find the first goto node in the entire flow.
+                const gotoNode = nodes.find(n => n.type === 'goto');
+                if (gotoNode && gotoNode.params.url) {
+                    targetUrl = gotoNode.params.url;
+                    selectorUrlInput.value = targetUrl;
+                    urlNotFoundMsg.classList.add('hidden');
+                    openUrlBtn.disabled = false;
+                } else {
+                    selectorUrlInput.value = 'Không tìm thấy URL';
+                    urlNotFoundMsg.classList.remove('hidden');
+                    openUrlBtn.disabled = true;
+                }
+
+                selectorModal.classList.remove('hidden');
+            }
+
+            function renderPropertiesPanel() {
+                propertiesPanelContainer.innerHTML = `
+                <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-slate-200 dark:border-gray-700 text-slate-900 dark:text-gray-100"><i class="fas fa-sliders-h mr-2 text-slate-500 dark:text-gray-400"></i>Thuộc tính</h2>
+                <div id="properties-panel" class="flex-grow overflow-y-auto"></div>`;
+                const panel = document.getElementById('properties-panel');
+                const node = nodes.find(n => n.id === selectedNodeId);
+                if (!node) {
+                    panel.innerHTML = `<p class="text-slate-500 dark:text-gray-400 text-center mt-8">Chọn một khối để xem thuộc tính.</p>`;
+                    return;
+                }
+                const config = ACTION_CONFIG[node.type];
+                if (!config) return;
+                let formHTML = '';
+                config.params.forEach(param => {
+                    const value = node.params[param.id] || '';
+                    const inputId = `prop-input-${node.id}-${param.id}`;
+                    formHTML += `<div class="mt-4"><label for="${inputId}" class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">${param.label}</label>`;
+                    const commonClasses = "w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+
+                    if (param.type === 'select') {
+                        formHTML += `<select id="${inputId}" data-param-id="${param.id}" class="${commonClasses}">`;
+                        param.options.forEach(opt => formHTML += `<option value="${opt.value}" ${value === opt.value ? 'selected' : ''}>${opt.text}</option>`);
+                        formHTML += `</select>`;
+                    } else if (param.type === 'selector') {
+                        formHTML += `<div class="flex items-center space-x-2">
+                        <textarea id="${inputId}" data-param-id="${param.id}" placeholder="${param.placeholder || ''}" rows="2" class="flex-grow ${commonClasses}">${value}</textarea>
+                        <button class="select-element-btn p-2 text-slate-500 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-gray-600 rounded-md" data-target-input="${inputId}"><i class="fas fa-crosshairs text-lg"></i></button>
+                    </div>`;
+                    } else {
+                        formHTML += `<textarea id="${inputId}" data-param-id="${param.id}" placeholder="${param.placeholder || ''}" rows="2" class="${commonClasses}">${value}</textarea>`;
+                    }
+                    formHTML += `</div>`;
+                });
+                if (node.type !== 'start') {
+                    formHTML += `<button id="delete-node-btn" class="w-full mt-6 bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md transition-colors"><i class="fas fa-trash-alt mr-2"></i>Xóa Khối</button>`;
+                }
+                panel.innerHTML = formHTML;
+
+                panel.querySelectorAll('textarea, select').forEach(input => {
+                    input.addEventListener('input', e => {
+                        node.params[e.target.dataset.paramId] = e.target.value;
+                        renderNodes();
+                    });
+                });
+
+                panel.querySelectorAll('.select-element-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => openSelectorTool(e.currentTarget.dataset.targetInput));
+                });
+
+                const deleteBtn = panel.querySelector('#delete-node-btn');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', () => {
+                        if (node.type === 'start') return;
+                        nodes = nodes.filter(n => n.id !== selectedNodeId);
+                        connections = connections.filter(c => c.fromNode !== selectedNodeId && c.toNode !== selectedNodeId);
+                        selectedNodeId = null;
+                        renderAll();
+                    });
+                }
+            }
+
+            function renderTestPanel() {
+                propertiesPanelContainer.innerHTML = `
+                <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-slate-200 dark:border-gray-700 text-slate-900 dark:text-gray-100"><i class="fas fa-tasks mr-2 text-green-500"></i>Kết quả Test</h2>
+                <pre id="panel-log-content" class="flex-grow bg-slate-100 dark:bg-gray-900 text-slate-800 dark:text-gray-200 text-sm p-2 rounded-md font-mono whitespace-pre-wrap overflow-y-auto mb-4"></pre>
+                <div id="test-controls" class="flex-shrink-0 flex space-x-2">
+                     <button id="stop-test-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md transition-colors"><i class="fas fa-stop mr-2"></i>Dừng</button>
+                     <button id="close-test-panel-btn" class="w-full bg-slate-500 hover:bg-slate-600 text-white font-semibold px-4 py-2 rounded-md transition-colors hidden"><i class="fas fa-times mr-2"></i>Kết thúc</button>
+                </div>`;
+                document.getElementById('stop-test-btn').addEventListener('click', () => { isTestStopped = true; });
+                document.getElementById('close-test-panel-btn').addEventListener('click', () => {
+                    isTesting = false;
+                    renderPropertiesPanel();
+                });
+            }
+
+            async function startTest() {
+                if (isTesting) return;
+                isTesting = true;
+                isTestStopped = false;
+                testButton.disabled = true;
+                testButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Testing...`;
+                renderTestPanel();
+                try {
+                    await runTestSimulation();
+                } catch (e) {
+                    console.error("Test simulation failed:", e);
+                    const logEl = document.getElementById('panel-log-content');
+                    if (logEl) logEl.textContent += '\n\nLỗi nghiêm trọng xảy ra khi chạy mô phỏng.';
+                } finally {
+                    testButton.disabled = false;
+                    testButton.innerHTML = `<i class="fas fa-play mr-2"></i>Test`;
+                    const stopBtn = document.getElementById('stop-test-btn');
+                    const closeBtn = document.getElementById('close-test-panel-btn');
+                    if (stopBtn) stopBtn.classList.add('hidden');
+                    if (closeBtn) closeBtn.classList.remove('hidden');
+                }
+            }
+
+            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+            async function runTestSimulation() {
+                const logEl = document.getElementById('panel-log-content');
+                let log = [];
+                const startNode = nodes.find(n => n.type === 'start');
+                if (!startNode) {
+                    logEl.textContent = "Lỗi: Không tìm thấy khối 'Bắt đầu'.";
+                    return;
+                }
+                logEl.textContent = "Bắt đầu mô phỏng...\n";
+                let currentNode = startNode;
+                let visitedCount = {};
+                while (currentNode && !isTestStopped) {
+                    visitedCount[currentNode.id] = (visitedCount[currentNode.id] || 0) + 1;
+                    if (visitedCount[currentNode.id] > 50) {
+                        log.push(`\n⚠️ Dừng lại do vòng lặp vô hạn có thể xảy ra tại khối ${currentNode.id}`);
+                        break;
+                    }
+                    const nodeEl = document.getElementById(currentNode.id);
+                    if (nodeEl) nodeEl.classList.add('ring-2', 'ring-green-500');
+                    const config = ACTION_CONFIG[currentNode.type];
+                    log.push(`\n▶️ [${config.name}]`);
+                    Object.entries(currentNode.params).forEach(([key, val]) => {
+                        if (val) log.push(`   - ${key}: ${val}`);
+                    });
+                    logEl.textContent = log.join('\n');
+                    logEl.scrollTop = logEl.scrollHeight;
+                    await sleep(700);
+                    let nextNodeId = null;
+                    if (currentNode.type === 'if') {
+                        const thenConn = connections.find(c => c.fromNode === currentNode.id && c.fromPort === 'then');
+                        if (thenConn) {
+                            nextNodeId = thenConn.toNode;
+                            log.push(`   -> Rẽ nhánh THEN (mô phỏng)`);
+                        }
+                    } else {
+                        const connection = connections.find(c => c.fromNode === currentNode.id);
+                        if (connection) nextNodeId = connection.toNode;
+                    }
+                    if (nodeEl) nodeEl.classList.remove('ring-2', 'ring-green-500');
+                    if (currentNode.type === 'stop') {
+                        log.push('⏹️ Luồng đã dừng tại khối Stop.');
+                        nextNodeId = null;
+                    }
+                    currentNode = nodes.find(n => n.id === nextNodeId);
+                }
+                if (isTestStopped) {
+                    log.push('\n\n⏹️ Người dùng đã dừng mô phỏng.');
+                } else if (!currentNode && !log.some(l => l.includes('⏹️'))) {
+                    log.push('\n\n✅ Mô phỏng hoàn tất.');
+                }
+                logEl.textContent = log.join('\n');
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+
+            function applyTransform() {
+                transformContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+                renderConnections();
+            }
+
+            document.querySelectorAll('.action-card').forEach(card => card.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', e.currentTarget.dataset.actionType)));
+            canvasContainer.addEventListener('dragover', e => e.preventDefault());
+            canvasContainer.addEventListener('drop', e => {
+                e.preventDefault();
+                const type = e.dataTransfer.getData('text/plain');
+                const rect = canvasContainer.getBoundingClientRect();
+                const x = (e.clientX - rect.left - panX) / scale;
+                const y = (e.clientY - rect.top - panY) / scale;
+                const newNode = createNode(type, x - 110, y - 40);
+                nodes.push(newNode);
+                selectedNodeId = newNode.id;
+                renderAll();
+            });
+            canvasContainer.addEventListener('wheel', e => {
+                e.preventDefault();
+                const rect = canvasContainer.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                const oldScale = scale;
+                if (e.ctrlKey) {
+                    const zoom = e.deltaY > 0 ? 0.9 : 1.1;
+                    scale = Math.max(0.2, Math.min(3, scale * zoom));
+                } else {
+                    panX += e.deltaX * -1;
+                    panY += e.deltaY * -1;
+                }
+                panX = mouseX - (mouseX - panX) * (scale / oldScale);
+                panY = mouseY - (mouseY - panY) * (scale / oldScale);
+                applyTransform();
+            });
+            canvasContainer.addEventListener('mousedown', e => {
+                if (isSpacePressed || e.button === 1) {
+                    isPanning = true;
+                    panStart.x = e.clientX;
+                    panStart.y = e.clientY;
+                    canvasContainer.classList.add('panning');
+                }
+            });
+            window.addEventListener('keydown', e => {
+                if (e.code === 'Space' && !isSpacePressed) {
+                    e.preventDefault();
+                    isSpacePressed = true;
+                    canvasContainer.classList.add('pannable');
+                }
+            });
+            window.addEventListener('keyup', e => {
+                if (e.code === 'Space') {
+                    isSpacePressed = false;
+                    isPanning = false;
+                    canvasContainer.classList.remove('pannable', 'panning');
+                }
+            });
+            clearButton.addEventListener('click', () => { if (confirm('Bạn có chắc muốn xóa toàn bộ luồng công việc?')) init(); });
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('mouseup', onMouseUp);
+            canvasContainer.addEventListener('click', e => {
+                if (isTesting) return;
+                if (e.target === canvasContainer || e.target === transformContainer) {
+                    selectedNodeId = null;
+                    renderAll();
+                }
+            });
+            exportButton.addEventListener('click', () => {
+                const dataStr = JSON.stringify({ nodes, connections, panX, panY, scale }, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+                const exportFileDefaultName = 'workflow.json';
+                let linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            });
+            importButton.addEventListener('click', () => importFileInput.click());
+            importFileInput.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (data && data.nodes && data.connections) init(data);
+                        else alert('Tệp JSON không hợp lệ.');
+                    } catch (error) {
+                        alert('Lỗi khi đọc tệp: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+            });
+            testButton.addEventListener('click', startTest);
+
+            // Selector Modal Logic
+            closeSelectorModalBtn.addEventListener('click', () => selectorModal.classList.add('hidden'));
+            openUrlBtn.addEventListener('click', () => {
+                const url = selectorUrlInput.value;
+                if (url && url !== 'Không tìm thấy URL') window.open(url, '_blank');
+            });
+            confirmSelectorBtn.addEventListener('click', () => {
+                const selectedNode = nodes.find(n => n.id === selectedNodeId);
+                const targetInput = document.getElementById(activeSelectorInputId);
+                if (selectedNode && targetInput) {
+                    targetInput.value = selectorPasteArea.value;
+                    const paramId = targetInput.dataset.paramId;
+                    selectedNode.params[paramId] = selectorPasteArea.value;
+                    renderNodes(); // To update summary in node
+                }
+                selectorModal.classList.add('hidden');
+            });
+
+            function init(initialData = null) {
+                const data = initialData || { nodes: [createNode('start', 200, 150)], connections: [], panX: 0, panY: 0, scale: 1 };
+                panX = data.panX || 0;
+                panY = data.panY || 0;
+                scale = data.scale || 1;
+                nodes = data.nodes;
+                connections = data.connections;
+                selectedNodeId = data.nodes[0]?.id || null;
+                renderAll();
+            }
+
+            init();
+
+            document.querySelectorAll('details').forEach(detail => {
+                const marker = detail.querySelector('.details-marker');
+                detail.addEventListener('toggle', () => marker.classList.toggle('rotate-90', detail.open));
+                if (detail.open) marker.classList.add('rotate-90');
+            });
+        });
+    </script>
+</body>
+
+</html>

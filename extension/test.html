@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Element Selector Extension</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .test-element {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        #unique-element {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+        
+        .class-example {
+            background: #f3e5f5;
+            border-color: #9c27b0;
+        }
+        
+        .multiple.classes.here {
+            background: #e8f5e8;
+            border-color: #4caf50;
+        }
+        
+        .nested-parent {
+            background: #fff3e0;
+            border-color: #ff9800;
+            padding: 30px;
+        }
+        
+        .nested-child {
+            background: #fce4ec;
+            border-color: #e91e63;
+            margin: 10px 0;
+            padding: 15px;
+        }
+        
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #1976d2;
+        }
+        
+        .list-item {
+            padding: 10px;
+            background: #f5f5f5;
+            margin: 5px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f2f2f2;
+        }
+        
+        .duplicate-test, .automation-elements {
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        
+        .duplicate-test button, .automation-elements button {
+            margin: 5px;
+        }
+        
+        .automation-elements input {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .specific-button {
+            background: #ff9800 !important;
+            color: white;
+        }
+        
+        .another-section {
+            background: #ffebee;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Page cho Element Selector Extension</h1>
+        <p>Trang này được tạo để test extension Element Selector. Hãy thử chọn các element khác nhau bên dưới:</p>
+        
+        <div class="test-element">
+            <h2>Element thường (không có ID hoặc class)</h2>
+            <p>Đây là một paragraph thường. Selector sẽ được tạo dựa trên cấu trúc DOM.</p>
+        </div>
+        
+        <div id="unique-element" class="test-element">
+            <h2>Element có ID</h2>
+            <p>Element này có ID="unique-element". Selector sẽ là #unique-element</p>
+        </div>
+        
+        <div class="test-element class-example">
+            <h2>Element có Class</h2>
+            <p>Element này có class="test-element class-example". Selector sẽ sử dụng classes.</p>
+        </div>
+        
+        <div class="test-element multiple classes here">
+            <h2>Element có Multiple Classes</h2>
+            <p>Element này có nhiều classes: "test-element", "multiple", "classes", "here"</p>
+        </div>
+
+        <div class="test-element">
+            <h2>Test Selector Accuracy</h2>
+            <p>Các test case để kiểm tra độ chính xác của selector:</p>
+            
+            <div class="duplicate-test">
+                <button class="btn">Button 1 (class generic)</button>
+                <button class="btn">Button 2 (class generic)</button>
+                <button class="btn specific-button">Button 3 (class cụ thể)</button>
+            </div>
+            
+            <div class="duplicate-test">
+                <div id="duplicate-id">Div với ID duplicate (bad practice)</div>
+            </div>
+            <div class="another-section">
+                <div id="duplicate-id">Another div với cùng ID (bad practice)</div>
+            </div>
+            
+            <div class="automation-elements">
+                <input type="text" data-testid="username-input" placeholder="Username">
+                <input type="password" data-cy="password-field" placeholder="Password">
+                <button data-test="login-btn" class="btn primary">Login</button>
+            </div>
+        </div>
+        
+        <div class="nested-parent">
+            <h2>Nested Elements</h2>
+            <p>Đây là parent element.</p>
+            <div class="nested-child">
+                <h3>Child Element</h3>
+                <p>Đây là child element bên trong parent.</p>
+                <button onclick="alert('Button clicked!')">Click Me</button>
+            </div>
+            <div class="nested-child">
+                <h3>Another Child</h3>
+                <p>Đây là child element thứ hai.</p>
+                <button onclick="alert('Second button!')">Another Button</button>
+            </div>
+        </div>
+        
+        <div class="test-element">
+            <h2>List Elements</h2>
+            <ul>
+                <li class="list-item">List item 1</li>
+                <li class="list-item">List item 2</li>
+                <li class="list-item">List item 3</li>
+            </ul>
+        </div>
+        
+        <div class="test-element">
+            <h2>Table Elements</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Header 1</th>
+                        <th>Header 2</th>
+                        <th>Header 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cell 1,1</td>
+                        <td>Cell 1,2</td>
+                        <td>Cell 1,3</td>
+                    </tr>
+                    <tr>
+                        <td>Cell 2,1</td>
+                        <td>Cell 2,2</td>
+                        <td>Cell 2,3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="test-element">
+            <h2>Form Elements</h2>
+            <form>
+                <div style="margin: 10px 0;">
+                    <label for="test-input">Test Input:</label>
+                    <input type="text" id="test-input" placeholder="Enter text here">
+                </div>
+                <div style="margin: 10px 0;">
+                    <label for="test-select">Test Select:</label>
+                    <select id="test-select">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                    </select>
+                </div>
+                <div style="margin: 10px 0;">
+                    <label>
+                        <input type="checkbox" id="test-checkbox"> Test Checkbox
+                    </label>
+                </div>
+                <button type="submit">Submit Form</button>
+            </form>
+        </div>
+        
+        <div class="test-element">
+            <h2>Hướng dẫn test</h2>
+            <ol>
+                <li>Mở extension Element Selector</li>
+                <li>Click "Bắt đầu chọn element"</li>
+                <li>Hover qua các element trên trang này</li>
+                <li>Click vào element muốn lấy selector</li>
+                <li>Kiểm tra selector đã được copy vào clipboard</li>
+                <li>Paste selector vào console hoặc editor để test</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

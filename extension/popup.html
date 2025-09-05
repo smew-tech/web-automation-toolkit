@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Selector Tool</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="logo.png" alt="Logo" class="logo-img">
+        </div>
+        
+        <div class="language-switch">
+            <button id="lang-en" class="lang-btn active" data-lang="en">🇺🇸</button>
+            <button id="lang-vi" class="lang-btn" data-lang="vi">🇻🇳</button>
+        </div>
+
+        <div class="header">
+            <h1 data-translate="extensionTitle">Element Selector</h1>
+            <p data-translate="extensionSubtitle">Chọn element và copy selector dễ dàng</p>
+        </div>
+
+        <div class="tutorial-link section">
+            <button id="tutorial-btn" class="btn btn-tutorial" data-translate="tutorialButton">
+                Xem hướng dẫn chi tiết
+            </button>
+        </div>
+
+        <div class="controls section">
+            <button id="start-btn" class="btn btn-primary" data-translate="startSelectionButton">
+                Bắt đầu chọn element
+            </button>
+            <button id="stop-btn" class="btn btn-secondary" disabled data-translate="stopSelectionButton">
+                Dừng chọn
+            </button>
+        </div>
+
+        <div class="status section">
+            <div id="status-indicator" class="status-inactive">
+                <span class="status-dot"></span>
+                <span data-translate="statusInactive">Chưa kích hoạt</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="lang.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>
