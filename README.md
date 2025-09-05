@@ -25,7 +25,7 @@ A comprehensive web automation toolkit consisting of a visual workflow builder a
 
 ```
 Automation-tool/
-├── automation-tools/
+├── toolkit/
 │   └── index.html          # Main workflow builder application
 └── extension/
     ├── manifest.json       # Chrome extension manifest
@@ -48,7 +48,7 @@ Automation-tool/
 4. The Element Selector Tool will appear in your extensions toolbar
 
 ### Workflow Builder Setup
-1. Open the `automation-tools/index.html` file in any modern web browser
+1. Open the `toolkit/index.html` file in any modern web browser
 2. No additional installation required - it's a standalone web application
 
 ## 📖 Usage
