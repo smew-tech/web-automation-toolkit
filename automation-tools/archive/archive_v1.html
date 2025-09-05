@@ -30,7 +30,7 @@
             bottom: 110%;
             left: 50%;
             transform: translateX(-50%);
-            background-color: rgb(71 85 105);
+            background-color: #334155;
             color: white;
             padding: 4px 8px;
             border-radius: 4px;
@@ -39,10 +39,6 @@
             white-space: nowrap;
             z-index: 100;
             pointer-events: none;
-        }
-        .dark .action-card:hover::after {
-            background-color: rgb(51 65 85);
-            color: rgb(248 250 252);
         }
 
         #canvas-container {
@@ -144,228 +140,6 @@
         .selected-node {
             border-color: #3b82f6 !important;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
-        }
-        
-        /* Force header background and text colors - draw.io style */
-        header {
-            background-color: rgb(250 250 250) !important;
-            color: rgb(51 51 51) !important;
-            border-color: rgb(224 224 224) !important;
-        }
-        .dark header {
-            background-color: rgb(40 40 40) !important;
-            color: rgb(220 220 220) !important;
-            border-color: rgb(60 60 60) !important;
-        }
-        
-        /* Force sidebar background colors - draw.io style */
-        aside {
-            background-color: rgb(250 250 250) !important;
-            color: rgb(51 51 51) !important;
-            border-color: rgb(224 224 224) !important;
-        }
-        .dark aside {
-            background-color: rgb(40 40 40) !important;
-            color: rgb(220 220 220) !important;
-            border-color: rgb(60 60 60) !important;
-        }
-        
-        /* Force main section background colors - draw.io style */
-        section {
-            background-color: rgb(250 250 250) !important;
-            color: rgb(51 51 51) !important;
-            border-color: rgb(224 224 224) !important;
-        }
-        .dark section {
-            background-color: rgb(40 40 40) !important;
-            color: rgb(220 220 220) !important;
-            border-color: rgb(60 60 60) !important;
-        }
-        
-        /* Force body background - draw.io style */
-        body {
-            background-color: rgb(245 245 245) !important;
-        }
-        .dark body {
-            background-color: rgb(20 20 20) !important;
-        }
-        
-        /* Canvas with warm undertones */
-        #canvas-container {
-            background-color: rgb(255 255 253) !important; /* Very subtle warm white */
-        }
-        .dark #canvas-container {
-            background-color: rgb(25 25 25) !important;
-        }
-        
-        /* Action cards with warm tones */
-        .action-card > div {
-            background-color: rgb(253 253 251) !important; /* Very light warm */
-            color: rgb(45 45 45) !important;
-            border-color: rgb(224 219 214) !important; /* Warm border */
-        }
-        .dark .action-card > div {
-            background-color: rgb(40 40 40) !important;
-            color: rgb(220 220 220) !important;
-            border-color: rgb(60 60 60) !important;
-        }
-        
-        /* Fix action cards hover states */
-        .action-card > div:hover {
-            border-color: rgb(99 102 241) !important;
-        }
-        .dark .action-card > div:hover {
-            border-color: rgb(129 140 248) !important;
-        }
-        
-        /* Workflow nodes with warm tones */
-        .workflow-node {
-            background-color: rgb(255 255 253) !important; /* Subtle warm white */
-            color: rgb(45 45 45) !important;
-            border-color: rgb(224 219 214) !important; /* Warm border */
-        }
-        .dark .workflow-node {
-            background-color: rgb(35 35 35) !important;
-            color: rgb(220 220 220) !important;
-            border-color: rgb(55 55 55) !important;
-        }
-        
-        /* Fix text colors throughout website */
-        body, h1, h2, h3, h4, h5, h6, p, span, div, label, summary {
-            color: rgb(51 51 51) !important;
-        }
-        .dark body, .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6, 
-        .dark p, .dark span, .dark div, .dark label, .dark summary {
-            color: rgb(220 220 220) !important;
-        }
-        
-        /* Fix input and button text colors */
-        input, textarea, button {
-            color: rgb(51 51 51) !important;
-        }
-        .dark input, .dark textarea, .dark button {
-            color: rgb(220 220 220) !important;
-        }
-        
-        /* Keep button background colors intact but fix text */
-        button[class*="bg-"] {
-            color: white !important;
-        }
-        
-        /* Draw.io inspired warm color scheme */
-        /* Warm off-white backgrounds instead of harsh white */
-        body {
-            background-color: rgb(251 251 249) !important; /* Very light warm beige */
-        }
-        .dark body {
-            background-color: rgb(15 15 15) !important;
-        }
-        
-        /* Soft cream colored panels */
-        header {
-            background-color: rgb(254 254 252) !important; /* Warm white */
-            border-color: rgb(224 219 214) !important; /* Warm border */
-        }
-        .dark header {
-            background-color: rgb(28 28 28) !important;
-            border-color: rgb(48 48 48) !important;
-        }
-        
-        aside {
-            background-color: rgb(254 254 252) !important; /* Warm white */
-            border-color: rgb(224 219 214) !important;
-        }
-        .dark aside {
-            background-color: rgb(28 28 28) !important;
-            border-color: rgb(48 48 48) !important;
-        }
-        
-        section {
-            background-color: rgb(254 254 252) !important; /* Warm white */
-            border-color: rgb(224 219 214) !important;
-        }
-        .dark section {
-            background-color: rgb(28 28 28) !important;
-            border-color: rgb(48 48 48) !important;
-        }
-        
-        /* Fix hover states to be theme aware */
-        *[class*="hover:bg-slate-"], *[class*="hover:bg-gray-"] {
-            transition: background-color 0.2s !important;
-        }
-        
-        summary:hover, button:hover:not([class*="bg-"]) {
-            background-color: rgb(243 244 246) !important;
-        }
-        .dark summary:hover, .dark button:hover:not([class*="bg-"]) {
-            background-color: rgb(55 55 55) !important;
-        }
-        
-        /* Remove annoying line under workflow-node header */
-        .node-header {
-            border-bottom: none !important;
-        }
-        
-        /* Comprehensive theme overrides - fix everything stuck in dark mode */
-        /* Force override all Tailwind dark: classes */
-        .dark\:bg-gray-800, .dark\:bg-gray-700, .dark\:bg-gray-600, .dark\:bg-gray-900 {
-            background-color: rgb(254 254 252) !important;
-        }
-        .dark .dark\:bg-gray-800, .dark .dark\:bg-gray-700, .dark .dark\:bg-gray-600, .dark .dark\:bg-gray-900 {
-            background-color: rgb(28 28 28) !important;
-        }
-        
-        /* Fix text colors that might be stuck */
-        .dark\:text-gray-200, .dark\:text-gray-300, .dark\:text-gray-400, .dark\:text-gray-100 {
-            color: rgb(51 51 51) !important;
-        }
-        .dark .dark\:text-gray-200, .dark .dark\:text-gray-300, .dark .dark\:text-gray-400, .dark .dark\:text-gray-100 {
-            color: rgb(220 220 220) !important;
-        }
-        
-        /* Fix border colors */
-        .dark\:border-gray-700, .dark\:border-gray-600, .dark\:border-gray-500 {
-            border-color: rgb(224 219 214) !important;
-        }
-        .dark .dark\:border-gray-700, .dark .dark\:border-gray-600, .dark .dark\:border-gray-500 {
-            border-color: rgb(48 48 48) !important;
-        }
-        
-        /* Override any remaining Tailwind classes that might be problematic */
-        [class*="dark:"] {
-            transition: all 0.2s ease !important;
-        }
-        
-        /* Fix specific toggle buttons hover states */
-        #language-toggle-button, #theme-toggle-button {
-            color: rgb(75 75 75) !important;
-        }
-        .dark #language-toggle-button, .dark #theme-toggle-button {
-            color: rgb(180 180 180) !important;
-        }
-        
-        #language-toggle-button:hover, #theme-toggle-button:hover {
-            background-color: rgb(248 246 242) !important; /* Warm hover */
-            color: rgb(45 45 45) !important;
-        }
-        .dark #language-toggle-button:hover, .dark #theme-toggle-button:hover {
-            background-color: rgb(45 45 45) !important;
-            color: rgb(220 220 220) !important;
-        }
-        
-        /* Fix theme toggle icons visibility */
-        .fa-sun {
-            display: block !important;
-        }
-        .dark .fa-sun {
-            display: none !important;
-        }
-        
-        .fa-moon {
-            display: none !important;
-        }
-        .dark .fa-moon {
-            display: block !important;
         }
 
         .node-header {
@@ -472,6 +246,7 @@
             right: 12px;
             top: 33.33%;
             transform: translateY(-50%);
+            color: #22c55e;
         }
 
         /* green-500 */
@@ -479,13 +254,14 @@
             right: 12px;
             top: 66.67%;
             transform: translateY(-50%);
+            color: #ef4444;
         }
 
         /* red-500 */
 
         .port-tooltip {
             position: absolute;
-            background-color: rgb(71 85 105);
+            background-color: #334155;
             color: white;
             padding: 2px 6px;
             border-radius: 4px;
@@ -497,10 +273,6 @@
             visibility: hidden;
             opacity: 0;
             transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-        }
-        .dark .port-tooltip {
-            background-color: rgb(51 65 85);
-            color: rgb(248 250 252);
         }
 
         .selected-node .port-tooltip {
@@ -575,23 +347,10 @@
             background: #64748b;
         }
 
-        /* Dark mode scrollbar for WebKit */
-        .dark ::-webkit-scrollbar-track {
-            background: rgb(55 65 81);
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background: rgb(107 114 128);
-        }
-        .dark ::-webkit-scrollbar-thumb:hover {
-            background: rgb(156 163 175);
-        }
         /* Áp dụng cho Firefox */
         * {
             scrollbar-width: thin;
             scrollbar-color: #94a3b8 #f1f5f9;
-        }
-        .dark * {
-            scrollbar-color: rgb(107 114 128) rgb(55 65 81);
         }
     </style>
 </head>
@@ -1288,11 +1047,11 @@
                             break;
                         case 'if':
                             portsHTML = `${createPortWithTooltip('port-left', 'input', 'in')}${createPortWithTooltip('port-if-then', 'output', 'then')}${createPortWithTooltip('port-if-else', 'output', 'else')}`;
-                            labelsHTML = `<span class="port-label label-then text-green-500">THEN</span><span class="port-label label-else text-red-500">ELSE</span>`;
+                            labelsHTML = `<span class="port-label label-then">THEN</span><span class="port-label label-else">ELSE</span>`;
                             break;
                         case 'forEach':
                             portsHTML = `${createPortWithTooltip('port-left', 'input', 'in')}${createPortWithTooltip('port-right', 'output', 'next')}${createPortWithTooltip('port-bottom', 'output', 'loopBody')}`;
-                            labelsHTML = `<span class="port-label text-green-500" style="top: 50%; right: 14px; transform: translateY(-50%);">NEXT</span><span class="port-label text-purple-500" style="bottom: -24px; left: 50%; transform: translateX(-50%);">LOOP</span>`;
+                            labelsHTML = `<span class="port-label" style="top: 50%; right: 14px; transform: translateY(-50%); color: #22c55e;">NEXT</span><span class="port-label" style="bottom: -24px; left: 50%; transform: translateX(-50%); color: #8b5cf6;">LOOP</span>`;
                             break;
                         default:
                             portsHTML = `${createPortWithTooltip('port-top', 'input', 'in_top')}${createPortWithTooltip('port-left', 'input', 'in_left')}${createPortWithTooltip('port-right', 'output', 'out_right')}${createPortWithTooltip('port-bottom', 'output', 'out_bottom')}`;

@@ -2,6 +2,9 @@
 
 A comprehensive web automation toolkit consisting of a visual workflow builder and a Chrome extension for element selection. This project enables users to create, test, and execute web automation workflows through an intuitive drag-and-drop interface.
 
+
+![Demo thông báo](images/Screenshot%202025-09-05%20at%2018.08.25.png)
+
 ## 🚀 Features
 
 ### Visual Workflow Builder
