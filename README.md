@@ -1,4 +1,4 @@
-# SMEW Automation Tool
+# Web automation toolkit
 
 A comprehensive web automation toolkit consisting of a visual workflow builder and a Chrome extension for element selection. This project enables users to create, test, and execute web automation workflows through an intuitive drag-and-drop interface.
 
