@@ -86,6 +86,7 @@
             height: 100%;
             pointer-events: none;
             z-index: 25;
+            overflow: visible;
         }
 
         .connector-group>* {
@@ -1503,8 +1504,13 @@
                         const isInputPort = endPort.classList.contains('input-port');
                         const isDifferentNode = endNodeId !== tempConnection.startNode;
                         if (isInputPort && isDifferentNode) {
-                            const isNodeInputOccupied = connections.some((c, i) => (dragInfo.type !== 'connection_active' || dragInfo.index !== i) && c.toNode === endNodeId);
-                            if (!isNodeInputOccupied) isValidTarget = true;
+
+                            const isNodeInputOccupied = connections.some((c, i) => {
+                                return (dragInfo.type !== 'connection_active' || dragInfo.index !== i) && c.toNode === endNodeId;
+                            });
+                            if (!isNodeInputOccupied) {
+                                isValidTarget = true;
+                            }
                         }
                     }
                     if (isValidTarget) {
