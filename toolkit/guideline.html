@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Automation Toolkit - Hướng Dẫn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .markdown-content {
+            line-height: 1.7;
+            color: #374151;
+        }
+        .markdown-content h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .markdown-content h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            padding-left: 0.5rem;
+            border-left: 4px solid #3b82f6;
+        }
+        .markdown-content h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .markdown-content h4 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+        .markdown-content p {
+            color: #4b5563;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+        .markdown-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #4b5563;
+        }
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        .markdown-content code {
+            background-color: #f3f4f6;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #1f2937;
+        }
+        .markdown-content pre {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        .markdown-content pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #f9fafb;
+        }
+        .markdown-content strong {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .markdown-content em {
+            font-style: italic;
+            color: #6b7280;
+        }
+        .markdown-content hr {
+            border: none;
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 2rem 0;
+        }
+        .menu-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            color: #374151;
+            transition: all 0.2s;
+            border-radius: 0.5rem;
+            margin-bottom: 0.125rem;
+        }
+        .menu-item:hover {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+        .menu-item.active {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+            font-weight: 500;
+        }
+        .category-header {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 0.5rem;
+        }
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+        .nav-subsection {
+            margin-left: 1rem;
+            margin-top: 0.5rem;
+        }
+        .language-btn {
+            background-color: #f3f4f6;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .language-btn:hover {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        .language-btn.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm border-b">
+        <div class="max-w-full mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-xl font-semibold text-gray-900">
+                        <span id="page-title">SMEW Automation Docs</span>
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500" id="node-count"></span>
+                    <div class="flex items-center space-x-2">
+                         <button onclick="switchLanguage('en')" 
+                                class="language-btn px-3 py-1 text-sm rounded transition-colors" 
+                                id="lang-en"
+                                title="Switch to English">
+                            🇺🇸 EN
+                        </button>
+                        <button onclick="switchLanguage('vi')" 
+                                class="language-btn px-3 py-1 text-sm rounded transition-colors" 
+                                id="lang-vi"
+                                title="Switch to Vietnamese">
+                            🇻🇳 VI
+                        </button>
+                    </div>
+                    <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" title="Go back to main toolkit">
+                        <i class="fas fa-play mr-2"></i>
+                        <span id="toolkit-btn">Toolkit</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen">
+        <!-- Left Sidebar -->
+        <nav class="w-80 bg-white shadow-lg overflow-y-auto">
+            <div class="p-4">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-3" id="categories-title">Contents</h2>
+                    <div class="space-y-1" id="navigation-menu">
+                        <!-- Menu will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <div class="max-w-4xl mx-auto p-8">
+                <div id="content" class="markdown-content">
+                    <div class="text-center py-12">
+                        <i class="fas fa-spinner fa-spin text-3xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-500">Đang tải nội dung...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let markdownContent = '';
+        let currentLanguage = 'vi';
+        let currentSection = 'overview';
+        
+        // Common Markdown Parser - Extract menu structure from any markdown content
+        function getMenuStructure() {
+            if (!markdownContent) return [];
+            
+            const lines = markdownContent.split('\n');
+            const menuItems = [];
+            let currentH1 = null;
+            
+            // Parse line by line following markdown hierarchy
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                // H1 headings become main menu items
+                if (line.startsWith('# ') && !line.startsWith('## ')) {
+                    const title = cleanHeadingText(line.substring(2));
+                    const id = generateId(title);
+                    
+                    currentH1 = {
+                        title,
+                        id,
+                        icon: 'fas fa-file-alt',
+                        items: []
+                    };
+                    
+                    menuItems.push(currentH1);
+                }
+                
+                // H2 headings become sub-menu items under current H1
+                else if (line.startsWith('## ') && !line.startsWith('### ') && currentH1) {
+                    const title = cleanHeadingText(line.substring(3));
+                    const id = generateId(title);
+                    
+                    currentH1.items.push({
+                        title,
+                        id
+                    });
+                }
+            }
+            
+            return menuItems;
+        }
+
+        // Clean heading text by removing markdown syntax and emojis
+        function cleanHeadingText(text) {
+            return text.replace(/[#\s]*/, '').replace(/[🎮🧭👆⏱️📊🔍]/g, '').trim();
+        }
+        
+        // Generate ID from title
+        function generateId(title) {
+            return title.toLowerCase()
+                .replace(/[^a-z0-9\s]/g, '') // Remove special characters except spaces
+                .replace(/\s+/g, '-') // Replace spaces with hyphens
+                .replace(/-+/g, '-') // Replace multiple hyphens with single
+                .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+        }
+        
+
+
+
+
+        // Load markdown content - try fetch first, fallback to showing instruction
+        async function loadMarkdown(language = 'vi') {
+            try {
+                const filename = language === 'en' ? 'guideline-en.md' : 'guideline-vi.md';
+                const response = await fetch(filename);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const text = await response.text();
+                markdownContent = text;
+                currentLanguage = language;
+                updateLanguageButtons();
+                renderMenu();
+                showSection('overview');
+            } catch (error) {
+                console.error('Error loading markdown:', error);
+                document.getElementById('content').innerHTML = '<div class="text-center py-12"><i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-4"></i><p class="text-red-500">Cannot load content. Please try again.</p></div>';
+            }
+        }
+        
+
+        // Switch language
+        function switchLanguage(lang) {
+            if (lang !== currentLanguage) {
+                loadMarkdown(lang);
+            }
+        }
+
+        // Update language button states
+        function updateLanguageButtons() {
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('lang-' + currentLanguage).classList.add('active');
+        }
+
+
+        // Initialize content
+        function initializeContent() {
+            loadMarkdown('en'); // Default to English for common use
+        }
+
+        // Render navigation menu
+        function renderMenu() {
+            const menuContainer = document.getElementById('navigation-menu');
+            menuContainer.innerHTML = '';
+
+            const menuStructure = getMenuStructure();
+            menuStructure.forEach(section => {
+                // Create section header
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'nav-section';
+
+                const sectionHeader = document.createElement('button');
+                sectionHeader.className = `menu-item flex items-center w-full text-left font-medium ${currentSection === section.id ? 'active' : ''}`;
+                sectionHeader.innerHTML = `<i class="${section.icon} mr-3 w-4 flex-shrink-0"></i><span>${section.title}</span>`;
+                sectionHeader.onclick = () => showSection(section.id);
+                
+                sectionDiv.appendChild(sectionHeader);
+
+                // Add subsections if available
+                if (section.items) {
+                    const subsectionDiv = document.createElement('div');
+                    subsectionDiv.className = 'nav-subsection space-y-1';
+                    
+                    section.items.forEach(item => {
+                        const itemButton = document.createElement('button');
+                        itemButton.className = `menu-item text-sm ${currentSection === item.id ? 'active' : ''}`;
+                        itemButton.innerHTML = `<span class="pl-2">${item.title}</span>`;
+                        itemButton.onclick = () => showSection(item.id);
+                        subsectionDiv.appendChild(itemButton);
+                    });
+                    
+                    sectionDiv.appendChild(subsectionDiv);
+                }
+
+                menuContainer.appendChild(sectionDiv);
+            });
+        }
+
+        // Show specific section
+        function showSection(sectionId) {
+            if (!markdownContent) {
+                document.getElementById('content').innerHTML = '<div class="text-center py-12"><i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-4"></i><p class="text-red-500">Cannot load content. Please try again.</p></div>';
+                return;
+            }
+            
+            currentSection = sectionId;
+            renderMenu();
+            
+            // Render full content
+            document.getElementById('content').innerHTML = marked.parse(markdownContent);
+            
+            // Scroll to the target section
+            scrollToSection(sectionId);
+        }
+        
+        // Scroll to specific section by ID
+        function scrollToSection(sectionId) {
+            // Find the section title from menu structure
+            const menuItems = getMenuStructure();
+            let targetTitle = '';
+            
+            for (const section of menuItems) {
+                if (section.id === sectionId) {
+                    targetTitle = section.title;
+                    break;
+                }
+                
+                if (section.items) {
+                    for (const item of section.items) {
+                        if (item.id === sectionId) {
+                            targetTitle = item.title;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (!targetTitle) {
+                document.querySelector('main').scrollTop = 0;
+                return;
+            }
+            
+            // Find the heading element in rendered content
+            setTimeout(() => {
+                const headings = document.querySelectorAll('#content h1, #content h2, #content h3');
+                for (const heading of headings) {
+                    const headingText = cleanHeadingText(heading.textContent);
+                    if (headingText === targetTitle) {
+                        // Get header height to offset scroll position
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const elementPosition = heading.offsetTop;
+                        const offsetPosition = elementPosition - headerHeight - 80;
+
+                        document.querySelector('main').scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                        return;
+                    }
+                }
+                
+                // Fallback: scroll to top
+                document.querySelector('main').scrollTop = 0;
+            }, 100); // Small delay to ensure content is rendered
+        }
+
+
+
+
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeContent);
+    </script>
+</body>
+</html>

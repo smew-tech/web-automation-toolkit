@@ -509,6 +509,52 @@
             opacity: 1;
         }
 
+        /* Help button tooltips */
+        .help-btn {
+            position: relative;
+        }
+
+        .help-btn:hover::after {
+            content: attr(title);
+            position: absolute;
+            top: 50%;
+            left: -300px;
+            transform: translateY(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            width: 280px;
+            white-space: normal;
+            word-wrap: break-word;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            line-height: 1.4;
+        }
+
+        .help-btn:hover::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -14px;
+            transform: translateY(-50%);
+            border: 6px solid transparent;
+            border-left-color: #1f2937;
+            z-index: 9999;
+        }
+
+        .dark .help-btn:hover::after {
+            background: #f9fafb;
+            color: #1f2937;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .help-btn:hover::before {
+            border-left-color: #f9fafb;
+        }
+
         .port-top+.port-tooltip {
             bottom: 105%;
             left: 50%;
@@ -614,6 +660,9 @@
                 <button id="export-button"
                     class="bg-slate-700 text-white font-semibold px-3 py-1.5 rounded-md hover:bg-slate-800 transition-colors active:scale-95 text-sm"><i
                         class="fas fa-download mr-2"></i>Export</button>
+                <button id="guideline-button"
+                    class="bg-purple-600 text-white font-semibold px-3 py-1.5 rounded-md hover:bg-purple-700 transition-colors active:scale-95 text-sm"><i
+                        class="fas fa-book mr-2"></i>Guide</button>
                 <button id="clear-button"
                     class="bg-red-500 text-white font-semibold px-2.5 py-1.5 rounded-md hover:bg-red-600 transition-colors active:scale-95 text-sm"><i
                         class="fas fa-trash"></i></button>
@@ -637,41 +686,41 @@
             <div class="flex-grow min-h-0 overflow-y-auto pr-1">
                 <details open class="text-slate-800 dark:text-gray-200">
                     <summary
-                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        class="cursor-pointer p-2 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
                         <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Logic
                     </summary>
-                    <div class="grid grid-cols-3 gap-2 p-2">
+                    <div class="grid grid-cols-4 gap-1 p-2">
                         <div class="action-card" draggable="true" data-action-type="if" data-tooltip-text="Điều Kiện">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-indigo-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-code-branch text-indigo-500 dark:text-indigo-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-indigo-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-code-branch text-indigo-500 dark:text-indigo-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="forEach"
                             data-tooltip-text="Vòng Lặp">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-sync-alt text-purple-500 dark:text-purple-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-sync-alt text-purple-500 dark:text-purple-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="setVariable"
                             data-tooltip-text="Gán Biến">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-pink-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-equals text-pink-500 dark:text-pink-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-pink-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-equals text-pink-500 dark:text-pink-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="stop" data-tooltip-text="Dừng">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-stop-circle text-red-500 dark:text-red-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-stop-circle text-red-500 dark:text-red-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="comment"
                             data-tooltip-text="Ghi Chú">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-comment-dots text-gray-500 dark:text-gray-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-comment-dots text-gray-500 dark:text-gray-400 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -679,36 +728,36 @@
 
                 <details open class="text-slate-800 dark:text-gray-200">
                     <summary
-                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        class="cursor-pointer p-2 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
                         <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Điều Hướng
                     </summary>
-                    <div class="grid grid-cols-3 gap-2 p-2">
+                    <div class="grid grid-cols-4 gap-1 p-2">
                         <div class="action-card" draggable="true" data-action-type="goto"
                             data-tooltip-text="Truy cập URL">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-sky-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-link text-sky-500 dark:text-sky-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-sky-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-link text-sky-500 dark:text-sky-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="reload"
                             data-tooltip-text="Tải Lại Trang">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-redo text-green-500 dark:text-green-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-redo text-green-500 dark:text-green-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="goBack"
                             data-tooltip-text="Lùi Lại Trang">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-slate-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-arrow-left text-slate-500 dark:text-slate-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-slate-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-arrow-left text-slate-500 dark:text-slate-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="goForward"
                             data-tooltip-text="Tới Trang Trước">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-slate-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-arrow-right text-slate-500 dark:text-slate-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-slate-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-arrow-right text-slate-500 dark:text-slate-400 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -716,62 +765,62 @@
 
                 <details open class="text-slate-800 dark:text-gray-200">
                     <summary
-                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        class="cursor-pointer p-2 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
                         <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Tương Tác
                     </summary>
-                    <div class="grid grid-cols-3 gap-2 p-2">
+                    <div class="grid grid-cols-4 gap-1 p-2">
                         <div class="action-card" draggable="true" data-action-type="click" data-tooltip-text="Nhấp">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-amber-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-hand-pointer text-amber-500 dark:text-amber-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-amber-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-hand-pointer text-amber-500 dark:text-amber-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="fill" data-tooltip-text="Điền">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-violet-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-keyboard text-violet-500 dark:text-violet-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-violet-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-keyboard text-violet-500 dark:text-violet-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="clearInput"
                             data-tooltip-text="Xóa Ô Nhập Liệu">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-eraser text-red-500 dark:text-red-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-eraser text-red-500 dark:text-red-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="setCheckboxState"
                             data-tooltip-text="Trạng thái Checkbox">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-check-square text-blue-500 dark:text-blue-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-check-square text-blue-500 dark:text-blue-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="selectOption"
                             data-tooltip-text="Chọn Dropdown">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-orange-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-list-ul text-orange-500 dark:text-orange-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-orange-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-list-ul text-orange-500 dark:text-orange-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="hover"
                             data-tooltip-text="Di chuột qua">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-cyan-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-mouse-pointer text-cyan-500 dark:text-cyan-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-cyan-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-mouse-pointer text-cyan-500 dark:text-cyan-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="press"
                             data-tooltip-text="Nhấn Phím">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-teal-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-arrow-turn-down text-teal-500 dark:text-teal-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-teal-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-arrow-turn-down text-teal-500 dark:text-teal-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="uploadFile"
                             data-tooltip-text="Tải Lên Tệp">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-fuchsia-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-file-upload text-fuchsia-500 dark:text-fuchsia-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-fuchsia-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-file-upload text-fuchsia-500 dark:text-fuchsia-400 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -779,22 +828,22 @@
 
                 <details class="text-slate-800 dark:text-gray-200">
                     <summary
-                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        class="cursor-pointer p-2 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
                         <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Chờ Đợi
                     </summary>
-                    <div class="grid grid-cols-3 gap-2 p-2">
+                    <div class="grid grid-cols-4 gap-1 p-2">
                         <div class="action-card" draggable="true" data-action-type="waitTimeout"
                             data-tooltip-text="Chờ Thời Gian">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-clock text-gray-500 dark:text-gray-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-clock text-gray-500 dark:text-gray-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="waitElement"
                             data-tooltip-text="Chờ Phần Tử">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-binoculars text-blue-500 dark:text-blue-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-binoculars text-blue-500 dark:text-blue-400 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -802,36 +851,36 @@
 
                 <details class="text-slate-800 dark:text-gray-200">
                     <summary
-                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        class="cursor-pointer p-2 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
                         <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Trích Xuất
                     </summary>
-                    <div class="grid grid-cols-3 gap-2 p-2">
+                    <div class="grid grid-cols-4 gap-1 p-2">
                         <div class="action-card" draggable="true" data-action-type="getText"
                             data-tooltip-text="Lấy Văn bản">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-rose-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-quote-left text-rose-500 dark:text-rose-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-rose-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-quote-left text-rose-500 dark:text-rose-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="getAttribute"
                             data-tooltip-text="Lấy Thuộc tính">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-lime-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-at text-lime-500 dark:text-lime-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-lime-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-at text-lime-500 dark:text-lime-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="getInputValue"
                             data-tooltip-text="Lấy Giá trị Input">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-i-cursor text-purple-500 dark:text-purple-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-i-cursor text-purple-500 dark:text-purple-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="screenshot"
                             data-tooltip-text="Chụp Ảnh">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-camera text-gray-500 dark:text-gray-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-camera text-gray-500 dark:text-gray-400 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -839,25 +888,268 @@
 
                 <details class="text-slate-800 dark:text-gray-200">
                     <summary
-                        class="cursor-pointer p-2 font-semibold hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
+                        class="cursor-pointer p-2 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-gray-700 rounded-md">
                         <i class="fas fa-chevron-right inline-block mr-2 text-xs details-marker"></i>Kiểm Tra
                     </summary>
-                    <div class="grid grid-cols-3 gap-2 p-2">
+                    
+                    <!-- Basic Assertions Header -->
+                    <div class="px-1.5 py-1 text-xs font-normal text-slate-600 dark:text-gray-400 uppercase tracking-wide border-b border-slate-300 dark:border-gray-600" id="basic-assertions-header">
+                        Kiểm Tra Cơ Bản
+                    </div>
+                    <div class="grid grid-cols-4 gap-1 p-2">
                         <div class="action-card" draggable="true" data-action-type="assertVisible"
                             data-tooltip-text="Kiểm tra Hiển thị">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-eye text-green-500 dark:text-green-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-eye text-green-500 dark:text-green-400 text-lg"></i>
                             </div>
                         </div>
                         <div class="action-card" draggable="true" data-action-type="assertText"
                             data-tooltip-text="Kiểm tra Văn bản">
                             <div
-                                class="bg-slate-50 dark:bg-gray-700 p-2 rounded-md border border-slate-200 dark:border-gray-600 hover:border-yellow-400 aspect-square flex items-center justify-center">
-                                <i class="fas fa-check-double text-yellow-500 dark:text-yellow-400 text-xl"></i>
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-yellow-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-check-double text-yellow-500 dark:text-yellow-400 text-lg"></i>
                             </div>
                         </div>
+                        <div class="action-card" draggable="true" data-action-type="assertURL"
+                            data-tooltip-text="Kiểm tra URL">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-link text-blue-500 dark:text-blue-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertTitle"
+                            data-tooltip-text="Kiểm tra Tiêu đề">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-heading text-purple-500 dark:text-purple-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertAttribute"
+                            data-tooltip-text="Kiểm tra Thuộc tính">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-orange-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-tags text-orange-500 dark:text-orange-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertElementCount"
+                            data-tooltip-text="Kiểm tra Số lượng Phần tử">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-indigo-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-list-ol text-indigo-500 dark:text-indigo-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertNotVisible"
+                            data-tooltip-text="Kiểm tra Không hiển thị">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-eye-slash text-red-500 dark:text-red-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertEnabled"
+                            data-tooltip-text="Kiểm tra Kích hoạt">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-teal-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-toggle-on text-teal-500 dark:text-teal-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertDisabled"
+                            data-tooltip-text="Kiểm tra Vô hiệu hóa">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-toggle-off text-gray-500 dark:text-gray-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertChecked"
+                            data-tooltip-text="Kiểm tra Đã chọn">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-emerald-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-check-square text-emerald-500 dark:text-emerald-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertUnchecked"
+                            data-tooltip-text="Kiểm tra Chưa chọn">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-pink-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-square text-pink-500 dark:text-pink-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertContainsText"
+                            data-tooltip-text="Kiểm tra Chứa văn bản">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-cyan-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-search text-cyan-500 dark:text-cyan-400 text-lg"></i>
+                            </div>
+                        </div>
+                        </div>
+                    
+                    <!-- Element States Header -->
+                    <div class="px-1.5 py-1 text-xs font-normal text-slate-600 dark:text-gray-400 uppercase tracking-wide border-b border-slate-300 dark:border-gray-600" id="element-states-header">
+                        Trạng Thái Element
                     </div>
+                    <div class="grid grid-cols-4 gap-1 p-2">
+                        <div class="action-card" draggable="true" data-action-type="assertEnabled"
+                            data-tooltip-text="Kiểm tra Kích hoạt">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-teal-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-toggle-on text-teal-500 dark:text-teal-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertDisabled"
+                            data-tooltip-text="Kiểm tra Vô hiệu hóa">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-toggle-off text-gray-500 dark:text-gray-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertChecked"
+                            data-tooltip-text="Kiểm tra Đã chọn">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-emerald-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-check-square text-emerald-500 dark:text-emerald-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertUnchecked"
+                            data-tooltip-text="Kiểm tra Chưa chọn">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-pink-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-square text-pink-500 dark:text-pink-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="assertCSSProperty"
+                            data-tooltip-text="Kiểm tra Thuộc tính CSS">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-violet-400 aspect-square flex items-center justify-center">
+                                <i class="fab fa-css3-alt text-violet-500 dark:text-violet-400 text-lg"></i>
+                            </div>
+                        </div>
+                        </div>
+                    
+                    <!-- Page Quality Header -->
+                    <div class="px-1.5 py-1 text-xs font-normal text-slate-600 dark:text-gray-400 uppercase tracking-wide border-b border-slate-300 dark:border-gray-600" id="page-quality-header">
+                        Chất Lượng Trang
+                    </div>
+                    <div class="grid grid-cols-4 gap-1 p-2">
+                        <div class="action-card" draggable="true" data-action-type="validateForm"
+                            data-tooltip-text="Kiểm tra Form">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-amber-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-clipboard-check text-amber-500 dark:text-amber-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkBrokenLinks"
+                            data-tooltip-text="Kiểm tra Liên kết lỗi">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-rose-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-unlink text-rose-500 dark:text-rose-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkImageLoading"
+                            data-tooltip-text="Kiểm tra Tải ảnh">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-lime-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-image text-lime-500 dark:text-lime-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkPageSpeed"
+                            data-tooltip-text="Kiểm tra Tốc độ Trang">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-sky-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-tachometer-alt text-sky-500 dark:text-sky-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkResponsive"
+                            data-tooltip-text="Kiểm tra Responsive">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-slate-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-mobile-alt text-slate-500 dark:text-slate-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkAccessibility"
+                            data-tooltip-text="Kiểm tra Khả năng tiếp cận">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-universal-access text-green-500 dark:text-green-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkSEO"
+                            data-tooltip-text="Kiểm tra SEO">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-yellow-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-search-plus text-yellow-500 dark:text-yellow-400 text-lg"></i>
+                            </div>
+                        </div>
+                        </div>
+                    
+                    <!-- Advanced Testing Header -->
+                    <div class="px-1.5 py-1 text-xs font-normal text-slate-600 dark:text-gray-400 uppercase tracking-wide border-b border-slate-300 dark:border-gray-600" id="advanced-testing-header">
+                        Kiểm Tra Nâng Cao
+                    </div>
+                    <div class="grid grid-cols-4 gap-1 p-2">
+                        <div class="action-card" draggable="true" data-action-type="interceptNetwork"
+                            data-tooltip-text="Chặn Mạng">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-ban text-red-500 dark:text-red-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="mockAPI"
+                            data-tooltip-text="Mock API">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-cloud text-purple-500 dark:text-purple-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="setCookie"
+                            data-tooltip-text="Đặt Cookie">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-orange-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-cookie-bite text-orange-500 dark:text-orange-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkConsoleErrors"
+                            data-tooltip-text="Kiểm tra Lỗi Console">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-red-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-red-500 dark:text-red-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkMemoryUsage"
+                            data-tooltip-text="Kiểm tra Sử dụng Bộ nhớ">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-memory text-blue-500 dark:text-blue-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkLocalStorage"
+                            data-tooltip-text="Kiểm tra Local Storage">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-teal-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-database text-teal-500 dark:text-teal-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkSessionStorage"
+                            data-tooltip-text="Kiểm tra Session Storage">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-indigo-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-archive text-indigo-500 dark:text-indigo-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="testCrossBrowser"
+                            data-tooltip-text="Kiểm tra Cross Browser">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
+                                <i class="fab fa-firefox-browser text-green-500 dark:text-green-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="simulateNetworkCondition"
+                            data-tooltip-text="Mô phỏng Điều kiện Mạng">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-yellow-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-wifi text-yellow-500 dark:text-yellow-400 text-lg"></i>
+                            </div>
+                        </div>
+                    
                 </details>
             </div>
         </aside>
@@ -904,63 +1196,6 @@
         </aside>
     </main>
 
-    <!-- Element Selector Modal -->
-    <div id="selector-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-        <div
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-slate-200 dark:border-gray-700">
-            <div class="p-4 border-b border-slate-200 dark:border-gray-700 flex justify-between items-center">
-                <h3 class="text-lg font-semibold text-slate-900 dark:text-gray-100"><i
-                        class="fas fa-crosshairs mr-2 text-blue-500"></i>Công Cụ Chọn Phần Tử</h3>
-                <button id="close-selector-modal"
-                    class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white text-2xl leading-none">&times;</button>
-            </div>
-            <div class="p-6 overflow-y-auto space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">URL trang web mục
-                        tiêu</label>
-                    <div class="flex items-center space-x-2">
-                        <input type="text" id="selector-url-input"
-                            class="flex-grow px-3 py-2 border border-slate-300 dark:border-gray-600 bg-slate-50 dark:bg-gray-700 text-slate-800 dark:text-gray-200 rounded-md"
-                            readonly>
-                        <button id="open-url-btn"
-                            class="bg-blue-500 text-white font-semibold px-3 py-2 rounded-md hover:bg-blue-600 transition-colors active:scale-95 text-sm"><i
-                                class="fas fa-external-link-alt mr-2"></i>Mở Tab</button>
-                    </div>
-                    <p id="url-not-found-msg" class="text-sm text-red-500 mt-1 hidden">Không tìm thấy hành động "Truy
-                        cập URL" trước đó. Vui lòng thêm vào luồng công việc.</p>
-                </div>
-
-                <div
-                    class="bg-slate-50 dark:bg-gray-900/50 p-4 rounded-md border border-slate-200 dark:border-gray-700">
-                    <h4 class="font-semibold mb-2 text-slate-800 dark:text-gray-200">Hướng dẫn:</h4>
-                    <ol class="list-decimal list-inside space-y-2 text-sm text-slate-600 dark:text-gray-400">
-                        <li>Nhấn nút "Mở Tab" để xem trang web trong một tab mới.</li>
-                        <li>Trên tab mới, **nhấp chuột phải** vào phần tử bạn muốn chọn (ví dụ: nút bấm, ô nhập liệu).
-                        </li>
-                        <li>Từ menu ngữ cảnh, chọn **"Inspect"** (Kiểm tra).</li>
-                        <li>Trong bảng điều khiển (DevTools) vừa mở ra, nhấp chuột phải vào dòng code HTML được tô sáng.
-                        </li>
-                        <li>Đi đến **Copy** &rarr; **Copy selector**.</li>
-                        <li>Quay lại đây và dán bộ chọn vào ô bên dưới.</li>
-                    </ol>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">Dán bộ chọn
-                        (selector) vào đây</label>
-                    <textarea id="selector-paste-area" rows="2"
-                        class="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="CSS Selector sẽ được dán vào đây..."></textarea>
-                </div>
-            </div>
-            <div
-                class="p-4 border-t border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-800/50 flex justify-end">
-                <button id="confirm-selector-btn"
-                    class="bg-green-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-green-600 transition-colors active:scale-95"><i
-                        class="fas fa-check mr-2"></i>Xác nhận lựa chọn</button>
-            </div>
-        </div>
-    </div>
 
     <script>
 
@@ -970,12 +1205,17 @@
                 test: "Test",
                 import: "Import",
                 export: "Export",
+                guide: "Guide",
                 logic: "Logic",
                 navigation: "Navigation",
                 interaction: "Interaction",
                 wait: "Wait",
                 extract: "Extract",
                 verify: "Verify",
+                basicAssertions: "Basic Assertions", 
+                elementStates: "Element States",
+                pageQuality: "Page Quality",
+                advancedTesting: "Advanced Testing",
                 properties: "Properties",
                 selectBlockToView: "Select a block to view properties.",
 
@@ -1004,6 +1244,33 @@
                 screenshot: "Screenshot",
                 assertVisible: "Assert Visible",
                 assertText: "Assert Text",
+                assertURL: "Assert URL",
+                assertTitle: "Assert Title",
+                assertAttribute: "Assert Attribute",
+                assertElementCount: "Assert Element Count",
+                assertNotVisible: "Assert Not Visible",
+                assertEnabled: "Assert Enabled",
+                assertDisabled: "Assert Disabled",
+                assertChecked: "Assert Checked",
+                assertUnchecked: "Assert Unchecked",
+                assertContainsText: "Assert Contains Text",
+                assertCSSProperty: "Assert CSS Property",
+                validateForm: "Validate Form",
+                checkBrokenLinks: "Check Broken Links",
+                checkImageLoading: "Check Image Loading",
+                checkPageSpeed: "Check Page Speed",
+                checkResponsive: "Check Responsive",
+                checkAccessibility: "Check Accessibility",
+                checkSEO: "Check SEO",
+                interceptNetwork: "Intercept Network",
+                mockAPI: "Mock API",
+                setCookie: "Set Cookie",
+                checkConsoleErrors: "Check Console Errors",
+                checkMemoryUsage: "Check Memory Usage",
+                checkLocalStorage: "Check Local Storage",
+                checkSessionStorage: "Check Session Storage",
+                testCrossBrowser: "Test Cross Browser",
+                simulateNetworkCondition: "Simulate Network Condition",
 
                 start: "Start",
 
@@ -1019,12 +1286,17 @@
                 test: "Test",
                 import: "Import",
                 export: "Export",
+                guide: "Hướng dẫn",
                 logic: "Logic",
                 navigation: "Điều Hướng",
                 interaction: "Tương Tác",
                 wait: "Chờ Đợi",
                 extract: "Trích Xuất",
                 verify: "Kiểm Tra",
+                basicAssertions: "Kiểm Tra Cơ Bản",
+                elementStates: "Trạng Thái Element", 
+                pageQuality: "Chất Lượng Trang",
+                advancedTesting: "Kiểm Tra Nâng Cao",
                 properties: "Thuộc tính",
                 selectBlockToView: "Chọn một khối để xem thuộc tính.",
 
@@ -1053,6 +1325,33 @@
                 screenshot: "Chụp Ảnh",
                 assertVisible: "Kiểm tra Hiển thị",
                 assertText: "Kiểm tra Văn bản",
+                assertURL: "Kiểm tra URL",
+                assertTitle: "Kiểm tra Tiêu đề",
+                assertAttribute: "Kiểm tra Thuộc tính",
+                assertElementCount: "Kiểm tra Số lượng Phần tử",
+                assertNotVisible: "Kiểm tra Không hiển thị",
+                assertEnabled: "Kiểm tra Kích hoạt",
+                assertDisabled: "Kiểm tra Vô hiệu hóa",
+                assertChecked: "Kiểm tra Đã chọn",
+                assertUnchecked: "Kiểm tra Chưa chọn",
+                assertContainsText: "Kiểm tra Chứa văn bản",
+                assertCSSProperty: "Kiểm tra Thuộc tính CSS",
+                validateForm: "Kiểm tra Form",
+                checkBrokenLinks: "Kiểm tra Liên kết lỗi",
+                checkImageLoading: "Kiểm tra Tải ảnh",
+                checkPageSpeed: "Kiểm tra Tốc độ Trang",
+                checkResponsive: "Kiểm tra Responsive",
+                checkAccessibility: "Kiểm tra Khả năng tiếp cận",
+                checkSEO: "Kiểm tra SEO",
+                interceptNetwork: "Chặn Mạng",
+                mockAPI: "Mock API",
+                setCookie: "Đặt Cookie",
+                checkConsoleErrors: "Kiểm tra Lỗi Console",
+                checkMemoryUsage: "Kiểm tra Sử dụng Bộ nhớ",
+                checkLocalStorage: "Kiểm tra Local Storage",
+                checkSessionStorage: "Kiểm tra Session Storage",
+                testCrossBrowser: "Kiểm tra Cross Browser",
+                simulateNetworkCondition: "Mô phỏng Điều kiện Mạng",
 
                 start: "Bắt đầu",
 
@@ -1078,6 +1377,13 @@
 
             document.getElementById('test-button').innerHTML = `<i class="fas fa-play mr-2"></i>${lang.test}`;
             document.getElementById('import-button').innerHTML = `<i class="fas fa-upload mr-2"></i>${lang.import}`;
+            document.getElementById('guideline-button').innerHTML = `<i class="fas fa-book mr-2"></i>${lang.guide}`;
+            
+            // Update verify headers
+            document.getElementById('basic-assertions-header').textContent = lang.basicAssertions;
+            document.getElementById('element-states-header').textContent = lang.elementStates;
+            document.getElementById('page-quality-header').textContent = lang.pageQuality;
+            document.getElementById('advanced-testing-header').textContent = lang.advancedTesting;
             document.getElementById('export-button').innerHTML = `<i class="fas fa-download mr-2"></i>${lang.export}`;
 
 
@@ -1106,7 +1412,34 @@
                 'getInputValue': lang.getInputValue,
                 'screenshot': lang.screenshot,
                 'assertVisible': lang.assertVisible,
-                'assertText': lang.assertText
+                'assertText': lang.assertText,
+                'assertURL': lang.assertURL,
+                'assertTitle': lang.assertTitle,
+                'assertAttribute': lang.assertAttribute,
+                'assertElementCount': lang.assertElementCount,
+                'assertNotVisible': lang.assertNotVisible,
+                'assertEnabled': lang.assertEnabled,
+                'assertDisabled': lang.assertDisabled,
+                'assertChecked': lang.assertChecked,
+                'assertUnchecked': lang.assertUnchecked,
+                'assertContainsText': lang.assertContainsText,
+                'assertCSSProperty': lang.assertCSSProperty,
+                'validateForm': lang.validateForm,
+                'checkBrokenLinks': lang.checkBrokenLinks,
+                'checkImageLoading': lang.checkImageLoading,
+                'checkPageSpeed': lang.checkPageSpeed,
+                'checkResponsive': lang.checkResponsive,
+                'checkAccessibility': lang.checkAccessibility,
+                'checkSEO': lang.checkSEO,
+                'interceptNetwork': lang.interceptNetwork,
+                'mockAPI': lang.mockAPI,
+                'setCookie': lang.setCookie,
+                'checkConsoleErrors': lang.checkConsoleErrors,
+                'checkMemoryUsage': lang.checkMemoryUsage,
+                'checkLocalStorage': lang.checkLocalStorage,
+                'checkSessionStorage': lang.checkSessionStorage,
+                'testCrossBrowser': lang.testCrossBrowser,
+                'simulateNetworkCondition': lang.simulateNetworkCondition
             };
 
 
@@ -1167,7 +1500,6 @@
             let scale = 1, panX = 0, panY = 0, isPanning = false, isSpacePressed = false, panStart = { x: 0, y: 0 };
             let isTesting = false;
             let isTestStopped = false;
-            let activeSelectorInputId = null;
 
             const canvasContainer = document.getElementById('canvas-container');
             const transformContainer = document.getElementById('transform-container');
@@ -1181,13 +1513,6 @@
             const testButton = document.getElementById('test-button');
 
 
-            const selectorModal = document.getElementById('selector-modal');
-            const closeSelectorModalBtn = document.getElementById('close-selector-modal');
-            const selectorUrlInput = document.getElementById('selector-url-input');
-            const openUrlBtn = document.getElementById('open-url-btn');
-            const urlNotFoundMsg = document.getElementById('url-not-found-msg');
-            const selectorPasteArea = document.getElementById('selector-paste-area');
-            const confirmSelectorBtn = document.getElementById('confirm-selector-btn');
 
             const getActionConfig = () => {
                 const lang = translations[currentLanguage];
@@ -1217,7 +1542,34 @@
                     'getInputValue': { icon: 'fa-i-cursor text-purple-500 dark:text-purple-400', name: lang.getInputValue, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '#firstname' }, { id: 'variable', label: currentLanguage === 'vi' ? 'Tên biến' : 'Variable Name', type: 'text', placeholder: 'firstName' }] },
                     'screenshot': { icon: 'fa-camera text-gray-500 dark:text-gray-400', name: lang.screenshot, params: [{ id: 'filename', label: currentLanguage === 'vi' ? 'Tên tệp' : 'Filename', type: 'text', placeholder: 'screenshot.png' }, { id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn (tùy chọn)' : 'Selector (optional)', type: 'selector', placeholder: currentLanguage === 'vi' ? 'Chụp 1 phần tử' : 'Capture element' }] },
                     'assertVisible': { icon: 'fa-eye text-green-500 dark:text-green-400', name: lang.assertVisible, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '.welcome-message' }] },
-                    'assertText': { icon: 'fa-check-double text-yellow-500 dark:text-yellow-400', name: lang.assertText, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: 'h1' }, { id: 'text', label: currentLanguage === 'vi' ? 'Văn bản mong muốn' : 'Expected Text', type: 'text', placeholder: currentLanguage === 'vi' ? 'Chào mừng' : 'Welcome' }] }
+                    'assertText': { icon: 'fa-check-double text-yellow-500 dark:text-yellow-400', name: lang.assertText, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: 'h1' }, { id: 'text', label: currentLanguage === 'vi' ? 'Văn bản mong muốn' : 'Expected Text', type: 'text', placeholder: currentLanguage === 'vi' ? 'Chào mừng' : 'Welcome' }] },
+                    'assertURL': { icon: 'fa-link text-blue-500 dark:text-blue-400', name: lang.assertURL, params: [{ id: 'expectedURL', label: currentLanguage === 'vi' ? 'URL mong muốn' : 'Expected URL', type: 'text', placeholder: 'https://example.com/dashboard' }] },
+                    'assertTitle': { icon: 'fa-heading text-purple-500 dark:text-purple-400', name: lang.assertTitle, params: [{ id: 'expectedTitle', label: currentLanguage === 'vi' ? 'Tiêu đề mong muốn' : 'Expected Title', type: 'text', placeholder: 'Welcome Page' }] },
+                    'assertAttribute': { icon: 'fa-tags text-orange-500 dark:text-orange-400', name: lang.assertAttribute, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: 'input[name="email"]' }, { id: 'attribute', label: currentLanguage === 'vi' ? 'Tên thuộc tính' : 'Attribute Name', type: 'text', placeholder: 'type' }, { id: 'expectedValue', label: currentLanguage === 'vi' ? 'Giá trị mong muốn' : 'Expected Value', type: 'text', placeholder: 'email' }] },
+                    'assertElementCount': { icon: 'fa-list-ol text-indigo-500 dark:text-indigo-400', name: lang.assertElementCount, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '.product-card' }, { id: 'operator', label: currentLanguage === 'vi' ? 'Toán tử' : 'Operator', type: 'select', options: [{ value: 'equals', text: 'Equals (=)' }, { value: 'greater', text: 'Greater (>)' }, { value: 'less', text: 'Less (<)' }, { value: 'greaterEqual', text: 'Greater Equal (>=)' }, { value: 'lessEqual', text: 'Less Equal (<=)' }] }, { id: 'expectedCount', label: currentLanguage === 'vi' ? 'Số lượng' : 'Count', type: 'number', placeholder: '10' }] },
+                    'assertNotVisible': { icon: 'fa-eye-slash text-red-500 dark:text-red-400', name: lang.assertNotVisible, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '.loading-spinner' }] },
+                    'assertEnabled': { icon: 'fa-toggle-on text-teal-500 dark:text-teal-400', name: lang.assertEnabled, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '#submit-button' }] },
+                    'assertDisabled': { icon: 'fa-toggle-off text-gray-500 dark:text-gray-400', name: lang.assertDisabled, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '#submit-button' }] },
+                    'assertChecked': { icon: 'fa-check-square text-emerald-500 dark:text-emerald-400', name: lang.assertChecked, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '#terms-checkbox' }] },
+                    'assertUnchecked': { icon: 'fa-square text-pink-500 dark:text-pink-400', name: lang.assertUnchecked, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '#newsletter-checkbox' }] },
+                    'assertContainsText': { icon: 'fa-search text-cyan-500 dark:text-cyan-400', name: lang.assertContainsText, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '.error-message' }, { id: 'containsText', label: currentLanguage === 'vi' ? 'Văn bản chứa' : 'Contains Text', type: 'text', placeholder: 'required field' }] },
+                    'assertCSSProperty': { icon: 'fab fa-css3-alt text-violet-500 dark:text-violet-400', name: lang.assertCSSProperty, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '.button' }, { id: 'property', label: currentLanguage === 'vi' ? 'Thuộc tính CSS' : 'CSS Property', type: 'text', placeholder: 'color' }, { id: 'expectedValue', label: currentLanguage === 'vi' ? 'Giá trị mong muốn' : 'Expected Value', type: 'text', placeholder: 'rgb(0, 0, 255)' }] },
+                    'validateForm': { icon: 'fa-clipboard-check text-amber-500 dark:text-amber-400', name: lang.validateForm, params: [{ id: 'formSelector', label: currentLanguage === 'vi' ? 'Bộ chọn Form' : 'Form Selector', type: 'selector', placeholder: '#registration-form' }, { id: 'validationType', label: currentLanguage === 'vi' ? 'Loại kiểm tra' : 'Validation Type', type: 'select', options: [{ value: 'required', text: 'Required Fields' }, { value: 'format', text: 'Format Validation' }, { value: 'length', text: 'Length Validation' }] }] },
+                    'checkBrokenLinks': { icon: 'fa-unlink text-rose-500 dark:text-rose-400', name: lang.checkBrokenLinks, params: [{ id: 'scope', label: currentLanguage === 'vi' ? 'Phạm vi kiểm tra' : 'Check Scope', type: 'select', options: [{ value: 'current-page', text: 'Current Page' }, { value: 'all-links', text: 'All Links' }, { value: 'internal-only', text: 'Internal Links Only' }] }] },
+                    'checkImageLoading': { icon: 'fa-image text-lime-500 dark:text-lime-400', name: lang.checkImageLoading, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn (tùy chọn)' : 'Selector (optional)', type: 'selector', placeholder: currentLanguage === 'vi' ? 'Tất cả hình ảnh' : 'All images' }] },
+                    'checkPageSpeed': { icon: 'fa-tachometer-alt text-sky-500 dark:text-sky-400', name: lang.checkPageSpeed, params: [{ id: 'metric', label: currentLanguage === 'vi' ? 'Chỉ số' : 'Metric', type: 'select', options: [{ value: 'load-time', text: 'Load Time' }, { value: 'first-paint', text: 'First Paint' }, { value: 'largest-contentful-paint', text: 'Largest Contentful Paint' }, { value: 'dom-content-loaded', text: 'DOM Content Loaded' }, { value: 'time-to-interactive', text: 'Time to Interactive' }] }, { id: 'threshold', label: currentLanguage === 'vi' ? 'Ngưỡng (ms)' : 'Threshold (ms)', type: 'number', placeholder: '3000' }, { id: 'timeout', label: currentLanguage === 'vi' ? 'Timeout (s)' : 'Timeout (s)', type: 'number', placeholder: '30' }] },
+                    'checkResponsive': { icon: 'fa-mobile-alt text-slate-500 dark:text-slate-400', name: lang.checkResponsive, params: [{ id: 'devices', label: currentLanguage === 'vi' ? 'Thiết bị' : 'Devices', type: 'select', options: [{ value: 'mobile', text: 'Mobile' }, { value: 'tablet', text: 'Tablet' }, { value: 'desktop', text: 'Desktop' }, { value: 'all', text: 'All Devices' }] }] },
+                    'checkAccessibility': { icon: 'fa-universal-access text-green-500 dark:text-green-400', name: lang.checkAccessibility, params: [{ id: 'level', label: currentLanguage === 'vi' ? 'Cấp độ WCAG' : 'WCAG Level', type: 'select', options: [{ value: 'A', text: 'Level A' }, { value: 'AA', text: 'Level AA' }, { value: 'AAA', text: 'Level AAA' }] }, { id: 'scope', label: currentLanguage === 'vi' ? 'Phạm vi' : 'Scope', type: 'select', options: [{ value: 'full-page', text: 'Full Page' }, { value: 'element', text: 'Specific Element' }] }, { id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn (tùy chọn)' : 'Selector (optional)', type: 'selector', placeholder: '.main-content' }] },
+                    'checkSEO': { icon: 'fa-search-plus text-yellow-500 dark:text-yellow-400', name: lang.checkSEO, params: [{ id: 'checks', label: currentLanguage === 'vi' ? 'Kiểm tra' : 'Checks', type: 'select', options: [{ value: 'meta-tags', text: 'Meta Tags' }, { value: 'headings', text: 'Heading Structure' }, { value: 'alt-text', text: 'Alt Text' }, { value: 'all', text: 'All SEO Checks' }] }] },
+                    'interceptNetwork': { icon: 'fa-ban text-red-500 dark:text-red-400', name: lang.interceptNetwork, params: [{ id: 'url', label: currentLanguage === 'vi' ? 'URL Pattern' : 'URL Pattern', type: 'text', placeholder: '*/api/users*' }, { id: 'action', label: currentLanguage === 'vi' ? 'Hành động' : 'Action', type: 'select', options: [{ value: 'block', text: 'Block' }, { value: 'delay', text: 'Delay' }, { value: 'modify', text: 'Modify Response' }] }] },
+                    'mockAPI': { icon: 'fa-cloud text-purple-500 dark:text-purple-400', name: lang.mockAPI, params: [{ id: 'endpoint', label: currentLanguage === 'vi' ? 'API Endpoint' : 'API Endpoint', type: 'text', placeholder: '/api/users' }, { id: 'method', label: currentLanguage === 'vi' ? 'Phương thức' : 'Method', type: 'select', options: [{ value: 'GET', text: 'GET' }, { value: 'POST', text: 'POST' }, { value: 'PUT', text: 'PUT' }, { value: 'DELETE', text: 'DELETE' }] }, { id: 'responseBody', label: currentLanguage === 'vi' ? 'Phản hồi Mock' : 'Mock Response', type: 'textarea', placeholder: '{"users": []}' }] },
+                    'setCookie': { icon: 'fa-cookie-bite text-orange-500 dark:text-orange-400', name: lang.setCookie, params: [{ id: 'name', label: currentLanguage === 'vi' ? 'Tên Cookie' : 'Cookie Name', type: 'text', placeholder: 'session_id' }, { id: 'value', label: currentLanguage === 'vi' ? 'Giá trị' : 'Value', type: 'text', placeholder: 'abc123' }, { id: 'domain', label: currentLanguage === 'vi' ? 'Domain (tùy chọn)' : 'Domain (optional)', type: 'text', placeholder: '.example.com' }] },
+                    'checkConsoleErrors': { icon: 'fa-exclamation-triangle text-red-500 dark:text-red-400', name: lang.checkConsoleErrors, params: [{ id: 'level', label: currentLanguage === 'vi' ? 'Cấp độ' : 'Level', type: 'select', options: [{ value: 'error', text: 'Error' }, { value: 'warning', text: 'Warning' }, { value: 'all', text: 'All Levels' }] }] },
+                    'checkMemoryUsage': { icon: 'fa-memory text-blue-500 dark:text-blue-400', name: lang.checkMemoryUsage, params: [{ id: 'threshold', label: currentLanguage === 'vi' ? 'Ngưỡng (MB)' : 'Threshold (MB)', type: 'number', placeholder: '100' }] },
+                    'checkLocalStorage': { icon: 'fa-database text-teal-500 dark:text-teal-400', name: lang.checkLocalStorage, params: [{ id: 'key', label: currentLanguage === 'vi' ? 'Key (tùy chọn)' : 'Key (optional)', type: 'text', placeholder: 'user_preferences' }, { id: 'expectedValue', label: currentLanguage === 'vi' ? 'Giá trị mong muốn (tùy chọn)' : 'Expected Value (optional)', type: 'text', placeholder: '{"theme": "dark"}' }] },
+                    'checkSessionStorage': { icon: 'fa-archive text-indigo-500 dark:text-indigo-400', name: lang.checkSessionStorage, params: [{ id: 'key', label: currentLanguage === 'vi' ? 'Key (tùy chọn)' : 'Key (optional)', type: 'text', placeholder: 'cart_items' }, { id: 'expectedValue', label: currentLanguage === 'vi' ? 'Giá trị mong muốn (tùy chọn)' : 'Expected Value (optional)', type: 'text', placeholder: '[]' }] },
+                    'testCrossBrowser': { icon: 'fab fa-firefox-browser text-green-500 dark:text-green-400', name: lang.testCrossBrowser, params: [{ id: 'browsers', label: currentLanguage === 'vi' ? 'Trình duyệt' : 'Browsers', type: 'select', options: [{ value: 'chrome', text: 'Chrome' }, { value: 'firefox', text: 'Firefox' }, { value: 'safari', text: 'Safari' }, { value: 'edge', text: 'Edge' }, { value: 'all', text: 'All Browsers' }] }] },
+                    'simulateNetworkCondition': { icon: 'fa-wifi text-yellow-500 dark:text-yellow-400', name: lang.simulateNetworkCondition, params: [{ id: 'condition', label: currentLanguage === 'vi' ? 'Điều kiện' : 'Condition', type: 'select', options: [{ value: 'offline', text: 'Offline' }, { value: 'slow-3g', text: 'Slow 3G' }, { value: 'fast-3g', text: 'Fast 3G' }, { value: 'fast-4g', text: 'Fast 4G' }, { value: 'custom', text: 'Custom' }] }, { id: 'downloadSpeed', label: currentLanguage === 'vi' ? 'Tốc độ tải xuống (Kbps)' : 'Download Speed (Kbps)', type: 'number', placeholder: '1600' }, { id: 'uploadSpeed', label: currentLanguage === 'vi' ? 'Tốc độ tải lên (Kbps)' : 'Upload Speed (Kbps)', type: 'number', placeholder: '750' }, { id: 'latency', label: currentLanguage === 'vi' ? 'Độ trễ (ms)' : 'Latency (ms)', type: 'number', placeholder: '150' }] }
                 };
             };
 
@@ -1638,27 +1990,97 @@
                 dragInfo = { type: 'connection', index: index, connection: connectionToModify, startX: e.clientX, startY: e.clientY };
             }
 
-            function openSelectorTool(inputId) {
-                activeSelectorInputId = inputId;
-                selectorPasteArea.value = '';
 
-                const startNode = nodes.find(n => n.id === selectedNodeId);
-                let targetUrl = '';
-
-
-                const gotoNode = nodes.find(n => n.type === 'goto');
-                if (gotoNode && gotoNode.params.url) {
-                    targetUrl = gotoNode.params.url;
-                    selectorUrlInput.value = targetUrl;
-                    urlNotFoundMsg.classList.add('hidden');
-                    openUrlBtn.disabled = false;
-                } else {
-                    selectorUrlInput.value = 'Không tìm thấy URL';
-                    urlNotFoundMsg.classList.remove('hidden');
-                    openUrlBtn.disabled = true;
-                }
-
-                selectorModal.classList.remove('hidden');
+            function getParamHelp(paramId, lang) {
+                const helpTexts = {
+                    en: {
+                        selector: "CSS selector to target HTML elements. Examples: #myId, .myClass, button[type='submit']",
+                        url: "Website URL to navigate to. Must include protocol (http:// or https://)",
+                        text: "Text content to type, search for, or validate against",
+                        condition: "Boolean expression to evaluate. Use variables and operators like ==, !=, >, <",
+                        timeout: "Time to wait in milliseconds (1000ms = 1 second)",
+                        variable: "Variable name to store extracted data for later use",
+                        key: "Keyboard key to press. Examples: Enter, Space, Tab, Escape",
+                        value: "Value to input, select, or compare against",
+                        attribute: "HTML attribute name like 'href', 'src', 'data-id', 'class'",
+                        filename: "File name with extension for saved screenshots or uploads",
+                        expectedURL: "Expected URL to verify navigation worked correctly",
+                        expectedTitle: "Expected page title text to validate",
+                        expectedValue: "Expected value to compare against actual element value",
+                        expectedCount: "Expected number of elements matching the selector",
+                        containsText: "Partial text that should be found within the element",
+                        property: "CSS property name like 'color', 'font-size', 'display'",
+                        threshold: "Maximum acceptable value (milliseconds for timing, MB for memory)",
+                        operator: "Mathematical comparison operator (=, >, <, >=, <=)",
+                        filePath: "Full path to the file to upload, including drive and folders",
+                        state: "Whether checkbox should be checked (check) or unchecked (uncheck)",
+                        list: "Array variable name or number of iterations for loops",
+                        method: "HTTP method for API requests (GET, POST, PUT, DELETE)",
+                        endpoint: "API endpoint URL path (e.g., /api/users)",
+                        responseBody: "Mock response data in JSON format",
+                        formSelector: "CSS selector targeting the form element to validate",
+                        validationType: "Type of validation to perform on the form",
+                        scope: "Range of elements or pages to check",
+                        metric: "Performance metric to measure and validate",
+                        devices: "Device types to test responsive design on",
+                        level: "WCAG accessibility compliance level to test against",
+                        checks: "SEO elements to validate (meta tags, headings, etc.)",
+                        action: "What to do when intercepting network requests",
+                        name: "Cookie name identifier",
+                        domain: "Domain scope for cookie (optional)",
+                        key: "Storage key name to check or data key to validate",
+                        browsers: "Which browsers to test compatibility across",
+                        condition: "Network condition to simulate for testing",
+                        downloadSpeed: "Download speed in Kbps for custom network conditions",
+                        uploadSpeed: "Upload speed in Kbps for custom network conditions",
+                        latency: "Network latency in milliseconds"
+                    },
+                    vi: {
+                        selector: "Bộ chọn CSS để nhắm mục tiêu phần tử HTML. Ví dụ: #myId, .myClass, button[type='submit']",
+                        url: "URL trang web để điều hướng. Phải bao gồm giao thức (http:// hoặc https://)",
+                        text: "Nội dung văn bản để nhập, tìm kiếm hoặc xác thực",
+                        condition: "Biểu thức boolean để đánh giá. Sử dụng biến và toán tử như ==, !=, >, <",
+                        timeout: "Thời gian chờ tính bằng mili giây (1000ms = 1 giây)",
+                        variable: "Tên biến để lưu trữ dữ liệu trích xuất để sử dụng sau",
+                        key: "Phím bàn phím để nhấn. Ví dụ: Enter, Space, Tab, Escape",
+                        value: "Giá trị để nhập, chọn hoặc so sánh",
+                        attribute: "Tên thuộc tính HTML như 'href', 'src', 'data-id', 'class'",
+                        filename: "Tên tệp có phần mở rộng cho ảnh chụp màn hình hoặc tải lên",
+                        expectedURL: "URL mong đợi để xác minh điều hướng hoạt động đúng",
+                        expectedTitle: "Văn bản tiêu đề trang mong đợi để xác thực",
+                        expectedValue: "Giá trị mong đợi để so sánh với giá trị phần tử thực tế",
+                        expectedCount: "Số lượng phần tử mong đợi khớp với bộ chọn",
+                        containsText: "Văn bản một phần nên được tìm thấy trong phần tử",
+                        property: "Tên thuộc tính CSS như 'color', 'font-size', 'display'",
+                        threshold: "Giá trị tối đa có thể chấp nhận (mili giây cho thời gian, MB cho bộ nhớ)",
+                        operator: "Toán tử so sánh toán học (=, >, <, >=, <=)",
+                        filePath: "Đường dẫn đầy đủ đến tệp tải lên, bao gồm ổ đĩa và thư mục",
+                        state: "Checkbox nên được chọn (check) hay bỏ chọn (uncheck)",
+                        list: "Tên biến mảng hoặc số lần lặp cho vòng lặp",
+                        method: "Phương thức HTTP cho yêu cầu API (GET, POST, PUT, DELETE)",
+                        endpoint: "Đường dẫn URL endpoint API (ví dụ: /api/users)",
+                        responseBody: "Dữ liệu phản hồi giả lập ở định dạng JSON",
+                        formSelector: "Bộ chọn CSS nhắm mục tiêu phần tử form để xác thực",
+                        validationType: "Loại xác thực thực hiện trên form",
+                        scope: "Phạm vi phần tử hoặc trang để kiểm tra",
+                        metric: "Chỉ số hiệu suất để đo lường và xác thực",
+                        devices: "Loại thiết bị để test responsive design",
+                        level: "Cấp độ tuân thủ khả năng truy cập WCAG để test",
+                        checks: "Các yếu tố SEO để xác thực (meta tags, headings, v.v.)",
+                        action: "Điều gì cần làm khi chặn yêu cầu mạng",
+                        name: "Định danh tên cookie",
+                        domain: "Phạm vi domain cho cookie (tùy chọn)",
+                        key: "Tên key storage để kiểm tra hoặc key dữ liệu để xác thực",
+                        browsers: "Những trình duyệt nào để test khả năng tương thích",
+                        condition: "Điều kiện mạng để mô phỏng cho testing",
+                        downloadSpeed: "Tốc độ tải xuống tính bằng Kbps cho điều kiện mạng tùy chỉnh",
+                        uploadSpeed: "Tốc độ tải lên tính bằng Kbps cho điều kiện mạng tùy chỉnh",
+                        latency: "Độ trễ mạng tính bằng mili giây"
+                    }
+                };
+                
+                const langCode = lang === 'vi' ? 'vi' : 'en';
+                return helpTexts[langCode][paramId] || (langCode === 'vi' ? 'Hướng dẫn chưa có sẵn' : 'Help text not available');
             }
 
             function renderPropertiesPanel() {
@@ -1683,16 +2105,27 @@
                     const commonClasses = "w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
 
                     if (param.type === 'select') {
-                        formHTML += `<select id="${inputId}" data-param-id="${param.id}" class="${commonClasses}">`;
+                        formHTML += `<div class="flex items-center space-x-2">
+                        <select id="${inputId}" data-param-id="${param.id}" class="flex-grow ${commonClasses}">`;
                         param.options.forEach(opt => formHTML += `<option value="${opt.value}" ${value === opt.value ? 'selected' : ''}>${opt.text}</option>`);
-                        formHTML += `</select>`;
+                        formHTML += `</select>
+                        <button class="help-btn p-2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md" data-help="${param.id}" title="${getParamHelp(param.id, currentLanguage)}"><i class="fas fa-question-circle text-sm"></i></button>
+                    </div>`;
+                    } else if (param.type === 'text' || param.type === 'number') {
+                        formHTML += `<div class="flex items-center space-x-2">
+                        <input type="${param.type}" id="${inputId}" data-param-id="${param.id}" placeholder="${param.placeholder || ''}" value="${value}" class="flex-grow ${commonClasses}">
+                        <button class="help-btn p-2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md" data-help="${param.id}" title="${getParamHelp(param.id, currentLanguage)}"><i class="fas fa-question-circle text-sm"></i></button>
+                    </div>`;
                     } else if (param.type === 'selector') {
                         formHTML += `<div class="flex items-center space-x-2">
                         <textarea id="${inputId}" data-param-id="${param.id}" placeholder="${param.placeholder || ''}" rows="2" class="flex-grow ${commonClasses}">${value}</textarea>
-                        <button class="select-element-btn p-2 text-slate-500 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-gray-600 rounded-md" data-target-input="${inputId}"><i class="fas fa-crosshairs text-lg"></i></button>
+                        <button class="help-btn p-2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md" data-help="${param.id}" title="${getParamHelp(param.id, currentLanguage)}"><i class="fas fa-question-circle text-sm"></i></button>
                     </div>`;
                     } else {
-                        formHTML += `<textarea id="${inputId}" data-param-id="${param.id}" placeholder="${param.placeholder || ''}" rows="2" class="${commonClasses}">${value}</textarea>`;
+                        formHTML += `<div class="flex items-center space-x-2">
+                        <textarea id="${inputId}" data-param-id="${param.id}" placeholder="${param.placeholder || ''}" rows="2" class="flex-grow ${commonClasses}">${value}</textarea>
+                        <button class="help-btn p-2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md" data-help="${param.id}" title="${getParamHelp(param.id, currentLanguage)}"><i class="fas fa-question-circle text-sm"></i></button>
+                    </div>`;
                     }
                     formHTML += `</div>`;
                 });
@@ -1702,16 +2135,14 @@
                 }
                 panel.innerHTML = formHTML;
 
-                panel.querySelectorAll('textarea, select').forEach(input => {
+                panel.querySelectorAll('input, textarea, select').forEach(input => {
                     input.addEventListener('input', e => {
                         node.params[e.target.dataset.paramId] = e.target.value;
                         renderNodes();
                     });
                 });
 
-                panel.querySelectorAll('.select-element-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => openSelectorTool(e.currentTarget.dataset.targetInput));
-                });
+                // Help tooltips - no need for additional event listeners as title attribute handles hover
 
                 const deleteBtn = panel.querySelector('#delete-node-btn');
                 if (deleteBtn) {
@@ -1885,6 +2316,9 @@
                 const confirmText = currentLanguage === 'vi' ? 'Bạn có chắc muốn xóa toàn bộ luồng công việc?' : 'Are you sure you want to clear the entire workflow?';
                 if (confirm(confirmText)) init();
             });
+            document.getElementById('guideline-button').addEventListener('click', () => {
+                window.open('./guideline.html', '_blank');
+            });
             window.addEventListener('mousemove', onMouseMove);
             window.addEventListener('mouseup', onMouseUp);
             canvasContainer.addEventListener('click', e => {
@@ -1931,22 +2365,6 @@
             testButton.addEventListener('click', startTest);
 
 
-            closeSelectorModalBtn.addEventListener('click', () => selectorModal.classList.add('hidden'));
-            openUrlBtn.addEventListener('click', () => {
-                const url = selectorUrlInput.value;
-                if (url && url !== 'Không tìm thấy URL') window.open(url, '_blank');
-            });
-            confirmSelectorBtn.addEventListener('click', () => {
-                const selectedNode = nodes.find(n => n.id === selectedNodeId);
-                const targetInput = document.getElementById(activeSelectorInputId);
-                if (selectedNode && targetInput) {
-                    targetInput.value = selectorPasteArea.value;
-                    const paramId = targetInput.dataset.paramId;
-                    selectedNode.params[paramId] = selectorPasteArea.value;
-                    renderNodes();
-                }
-                selectorModal.classList.add('hidden');
-            });
 
             function init(initialData = null) {
                 const data = initialData || { nodes: [createNode('start', 200, 150)], connections: [], panX: 0, panY: 0, scale: 1 };
