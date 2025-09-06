@@ -1,22 +1,46 @@
-# SMEW Automation Toolkit - Complete Guide
+# SMEW Automation Toolkit - Comprehensive Guide
 
 ## Overview
 
-SMEW Automation Toolkit is a powerful workflow automation tool that allows you to create automated testing and web interaction processes without writing code.
+SMEW Automation Toolkit is a powerful workflow automation creation tool that allows you to create automated testing and web interaction processes without writing code.
 
 ### Basic Usage
-1. **Drag & Drop** nodes from the left sidebar to canvas
-2. **Connect** nodes by dragging from output port to input port
+1. **Drag and drop** nodes from the left sidebar to the canvas
+2. **Connect** nodes by dragging from one output port to another input port
 3. **Configure** properties for each node in the right panel
-4. **Test** workflow using the "Test" button
+4. **Test** workflow with the "Test" button
 5. **Export** workflow as JSON file
 
 ---
 
-# CONTROL NODES
+# Start
 
-## if - Condition
-**Purpose**: Create conditional branching in workflow based on boolean expressions.
+## <i class="fas fa-play-circle" style="color: #10b981;"></i> start - Start
+**Purpose**: Starting node of workflow, every workflow must begin with this node.
+
+### JSON Format
+```json
+{
+  "id": "start",
+  "type": "start",
+  "x": 50,
+  "y": 100,
+  "params": {}
+}
+```
+
+### Characteristics
+- The only node without input port
+- Every workflow must have exactly one start node
+- Workflow execution begins from this node
+- Only has output port to connect to next node
+
+---
+
+# Control Flow
+
+## <i class="fas fa-code-branch" style="color: #6366f1;"></i> if - Condition
+**Purpose**: Create conditional branching in workflow based on boolean expression.
 
 ### Parameters
 - **condition** (text): Condition expression to evaluate
@@ -40,16 +64,12 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 - **Output Then**: Executes when condition is TRUE
 - **Output Else**: Executes when condition is FALSE
 
----
-
-## forEach - Loop
+## <i class="fas fa-sync-alt" style="color: #8b5cf6;"></i> forEach - Loop
 **Purpose**: Loop through array or execute a specific number of times.
 
 ### Parameters
 - **list** (text): Array variable name or number of iterations
   - *Examples*: `myArray`, `5`, `productList`
-- **variable** (text): Variable name for each element in the loop
-  - *Examples*: `item`, `product`, `user`
 
 ### JSON Format
 ```json
@@ -59,27 +79,22 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 300,
   "y": 200,
   "params": {
-    "list": "productList",
-    "variable": "product"
+    "list": "productList"
   }
 }
 ```
 
 ### Ports
 - **Input**: Receives from previous node
-- **Loop Body**: Content to be repeated
-- **Output**: Continues after loop completion
+- **Output Loop**: Executes for each iteration
+- **Output Done**: Executes when loop completes
 
----
-
-## setVariable - Set Variable
-**Purpose**: Create or update variable value for use in workflow.
+## <i class="fas fa-equals" style="color: #ec4899;"></i> setVariable - Set Variable
+**Purpose**: Store value in variable for use in other nodes.
 
 ### Parameters
-- **variable** (text): Variable name
-  - *Examples*: `counter`, `userName`, `baseURL`
-- **value** (text): Value to assign to variable
-  - *Examples*: `"admin"`, `0`, `"https://example.com"`
+- **name** (text): Variable name
+- **value** (text): Value to store
 
 ### JSON Format
 ```json
@@ -89,16 +104,14 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 500,
   "y": 200,
   "params": {
-    "variable": "userName",
-    "value": "admin123"
+    "name": "userName",
+    "value": "john_doe"
   }
 }
 ```
 
----
-
-## stop - Stop
-**Purpose**: Stop workflow execution at this point.
+## <i class="fas fa-stop-circle" style="color: #ef4444;"></i> stop - Stop
+**Purpose**: Stop workflow execution.
 
 ### JSON Format
 ```json
@@ -111,14 +124,11 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 }
 ```
 
----
-
-## comment - Comment
-**Purpose**: Add notes, comments to workflow (does not affect execution).
+## <i class="fas fa-comment-dots" style="color: #6b7280;"></i> comment - Comment
+**Purpose**: Add explanatory comment to workflow.
 
 ### Parameters
 - **text** (text): Comment content
-  - *Examples*: `"This step checks login"`, `"TODO: Add validation"`
 
 ### JSON Format
 ```json
@@ -128,21 +138,20 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 900,
   "y": 200,
   "params": {
-    "text": "Check login success"
+    "text": "This is an explanatory comment"
   }
 }
 ```
 
 ---
 
-# NAVIGATION NODES
+# Navigation
 
-## goto - Go To
-**Purpose**: Navigate browser to a specific URL.
+## <i class="fas fa-link" style="color: #0ea5e9;"></i> goto - Go To
+**Purpose**: Navigate to another URL.
 
 ### Parameters
-- **url** (text): Target URL
-  - *Examples*: `"https://google.com"`, `"http://localhost:3000/login"`
+- **url** (text): Target URL to navigate to
 
 ### JSON Format
 ```json
@@ -152,15 +161,13 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 100,
   "y": 300,
   "params": {
-    "url": "https://example.com/dashboard"
+    "url": "https://example.com"
   }
 }
 ```
 
----
-
-## reload - Reload
-**Purpose**: Refresh the current page.
+## <i class="fas fa-redo" style="color: #10b981;"></i> reload - Reload
+**Purpose**: Reload current page.
 
 ### JSON Format
 ```json
@@ -173,9 +180,7 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 }
 ```
 
----
-
-## goBack - Go Back
+## <i class="fas fa-arrow-left" style="color: #64748b;"></i> goBack - Go Back
 **Purpose**: Go back to previous page in history.
 
 ### JSON Format
@@ -189,9 +194,7 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 }
 ```
 
----
-
-## goForward - Go Forward
+## <i class="fas fa-arrow-right" style="color: #64748b;"></i> goForward - Go Forward
 **Purpose**: Go forward to next page in history.
 
 ### JSON Format
@@ -207,18 +210,13 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 
 ---
 
-# INTERACTION NODES
+# Interaction
 
-## click - Click
-**Purpose**: Click on element on the page.
+## <i class="fas fa-hand-pointer" style="color: #f59e0b;"></i> click - Click
+**Purpose**: Click on element.
 
 ### Parameters
 - **selector** (selector): CSS selector of element to click
-  - *Examples*: `"#login-button"`, `".submit-btn"`, `"button[type='submit']"`
-- **type** (select): Click type
-  - **left**: Left click (default)
-  - **right**: Right click
-  - **double**: Double click
 
 ### JSON Format
 ```json
@@ -228,21 +226,17 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 100,
   "y": 400,
   "params": {
-    "selector": "#login-button",
-    "type": "left"
+    "selector": "#submit-button"
   }
 }
 ```
 
----
-
-## fill - Fill
-**Purpose**: Enter text into input field.
+## <i class="fas fa-keyboard" style="color: #8b5cf6;"></i> fill - Fill
+**Purpose**: Fill text into input field.
 
 ### Parameters
 - **selector** (selector): CSS selector of input field
-- **value** (text): Content to enter
-  - *Examples*: `"admin@example.com"`, `"password123"`
+- **value** (text): Value to fill
 
 ### JSON Format
 ```json
@@ -252,19 +246,17 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 300,
   "y": 400,
   "params": {
-    "selector": "#email",
-    "value": "user@test.com"
+    "selector": "#username",
+    "value": "john_doe"
   }
 }
 ```
 
----
-
-## clearInput - Clear Input
+## <i class="fas fa-eraser" style="color: #ef4444;"></i> clearInput - Clear Input
 **Purpose**: Clear content of input field.
 
 ### Parameters
-- **selector** (selector): CSS selector of input field to clear
+- **selector** (selector): CSS selector of input field
 
 ### JSON Format
 ```json
@@ -274,21 +266,17 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 500,
   "y": 400,
   "params": {
-    "selector": "#search-box"
+    "selector": "#search-field"
   }
 }
 ```
 
----
-
-## setCheckboxState - Set Checkbox State
+## <i class="fas fa-check-square" style="color: #3b82f6;"></i> setCheckboxState - Set Checkbox State
 **Purpose**: Set checked/unchecked state for checkbox.
 
 ### Parameters
 - **selector** (selector): CSS selector of checkbox
-- **state** (select): Desired state
-  - **check**: Check checkbox
-  - **uncheck**: Uncheck checkbox
+- **checked** (boolean): true to check, false to uncheck
 
 ### JSON Format
 ```json
@@ -299,19 +287,17 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "y": 400,
   "params": {
     "selector": "#agree-terms",
-    "state": "check"
+    "checked": true
   }
 }
 ```
 
----
-
-## selectOption - Select Option
-**Purpose**: Select option in dropdown/select.
+## <i class="fas fa-list-ul" style="color: #f97316;"></i> selectOption - Select Option
+**Purpose**: Select option in select dropdown.
 
 ### Parameters
 - **selector** (selector): CSS selector of select element
-- **value** (text): Value of option to select
+- **value** (text): Option value to select
 
 ### JSON Format
 ```json
@@ -322,18 +308,16 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "y": 400,
   "params": {
     "selector": "#country",
-    "value": "Vietnam"
+    "value": "vietnam"
   }
 }
 ```
 
----
-
-## hover - Hover
-**Purpose**: Hover mouse over element (to show dropdown menu, tooltip...).
+## <i class="fas fa-mouse-pointer" style="color: #06b6d4;"></i> hover - Hover
+**Purpose**: Hover mouse over element to trigger hover effect.
 
 ### Parameters
-- **selector** (selector): CSS selector of element to hover
+- **selector** (selector): CSS selector of element
 
 ### JSON Format
 ```json
@@ -348,15 +332,11 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 }
 ```
 
----
-
-## press - Press Key
-**Purpose**: Press keyboard key.
+## <i class="fas fa-arrow-turn-down" style="color: #14b8a6;"></i> press - Press Key
+**Purpose**: Press key on keyboard.
 
 ### Parameters
-- **selector** (selector): CSS selector of focused element (optional)
-- **key** (text): Key name to press
-  - *Examples*: `"Enter"`, `"Tab"`, `"Escape"`, `"Space"`, `"ArrowDown"`
+- **key** (text): Key to press (Enter, Tab, Escape, etc.)
 
 ### JSON Format
 ```json
@@ -366,21 +346,17 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 300,
   "y": 500,
   "params": {
-    "selector": "#search-input",
     "key": "Enter"
   }
 }
 ```
 
----
-
-## uploadFile - Upload File
-**Purpose**: Upload file through input[type="file"].
+## <i class="fas fa-file-upload" style="color: #d946ef;"></i> uploadFile - Upload File
+**Purpose**: Upload file through file input.
 
 ### Parameters
 - **selector** (selector): CSS selector of file input
-- **filePath** (text): Full path to file
-  - *Examples*: `"C:\\Users\\Documents\\test.pdf"`, `"/home/user/image.jpg"`
+- **filePath** (text): Path to file to upload
 
 ### JSON Format
 ```json
@@ -390,22 +366,21 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 500,
   "y": 500,
   "params": {
-    "selector": "input[type='file']",
-    "filePath": "C:\\Documents\\resume.pdf"
+    "selector": "#file-upload",
+    "filePath": "/path/to/file.pdf"
   }
 }
 ```
 
 ---
 
-# WAIT NODES
+# Wait
 
-## waitTimeout - Wait Time
-**Purpose**: Wait for a fixed amount of time.
+## <i class="fas fa-clock" style="color: #6b7280;"></i> waitTimeout - Wait Timeout
+**Purpose**: Wait for a specific amount of time.
 
 ### Parameters
-- **timeout** (number): Wait time in milliseconds
-  - *Examples*: `1000` (1 second), `5000` (5 seconds)
+- **timeout** (number): Wait time (milliseconds)
 
 ### JSON Format
 ```json
@@ -415,18 +390,17 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 100,
   "y": 600,
   "params": {
-    "timeout": "3000"
+    "timeout": 3000
   }
 }
 ```
 
----
-
-## waitElement - Wait Element
-**Purpose**: Wait until element appears on page.
+## <i class="fas fa-binoculars" style="color: #3b82f6;"></i> waitElement - Wait Element
+**Purpose**: Wait for element to appear on page.
 
 ### Parameters
 - **selector** (selector): CSS selector of element to wait for
+- **timeout** (number): Maximum wait time (milliseconds)
 
 ### JSON Format
 ```json
@@ -436,21 +410,22 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 300,
   "y": 600,
   "params": {
-    "selector": ".loading-complete"
+    "selector": ".loading-spinner",
+    "timeout": 10000
   }
 }
 ```
 
 ---
 
-# DATA NODES
+# Extract
 
-## getText - Get Text
-**Purpose**: Extract text content from element and save to variable.
+## <i class="fas fa-quote-left" style="color: #f43f5e;"></i> getText - Get Text
+**Purpose**: Extract text content of element.
 
 ### Parameters
-- **selector** (selector): CSS selector of element containing text
-- **variable** (text): Variable name to save text
+- **selector** (selector): CSS selector of element
+- **variable** (text): Variable name to store text
 
 ### JSON Format
 ```json
@@ -460,22 +435,19 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 100,
   "y": 700,
   "params": {
-    "selector": "h1.page-title",
+    "selector": "h1",
     "variable": "pageTitle"
   }
 }
 ```
 
----
-
-## getAttribute - Get Attribute
-**Purpose**: Extract attribute value from element.
+## <i class="fas fa-at" style="color: #84cc16;"></i> getAttribute - Get Attribute
+**Purpose**: Extract attribute value of element.
 
 ### Parameters
 - **selector** (selector): CSS selector of element
-- **attribute** (text): Attribute name to get
-  - *Examples*: `"href"`, `"src"`, `"data-id"`, `"class"`
-- **variable** (text): Variable name to save value
+- **attribute** (text): Attribute name
+- **variable** (text): Variable name to store value
 
 ### JSON Format
 ```json
@@ -485,21 +457,19 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 300,
   "y": 700,
   "params": {
-    "selector": "a.product-link",
+    "selector": "a",
     "attribute": "href",
-    "variable": "productURL"
+    "variable": "linkURL"
   }
 }
 ```
 
----
-
-## getInputValue - Get Input Value
-**Purpose**: Get current value of input field.
+## <i class="fas fa-i-cursor" style="color: #8b5cf6;"></i> getInputValue - Get Input Value
+**Purpose**: Extract value of input field.
 
 ### Parameters
-- **selector** (selector): CSS selector of input
-- **variable** (text): Variable name to save value
+- **selector** (selector): CSS selector of input field
+- **variable** (text): Variable name to store value
 
 ### JSON Format
 ```json
@@ -509,21 +479,17 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 500,
   "y": 700,
   "params": {
-    "selector": "#user-name",
-    "variable": "currentUserName"
+    "selector": "#username",
+    "variable": "currentUser"
   }
 }
 ```
 
----
-
-## screenshot - Screenshot
-**Purpose**: Take screenshot of screen or specific element.
+## <i class="fas fa-camera" style="color: #6b7280;"></i> screenshot - Screenshot
+**Purpose**: Take screenshot of current page.
 
 ### Parameters
-- **filename** (text): Image file name
-  - *Examples*: `"homepage.png"`, `"login-error.jpg"`
-- **selector** (selector, optional): CSS selector of element to capture (empty = full screen)
+- **filename** (text): Image filename
 
 ### JSON Format
 ```json
@@ -533,25 +499,22 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 700,
   "y": 700,
   "params": {
-    "filename": "dashboard.png",
-    "selector": ".main-content"
+    "filename": "page-screenshot.png"
   }
 }
 ```
 
 ---
 
-# TESTING NODES
+# Basic Assertions
 
-## Basic Assertions
-
-### assertVisible - Assert Visible
+## <i class="fas fa-eye" style="color: #10b981;"></i> assertVisible - Assert Visible
 **Purpose**: Verify element is visible on page.
 
-#### Parameters
+### Parameters
 - **selector** (selector): CSS selector of element to check
 
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-601",
@@ -564,16 +527,14 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 }
 ```
 
----
-
-### assertText - Assert Text
+## <i class="fas fa-check-double" style="color: #eab308;"></i> assertText - Assert Text
 **Purpose**: Verify text content of element.
 
-#### Parameters
+### Parameters
 - **selector** (selector): CSS selector of element
 - **text** (text): Expected text
 
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-602",
@@ -587,15 +548,13 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 }
 ```
 
----
+## <i class="fas fa-link" style="color: #3b82f6;"></i> assertURL - Assert URL
+**Purpose**: Verify current URL of page.
 
-### assertURL - Assert URL
-**Purpose**: Verify current page URL.
+### Parameters
+- **url** (text): Expected URL
 
-#### Parameters
-- **expectedURL** (text): Expected URL
-
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-603",
@@ -603,20 +562,18 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 500,
   "y": 800,
   "params": {
-    "expectedURL": "https://example.com/dashboard"
+    "url": "https://example.com/dashboard"
   }
 }
 ```
 
----
-
-### assertTitle - Assert Title
+## <i class="fas fa-heading" style="color: #8b5cf6;"></i> assertTitle - Assert Title
 **Purpose**: Verify page title.
 
-#### Parameters
-- **expectedTitle** (text): Expected title
+### Parameters
+- **title** (text): Expected title
 
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-604",
@@ -624,22 +581,20 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 700,
   "y": 800,
   "params": {
-    "expectedTitle": "Dashboard - My App"
+    "title": "Dashboard - My App"
   }
 }
 ```
 
----
+## <i class="fas fa-tags" style="color: #f97316;"></i> assertAttribute - Assert Attribute
+**Purpose**: Verify attribute value of element.
 
-### assertAttribute - Assert Attribute
-**Purpose**: Verify element attribute value.
-
-#### Parameters
+### Parameters
 - **selector** (selector): CSS selector of element
 - **attribute** (text): Attribute name
-- **expectedValue** (text): Expected value
+- **value** (text): Expected value
 
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-605",
@@ -647,29 +602,21 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 900,
   "y": 800,
   "params": {
-    "selector": "input[name='email']",
-    "attribute": "type",
-    "expectedValue": "email"
+    "selector": "input",
+    "attribute": "placeholder",
+    "value": "Enter username"
   }
 }
 ```
 
----
-
-### assertElementCount - Assert Element Count
+## <i class="fas fa-list-ol" style="color: #6366f1;"></i> assertElementCount - Assert Element Count
 **Purpose**: Verify number of elements matching selector.
 
-#### Parameters
-- **selector** (selector): CSS selector
-- **operator** (select): Comparison operator
-  - **equals**: Equal (=)
-  - **greater**: Greater than (>)
-  - **less**: Less than (<)
-  - **greaterEqual**: Greater than or equal (>=)
-  - **lessEqual**: Less than or equal (<=)
-- **expectedCount** (number): Expected count
+### Parameters
+- **selector** (selector): CSS selector of elements
+- **count** (number): Expected count
 
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-606",
@@ -677,22 +624,19 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 100,
   "y": 900,
   "params": {
-    "selector": ".product-card",
-    "operator": "greater",
-    "expectedCount": "5"
+    "selector": ".product-item",
+    "count": 12
   }
 }
 ```
 
----
+## <i class="fas fa-eye-slash" style="color: #ef4444;"></i> assertNotVisible - Assert Not Visible
+**Purpose**: Verify element is not visible or doesn't exist.
 
-### assertNotVisible - Assert Not Visible
-**Purpose**: Verify element is not visible or does not exist.
-
-#### Parameters
+### Parameters
 - **selector** (selector): CSS selector of element
 
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-607",
@@ -700,113 +644,80 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
   "x": 300,
   "y": 900,
   "params": {
-    "selector": ".loading-spinner"
+    "selector": ".error-message"
   }
 }
 ```
 
----
+## <i class="fas fa-toggle-on" style="color: #14b8a6;"></i> assertEnabled - Assert Enabled
+**Purpose**: Verify element is interactive.
 
-### assertContainsText - Assert Contains Text
-**Purpose**: Verify element contains partial text.
-
-#### Parameters
+### Parameters
 - **selector** (selector): CSS selector of element
-- **containsText** (text): Partial text to find
 
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-608",
-  "type": "assertContainsText",
+  "type": "assertEnabled",
   "x": 500,
   "y": 900,
   "params": {
-    "selector": ".error-message",
-    "containsText": "required field"
+    "selector": "#submit-btn"
   }
 }
 ```
 
----
+## <i class="fas fa-toggle-off" style="color: #6b7280;"></i> assertDisabled - Assert Disabled
+**Purpose**: Verify element is disabled.
 
-## Advanced Assertions
+### Parameters
+- **selector** (selector): CSS selector of element
 
-### assertEnabled - Assert Enabled
-**Purpose**: Verify element is enabled and interactive.
-
-#### Parameters
-- **selector** (selector): CSS selector of element to check
-
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-609",
-  "type": "assertEnabled",
-  "x": 100,
-  "y": 1000,
+  "type": "assertDisabled",
+  "x": 700,
+  "y": 900,
   "params": {
-    "selector": "#submit-button"
+    "selector": "#submit-btn"
   }
 }
 ```
 
----
+## <i class="fas fa-check-square" style="color: #10b981;"></i> assertChecked - Assert Checked
+**Purpose**: Verify checkbox/radio is checked.
 
-### assertDisabled - Assert Disabled
-**Purpose**: Verify element is disabled and not interactive.
+### Parameters
+- **selector** (selector): CSS selector of checkbox/radio
 
-#### Parameters
-- **selector** (selector): CSS selector of element to check
-
-#### JSON Format
+### JSON Format
 ```json
 {
   "id": "node-610",
-  "type": "assertDisabled",
-  "x": 300,
-  "y": 1000,
-  "params": {
-    "selector": "#submit-button"
-  }
-}
-```
-
----
-
-### assertChecked - Assert Checked
-**Purpose**: Verify checkbox or radio button is checked.
-
-#### Parameters
-- **selector** (selector): CSS selector of checkbox/radio element
-
-#### JSON Format
-```json
-{
-  "id": "node-611",
   "type": "assertChecked",
-  "x": 500,
-  "y": 1000,
+  "x": 900,
+  "y": 900,
   "params": {
     "selector": "#agree-terms"
   }
 }
 ```
 
----
+## <i class="fas fa-square" style="color: #ec4899;"></i> assertUnchecked - Assert Unchecked
+**Purpose**: Verify checkbox/radio is unchecked.
 
-### assertUnchecked - Assert Unchecked
-**Purpose**: Verify checkbox or radio button is not checked.
+### Parameters
+- **selector** (selector): CSS selector of checkbox/radio
 
-#### Parameters
-- **selector** (selector): CSS selector of checkbox/radio element
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-612",
+  "id": "node-611",
   "type": "assertUnchecked",
-  "x": 700,
+  "x": 100,
   "y": 1000,
   "params": {
     "selector": "#newsletter"
@@ -814,488 +725,717 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 }
 ```
 
----
+## <i class="fas fa-search" style="color: #06b6d4;"></i> assertContainsText - Assert Contains Text
+**Purpose**: Verify element contains specific text.
 
-### assertCSSProperty - Assert CSS Property
-**Purpose**: Verify element's CSS property has expected value.
-
-#### Parameters
+### Parameters
 - **selector** (selector): CSS selector of element
-- **property** (text): CSS property name
-- **expectedValue** (text): Expected property value
+- **text** (text): Text to find
 
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-613",
-  "type": "assertCSSProperty",
-  "x": 900,
+  "id": "node-612",
+  "type": "assertContainsText",
+  "x": 300,
   "y": 1000,
   "params": {
-    "selector": ".highlight",
-    "property": "background-color",
-    "expectedValue": "rgb(255, 255, 0)"
+    "selector": ".message",
+    "text": "success"
   }
 }
 ```
 
 ---
 
-## Quality Assurance Nodes
+# Element States
 
-### validateForm - Validate Form
-**Purpose**: Comprehensive form validation check.
+## <i class="fab fa-css3-alt" style="color: #8b5cf6;"></i> assertCSSProperty - Assert CSS Property
+**Purpose**: Verify CSS property value of element.
 
-#### Parameters
-- **selector** (selector): CSS selector of form element
-- **validationType** (select): Type of validation
-  - **required**: Check required fields
-  - **format**: Check input formats
-  - **all**: Complete validation
+### Parameters
+- **selector** (selector): CSS selector of element
+- **property** (text): CSS property name
+- **value** (text): Expected value
 
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-614",
+  "id": "node-701",
+  "type": "assertCSSProperty",
+  "x": 100,
+  "y": 1100,
+  "params": {
+    "selector": ".modal",
+    "property": "display",
+    "value": "block"
+  }
+}
+```
+
+---
+
+# Page Quality
+
+## <i class="fas fa-clipboard-check" style="color: #f59e0b;"></i> validateForm - Validate Form
+**Purpose**: Check form validation validity.
+
+### Parameters
+- **selector** (selector): CSS selector of form
+
+### JSON Format
+```json
+{
+  "id": "node-801",
   "type": "validateForm",
   "x": 100,
-  "y": 1100,
+  "y": 1200,
   "params": {
-    "selector": "#contact-form",
-    "validationType": "all"
+    "selector": "#contact-form"
   }
 }
 ```
 
----
+## <i class="fas fa-unlink" style="color: #f43f5e;"></i> checkBrokenLinks - Check Broken Links
+**Purpose**: Check for broken links on page.
 
-### checkBrokenLinks - Check Broken Links
-**Purpose**: Scan page for broken or invalid links.
-
-#### Parameters
-- **scope** (select): Scope of link checking
-  - **page**: Current page only
-  - **domain**: Same domain links
-  - **all**: All links
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-615",
+  "id": "node-802",
   "type": "checkBrokenLinks",
   "x": 300,
-  "y": 1100,
-  "params": {
-    "scope": "page"
-  }
+  "y": 1200,
+  "params": {}
 }
 ```
 
----
+## <i class="fas fa-image" style="color: #84cc16;"></i> checkImageLoading - Check Image Loading
+**Purpose**: Check if all images load successfully.
 
-### checkImageLoading - Check Image Loading
-**Purpose**: Verify all images load successfully.
-
-#### Parameters
-- **selector** (selector, optional): CSS selector for specific images (empty = all images)
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-616",
+  "id": "node-803",
   "type": "checkImageLoading",
   "x": 500,
-  "y": 1100,
-  "params": {
-    "selector": ".gallery img"
-  }
+  "y": 1200,
+  "params": {}
 }
 ```
 
----
+## <i class="fas fa-tachometer-alt" style="color: #0ea5e9;"></i> checkPageSpeed - Check Page Speed
+**Purpose**: Measure page loading speed and performance.
 
-### checkPageSpeed - Check Page Speed
-**Purpose**: Measure page loading performance.
-
-#### Parameters
-- **metric** (select): Performance metric to measure
-  - **load**: Page load time
-  - **dom**: DOM ready time
-  - **first-paint**: First contentful paint
-- **threshold** (number): Maximum acceptable time in milliseconds
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-617",
+  "id": "node-804",
   "type": "checkPageSpeed",
   "x": 700,
-  "y": 1100,
-  "params": {
-    "metric": "load",
-    "threshold": "3000"
-  }
+  "y": 1200,
+  "params": {}
 }
 ```
 
----
+## <i class="fas fa-mobile-alt" style="color: #64748b;"></i> checkResponsive - Check Responsive
+**Purpose**: Check if page is responsive across different screen sizes.
 
-### checkResponsive - Check Responsive Design
-**Purpose**: Test responsive design across different screen sizes.
-
-#### Parameters
-- **devices** (select): Device types to test
-  - **mobile**: Mobile devices
-  - **tablet**: Tablet devices
-  - **desktop**: Desktop sizes
-  - **all**: All device types
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-618",
+  "id": "node-805",
   "type": "checkResponsive",
   "x": 900,
-  "y": 1100,
-  "params": {
-    "devices": "all"
-  }
+  "y": 1200,
+  "params": {}
 }
 ```
 
----
+## <i class="fas fa-universal-access" style="color: #10b981;"></i> checkAccessibility - Check Accessibility
+**Purpose**: Check accessibility of web page.
 
-### checkAccessibility - Check Accessibility
-**Purpose**: Test WCAG accessibility compliance.
-
-#### Parameters
-- **level** (select): WCAG compliance level
-  - **A**: Level A compliance
-  - **AA**: Level AA compliance
-  - **AAA**: Level AAA compliance
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-619",
+  "id": "node-806",
   "type": "checkAccessibility",
   "x": 100,
-  "y": 1200,
-  "params": {
-    "level": "AA"
-  }
+  "y": 1300,
+  "params": {}
 }
 ```
 
----
+## <i class="fas fa-search-plus" style="color: #eab308;"></i> checkSEO - Check SEO
+**Purpose**: Check basic SEO factors of page.
 
-### checkSEO - Check SEO
-**Purpose**: Analyze page SEO factors.
-
-#### Parameters
-- **checks** (select): SEO elements to check
-  - **meta**: Meta tags
-  - **headings**: Heading structure
-  - **images**: Image alt texts
-  - **links**: Link structure
-  - **all**: All SEO factors
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-620",
+  "id": "node-807",
   "type": "checkSEO",
   "x": 300,
-  "y": 1200,
-  "params": {
-    "checks": "all"
-  }
+  "y": 1300,
+  "params": {}
 }
 ```
 
 ---
 
-## Network & Performance Nodes
+# Advanced Testing
 
-### interceptNetwork - Intercept Network
-**Purpose**: Intercept and modify network requests.
+## <i class="fas fa-ban" style="color: #ef4444;"></i> interceptNetwork - Intercept Network
+**Purpose**: Intercept and control network requests.
 
-#### Parameters
+### Parameters
 - **url** (text): URL pattern to intercept
-- **method** (select): HTTP method to intercept
-- **action** (select): Action to take
-  - **block**: Block the request
-  - **modify**: Modify the request
-  - **delay**: Add delay to request
+- **method** (text): HTTP method (GET, POST, etc.)
 
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-621",
+  "id": "node-901",
   "type": "interceptNetwork",
-  "x": 500,
-  "y": 1200,
+  "x": 100,
+  "y": 1400,
   "params": {
-    "url": "*/api/users",
-    "method": "GET",
-    "action": "delay"
+    "url": "*/api/users*",
+    "method": "GET"
   }
 }
 ```
 
----
+## <i class="fas fa-cloud" style="color: #8b5cf6;"></i> mockAPI - Mock API
+**Purpose**: Create mock response for API calls.
 
-### setCookie - Set Cookie
-**Purpose**: Set browser cookies for testing.
+### Parameters
+- **url** (text): API URL pattern
+- **response** (text): Mock response JSON
 
-#### Parameters
+### JSON Format
+```json
+{
+  "id": "node-902",
+  "type": "mockAPI",
+  "x": 300,
+  "y": 1400,
+  "params": {
+    "url": "*/api/data*",
+    "response": "{\"status\": \"success\", \"data\": []}"
+  }
+}
+```
+
+## <i class="fas fa-cookie-bite" style="color: #f97316;"></i> setCookie - Set Cookie
+**Purpose**: Set cookie for current domain.
+
+### Parameters
 - **name** (text): Cookie name
 - **value** (text): Cookie value
-- **domain** (text, optional): Cookie domain
+- **domain** (text): Domain (optional)
 
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-622",
+  "id": "node-903",
   "type": "setCookie",
-  "x": 700,
-  "y": 1200,
+  "x": 500,
+  "y": 1400,
   "params": {
     "name": "sessionId",
-    "value": "test123",
+    "value": "abc123",
     "domain": "example.com"
   }
 }
 ```
 
----
+## <i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i> checkConsoleErrors - Check Console Errors
+**Purpose**: Check for JavaScript errors in console.
 
-### checkConsoleErrors - Check Console Errors
-**Purpose**: Monitor and validate browser console for errors.
-
-#### Parameters
-- **threshold** (number): Maximum acceptable error count
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-623",
+  "id": "node-904",
   "type": "checkConsoleErrors",
-  "x": 900,
-  "y": 1200,
-  "params": {
-    "threshold": "0"
-  }
-}
-```
-
----
-
-### checkMemoryUsage - Check Memory Usage
-**Purpose**: Monitor memory consumption during test execution.
-
-#### Parameters
-- **threshold** (number): Maximum memory usage in MB
-
-#### JSON Format
-```json
-{
-  "id": "node-624",
-  "type": "checkMemoryUsage",
-  "x": 100,
-  "y": 1300,
-  "params": {
-    "threshold": "512"
-  }
-}
-```
-
----
-
-### checkLocalStorage - Check Local Storage
-**Purpose**: Validate browser local storage data.
-
-#### Parameters
-- **key** (text): Storage key to check
-- **expectedValue** (text, optional): Expected value
-
-#### JSON Format
-```json
-{
-  "id": "node-625",
-  "type": "checkLocalStorage",
-  "x": 300,
-  "y": 1300,
-  "params": {
-    "key": "userPreferences",
-    "expectedValue": "dark-mode"
-  }
-}
-```
-
----
-
-### checkSessionStorage - Check Session Storage
-**Purpose**: Validate browser session storage data.
-
-#### Parameters
-- **key** (text): Storage key to check
-- **expectedValue** (text, optional): Expected value
-
-#### JSON Format
-```json
-{
-  "id": "node-626",
-  "type": "checkSessionStorage",
-  "x": 500,
-  "y": 1300,
-  "params": {
-    "key": "cartItems",
-    "expectedValue": "2"
-  }
-}
-```
-
----
-
-### testCrossBrowser - Test Cross Browser
-**Purpose**: Execute test across multiple browser engines.
-
-#### Parameters
-- **browsers** (select): Browsers to test
-  - **chrome**: Google Chrome
-  - **firefox**: Mozilla Firefox
-  - **safari**: Safari
-  - **edge**: Microsoft Edge
-  - **all**: All browsers
-
-#### JSON Format
-```json
-{
-  "id": "node-627",
-  "type": "testCrossBrowser",
   "x": 700,
-  "y": 1300,
-  "params": {
-    "browsers": "all"
-  }
+  "y": 1400,
+  "params": {}
 }
 ```
 
----
+## <i class="fas fa-memory" style="color: #3b82f6;"></i> checkMemoryUsage - Check Memory Usage
+**Purpose**: Check page memory usage.
 
-### simulateNetworkCondition - Simulate Network Condition
-**Purpose**: Test under different network conditions.
-
-#### Parameters
-- **condition** (select): Network condition preset
-  - **fast-3g**: Fast 3G
-  - **slow-3g**: Slow 3G
-  - **offline**: Offline mode
-  - **custom**: Custom condition
-- **downloadSpeed** (number, optional): Download speed in Kbps
-- **uploadSpeed** (number, optional): Upload speed in Kbps
-- **latency** (number, optional): Network latency in ms
-
-#### JSON Format
+### JSON Format
 ```json
 {
-  "id": "node-628",
-  "type": "simulateNetworkCondition",
+  "id": "node-905",
+  "type": "checkMemoryUsage",
   "x": 900,
-  "y": 1300,
+  "y": 1400,
+  "params": {}
+}
+```
+
+## <i class="fas fa-database" style="color: #14b8a6;"></i> checkLocalStorage - Check Local Storage
+**Purpose**: Check value in localStorage.
+
+### Parameters
+- **key** (text): Key to check
+- **value** (text): Expected value (optional)
+
+### JSON Format
+```json
+{
+  "id": "node-906",
+  "type": "checkLocalStorage",
+  "x": 100,
+  "y": 1500,
   "params": {
-    "condition": "slow-3g"
+    "key": "userPrefs",
+    "value": "dark-mode"
+  }
+}
+```
+
+## <i class="fas fa-archive" style="color: #6366f1;"></i> checkSessionStorage - Check Session Storage
+**Purpose**: Check value in sessionStorage.
+
+### Parameters
+- **key** (text): Key to check
+- **value** (text): Expected value (optional)
+
+### JSON Format
+```json
+{
+  "id": "node-907",
+  "type": "checkSessionStorage",
+  "x": 300,
+  "y": 1500,
+  "params": {
+    "key": "tempData",
+    "value": "cached"
+  }
+}
+```
+
+## <i class="fas fa-globe" style="color: #059669;"></i> testCrossBrowser - Test Cross Browser
+**Purpose**: Test compatibility across different browsers.
+
+### Parameters
+- **browsers** (text): List of browsers (chrome,firefox,safari)
+
+### JSON Format
+```json
+{
+  "id": "node-908",
+  "type": "testCrossBrowser",
+  "x": 500,
+  "y": 1500,
+  "params": {
+    "browsers": "chrome,firefox,safari"
+  }
+}
+```
+
+## <i class="fas fa-wifi" style="color: #eab308;"></i> simulateNetworkCondition - Simulate Network Condition
+**Purpose**: Simulate slow network or offline conditions.
+
+### Parameters
+- **condition** (text): Condition type (slow3g, fast3g, offline)
+
+### JSON Format
+```json
+{
+  "id": "node-909",
+  "type": "simulateNetworkCondition",
+  "x": 700,
+  "y": 1500,
+  "params": {
+    "condition": "slow3g"
   }
 }
 ```
 
 ---
 
-# Usage Tips
+# General Guidelines
 
-## Common CSS Selectors
-- **ID**: `#elementId`
-- **Class**: `.className`
-- **Attribute**: `[attribute="value"]`
-- **Descendant**: `.parent .child`
-- **Direct child**: `.parent > .child`
-- **Multiple classes**: `.class1.class2`
-- **Nth child**: `:nth-child(2)`
-- **Contains text**: `:contains("text")`
+## Workflow Design Principles
 
-## Conditional Expressions
-- **Comparison**: `==`, `!=`, `>`, `<`, `>=`, `<=`
-- **Logic**: `&&` (and), `||` (or), `!` (not)
-- **String**: `variable.includes("text")`
-- **Number**: `parseInt(variable) > 10`
+### 1. Workflow Structure
+- **Start**: Every workflow must have a `start` node
+- **Sequential**: Nodes execute in connection order
+- **Branching**: Use `if` node for conditional logic
+- **Looping**: Use `forEach` node for repeated operations
+- **Termination**: Workflow ends when no more nodes to execute
+
+### 2. Variable Management
+- **Naming**: Use meaningful variable names (`userName`, `productCount`)
+- **Scope**: Variables can be used in all nodes after creation
+- **Reference**: Use `${variableName}` to reference variables
+- **Types**: Supports string, number, boolean, array
+
+### 3. Selector Strategy
+- **Priority ID**: `#unique-id` (highest priority)
+- **Class selectors**: `.class-name` 
+- **Attribute selectors**: `[data-testid="value"]`
+- **Hierarchy selectors**: `.parent .child`
+- **Avoid**: Complex XPath, position-based selectors
+
+### 4. Error Prevention
+- **Validation**: Always check element exists before interaction
+- **Timeouts**: Set appropriate timeouts for wait operations
+- **Fallbacks**: Have plans for when elements aren't found
+- **Screenshots**: Take screenshots for debugging when needed
 
 ## Best Practices
-1. **Clear variable names**: Use `userName` instead of `var1`
-2. **Specific CSS selectors**: Avoid overly generic selectors
-3. **Add wait nodes**: Wait for elements to load before interaction
-4. **Important screenshots**: Take screenshots at key steps for debugging
-5. **Comments**: Add notes for complex workflows
-6. **Error handling**: Use assert nodes to validate results
 
-## Workflow Structure Example
+### Design Patterns
+1. **Page Navigation Pattern**
+   ```
+   start → goto → waitElement → [page actions] → assertURL
+   ```
+
+2. **Form Filling Pattern**
+   ```
+   start → fill(field1) → fill(field2) → click(submit) → assertVisible(success)
+   ```
+
+3. **Data Extraction Pattern**
+   ```
+   start → getText → setVariable → [use variable] → screenshot
+   ```
+
+4. **Conditional Testing Pattern**
+   ```
+   start → getText → setVariable → if(condition) → [then/else actions]
+   ```
+
+### Naming Conventions
+- **Nodes**: Use descriptive names (`loginForm`, `submitButton`)
+- **Variables**: camelCase (`userName`, `isLoggedIn`)
+- **Selectors**: Clear, not dependent on CSS framework
+
+---
+
+# Advanced Techniques
+
+## Dynamic Content Handling
+
+### 1. Waiting for Dynamic Elements
+```javascript
+// Pattern: Wait → Check → Action
+waitElement → assertVisible → click
 ```
-[Start] → [Goto URL] → [Wait Element] → [Fill Login] → [Click Submit] 
-    → [Assert Success] → [Screenshot] → [End]
+
+### 2. Handling AJAX Requests
+- Use `waitElement` for loading indicators
+- Wait for elements to appear after AJAX completion
+- Check network requests with `interceptNetwork`
+
+### 3. Scroll and Lazy Loading
+```javascript
+// Pattern: Scroll → Wait → Extract
+hover(trigger) → waitElement(content) → getText
+```
+
+## Complex Workflows
+
+### 1. Multi-Step Forms
+```javascript
+start → goto(page1) → fill(step1) → click(next) → 
+waitElement(page2) → fill(step2) → click(next) →
+waitElement(page3) → fill(step3) → click(submit) →
+assertText(success)
+```
+
+### 2. Data-Driven Testing
+```javascript
+start → setVariable(testData) → forEach(testData) →
+fill(${currentItem.field}) → click(submit) →
+assertText(${currentItem.expected})
+```
+
+### 3. Cross-Page Workflows
+```javascript
+start → goto(page1) → getText(data) → setVariable(extractedData) →
+goto(page2) → fill(${extractedData}) → click(submit) →
+assertURL(resultPage)
+```
+
+## API Integration
+
+### 1. Mock API Responses
+```javascript
+start → mockAPI(endpoint, mockData) → goto(page) →
+// Page will receive mock data instead of real API
+assertText(mockData.result)
+```
+
+### 2. Network Interception
+```javascript
+start → interceptNetwork(apiEndpoint, GET) →
+goto(page) → // Check request is sent
+assertVisible(loadingIndicator)
+```
+
+## Performance Optimization
+
+### 1. Efficient Waiting
+- Use `waitElement` instead of `waitTimeout` when possible
+- Set short but reasonable timeouts
+- Combine multiple checks in one assertion
+
+### 2. Batch Operations
+```javascript
+// Instead of multiple separate assertions:
+assertVisible(element1) → assertVisible(element2) → assertVisible(element3)
+
+// Use element count:
+assertElementCount(.required-element, 3)
 ```
 
 ---
 
-# TROUBLESHOOTING
+# Troubleshooting
 
 ## Common Issues
 
-### Element Not Found
-- **Cause**: Incorrect CSS selector or element not loaded
-- **Solution**: Verify selector, add `waitElement` before interaction
+### 1. Element Not Found
+**Symptoms**: "Element not found" error
+**Causes**:
+- Incorrect selector
+- Element not fully loaded
+- Element hidden by CSS
 
-### Timeout Error
-- **Cause**: Element doesn't appear within wait time
-- **Solution**: Increase timeout or check loading conditions
-
-### Click Failed
-- **Cause**: Element obscured or not clickable
-- **Solution**: Scroll to element, use `hover` before clicking
-
-### Variable Not Found
-- **Cause**: Variable not initialized or incorrect name
-- **Solution**: Ensure `setVariable` was executed beforehand
-
----
-
-# ADVANCED TECHNIQUES
-
-## Dynamic Selectors
-Using variables in selectors:
-```
-selector: "input[name='" + variableName + "']"
-```
-
-## Conditional Workflows
-Using `if` nodes for complex conditional flows:
-```
-if (pageTitle == "Login") → fillLoginForm
-else → skipLogin
-```
-
-## Data-Driven Testing
-Using `forEach` with array data:
+**Solutions**:
 ```javascript
-testData = ["user1", "user2", "user3"]
-forEach(testData) → testLogin(currentUser)
+// Add wait before interaction
+waitElement(selector) → click(selector)
+
+// Check selector in DevTools
+// F12 → Console → document.querySelector('your-selector')
+
+// Use screenshot for debugging
+screenshot(debug-image) → click(selector)
 ```
 
-## Error Handling Patterns
+### 2. Timeout Issues
+**Symptoms**: Workflow timeouts
+**Causes**:
+- Slow network
+- Slow JavaScript execution
+- Slow element loading
+
+**Solutions**:
+```javascript
+// Increase timeout for specific operations
+waitElement(selector, 30000) // 30 seconds
+
+// Use network simulation
+simulateNetworkCondition(fast3g) → goto(page)
+
+// Check page speed
+checkPageSpeed() → screenshot(performance-debug)
 ```
-action → assert → onSuccess → continue
-       ↘ onFail → screenshot → stop
+
+### 3. Variable Issues
+**Symptoms**: Variables not working correctly
+**Causes**:
+- Variable not set
+- Incorrect syntax
+- Scope issues
+
+**Solutions**:
+```javascript
+// Check variable is set correctly
+getText(element, myVar) → comment(Variable set: ${myVar})
+
+// Debug variable value
+setVariable(debugVar, ${myVar}) → screenshot(var-debug)
+
+// Ensure variable exists before use
+if(${myVar} != null) → fill(input, ${myVar})
+```
+
+### 4. Assertion Failures
+**Symptoms**: Assertions fail unexpectedly
+**Causes**:
+- Data changes
+- Timing issues
+- Environment differences
+
+**Solutions**:
+```javascript
+// Use partial text matching
+assertContainsText(element, partial-text) instead of assertText(element, exact-text)
+
+// Add wait before assertion
+waitElement(element) → assertVisible(element)
+
+// Use screenshots for debugging
+screenshot(before-assertion) → assertText(element, expected)
+```
+
+## Debug Techniques
+
+### 1. Screenshot Strategy
+```javascript
+// At key points
+start → screenshot(01-start) → goto(page) → 
+screenshot(02-page-loaded) → fill(input) → 
+screenshot(03-form-filled) → click(submit) → 
+screenshot(04-after-submit)
+```
+
+### 2. Console Monitoring
+```javascript
+// Check for JavaScript errors
+checkConsoleErrors() → screenshot(console-state)
+
+// Monitor network requests
+interceptNetwork(*) → goto(page) → screenshot(network-debug)
+```
+
+### 3. Step-by-Step Verification
+```javascript
+// Verify each step
+start → assertVisible(startPage) → 
+click(button) → assertVisible(nextPage) → 
+fill(input) → assertAttribute(input, value, expected)
 ```
 
 ---
 
-*This documentation is continuously updated. For more information, please refer to the source code or contact the support team.*
+# Tips and Tricks
+
+## Workflow Development
+
+### 1. Incremental Development
+- Start with simple workflow
+- Test each node before connecting
+- Add complexity gradually
+- Always keep backup of working version
+
+### 2. Node Organization
+- Arrange nodes by logic flow
+- Use `comment` nodes for explanation
+- Group related nodes together
+- Use consistent naming
+
+### 3. Reusability
+```javascript
+// Create reusable patterns
+// Login pattern: goto → fill(username) → fill(password) → click(login) → waitElement(dashboard)
+
+// Navigation pattern: click(menu) → waitElement(submenu) → click(item)
+
+// Form validation pattern: fill(invalid) → click(submit) → assertVisible(error)
+```
+
+## Testing Strategies
+
+### 1. Happy Path Testing
+```javascript
+start → goto(app) → fill(validData) → click(submit) → assertText(success)
+```
+
+### 2. Error Path Testing
+```javascript
+start → goto(app) → fill(invalidData) → click(submit) → assertVisible(errorMessage)
+```
+
+### 3. Edge Case Testing
+```javascript
+// Empty inputs
+start → goto(form) → click(submit) → assertVisible(requiredFieldError)
+
+// Long inputs
+start → setVariable(longText, very-long-string) → fill(input, ${longText}) → click(submit)
+
+// Special characters
+start → setVariable(specialChars, !@#$%^&*) → fill(input, ${specialChars}) → click(submit)
+```
+
+## Maintenance Tips
+
+### 1. Regular Updates
+- Update selectors when UI changes
+- Test workflows on new environments
+- Review and optimize performance
+- Update expected values when needed
+
+### 2. Documentation
+- Use `comment` nodes to document workflow
+- Note business logic
+- Document known issues and workarounds
+- Maintain changelog for major updates
+
+### 3. Version Control
+- Export workflows regularly
+- Backup before major changes
+- Test thoroughly before deployment
+- Have rollback plan
+
+## Performance Optimization
+
+### 1. Minimize Waits
+```javascript
+// Instead of:
+waitTimeout(5000) → click(button)
+
+// Use:
+waitElement(button) → click(button)
+```
+
+### 2. Efficient Selectors
+```javascript
+// Fast selectors
+#id               // Fastest
+.class            // Fast
+[data-testid]     // Good
+.parent > .child  // Moderate
+.complex .nested .selector  // Slow
+```
+
+### 3. Batch Operations
+```javascript
+// Combine assertions
+assertVisible(element1) AND assertText(element2) AND assertAttribute(element3)
+
+// Group related actions
+fill(field1) → fill(field2) → fill(field3) → click(submit)
+```
+
+## Common Patterns
+
+### 1. Login Flow
+```javascript
+start → goto(loginPage) → 
+fill(#username, testUser) → 
+fill(#password, testPass) → 
+click(#loginButton) → 
+waitElement(.dashboard) → 
+assertURL(dashboard-url)
+```
+
+### 2. Search Flow
+```javascript
+start → goto(searchPage) → 
+fill(#searchInput, query) → 
+press(Enter) → 
+waitElement(.search-results) → 
+assertElementCount(.result-item, expectedCount)
+```
+
+### 3. Form Submission
+```javascript
+start → goto(formPage) → 
+fill(#field1, value1) → 
+selectOption(#dropdown, option) → 
+setCheckboxState(#checkbox, true) → 
+click(#submit) → 
+waitElement(.success-message) → 
+assertContainsText(.success-message, success)
+```

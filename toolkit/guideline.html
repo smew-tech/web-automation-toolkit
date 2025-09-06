@@ -267,10 +267,6 @@
                 .replace(/-+/g, '-') // Replace multiple hyphens with single
                 .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
         }
-        
-
-
-
 
         // Load markdown content - try fetch first, fallback to showing instruction
         async function loadMarkdown(language = 'vi') {
@@ -293,7 +289,6 @@
                 document.getElementById('content').innerHTML = '<div class="text-center py-12"><i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-4"></i><p class="text-red-500">Cannot load content. Please try again.</p></div>';
             }
         }
-        
 
         // Switch language
         function switchLanguage(lang) {
@@ -309,7 +304,6 @@
             });
             document.getElementById('lang-' + currentLanguage).classList.add('active');
         }
-
 
         // Initialize content
         function initializeContent() {
@@ -421,10 +415,6 @@
                 document.querySelector('main').scrollTop = 0;
             }, 100); // Small delay to ensure content is rendered
         }
-
-
-
-
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', initializeContent);
