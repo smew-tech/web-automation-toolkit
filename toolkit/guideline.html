@@ -130,6 +130,22 @@
         .nav-subsection {
             margin-left: 1rem;
             margin-top: 0.5rem;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            overflow: hidden;
+        }
+        .nav-subsection.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+        .nav-subsection.expanded {
+            max-height: 1000px;
+            opacity: 1;
+        }
+        .section-toggle {
+            transition: transform 0.3s ease;
+        }
+        .section-toggle.rotated {
+            transform: rotate(90deg);
         }
         .language-btn {
             background-color: #f3f4f6;
@@ -158,6 +174,35 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm text-gray-500" id="node-count"></span>
+                    
+                    <!-- Search Box -->
+                    <div class="relative">
+                        <div class="relative">
+                            <input type="text" 
+                                   id="search-input" 
+                                   placeholder="Search documentation..." 
+                                   class="w-80 pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                                   autocomplete="off">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400 text-sm"></i>
+                            </div>
+                            <button id="clear-search" 
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 hidden"
+                                    title="Clear search">
+                                <i class="fas fa-times text-sm"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Search Results Dropdown -->
+                        <div id="search-results" 
+                             class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 hidden">
+                            <div id="search-results-content"></div>
+                            <div id="search-no-results" class="px-4 py-3 text-sm text-gray-500 text-center hidden">
+                                No results found
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="flex items-center space-x-2">
                          <button onclick="switchLanguage('en')" 
                                 class="language-btn px-3 py-1 text-sm rounded transition-colors" 
@@ -173,8 +218,7 @@
                         </button>
                     </div>
                     <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" title="Go back to main toolkit">
-                        <i class="fas fa-play mr-2"></i>
-                        <span id="toolkit-btn">Toolkit</span>
+                        <span id="toolkit-btn">SMEW Toolkit</span>
                     </a>
                 </div>
             </div>
@@ -188,7 +232,6 @@
                 <div class="mb-6">
                     <h2 class="text-lg font-semibold text-gray-900 mb-3" id="categories-title">Contents</h2>
                     <div class="space-y-1" id="navigation-menu">
-                        <!-- Menu will be populated by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -226,11 +269,12 @@
                 
                 // H1 headings become main menu items
                 if (line.startsWith('# ') && !line.startsWith('## ')) {
-                    const title = cleanHeadingText(line.substring(2));
-                    const id = generateId(title);
+                    const fullTitle = cleanHeadingText(line.substring(2)); // Keep icons for display
+                    const textOnly = getTextOnly(line.substring(2)); // Text only for ID generation
+                    const id = generateId(textOnly);
                     
                     currentH1 = {
-                        title,
+                        title: fullTitle, // This will include icons
                         id,
                         icon: 'fas fa-file-alt',
                         items: []
@@ -241,11 +285,12 @@
                 
                 // H2 headings become sub-menu items under current H1
                 else if (line.startsWith('## ') && !line.startsWith('### ') && currentH1) {
-                    const title = cleanHeadingText(line.substring(3));
-                    const id = generateId(title);
+                    const fullTitle = cleanHeadingText(line.substring(3)); // Keep icons for display
+                    const textOnly = getTextOnly(line.substring(3)); // Text only for ID generation
+                    const id = generateId(textOnly);
                     
                     currentH1.items.push({
-                        title,
+                        title: fullTitle, // This will include icons
                         id
                     });
                 }
@@ -254,14 +299,26 @@
             return menuItems;
         }
 
-        // Clean heading text by removing markdown syntax and emojis
+        // Clean heading text by removing markdown syntax and emojis, but keep HTML icons
         function cleanHeadingText(text) {
-            return text.replace(/[#\s]*/, '').replace(/[🎮🧭👆⏱️📊🔍]/g, '').trim();
+            return text.replace(/^[#\s]*/, '') // Only remove leading # and spaces
+                      .replace(/[🎮🧭👆⏱️📊🔍]/g, '') // Remove emoji icons
+                      .trim();
+        }
+        
+        // Get text content only (without HTML) for ID generation and matching
+        function getTextOnly(text) {
+            return text.replace(/^[#\s]*/, '')
+                      .replace(/[🎮🧭👆⏱️📊🔍]/g, '')
+                      .replace(/<[^>]*>/g, '') // Remove HTML tags for matching only
+                      .trim();
         }
         
         // Generate ID from title
         function generateId(title) {
-            return title.toLowerCase()
+            // Use getTextOnly to remove HTML tags before generating ID
+            const cleanTitle = getTextOnly(title);
+            return cleanTitle.toLowerCase()
                 .replace(/[^a-z0-9\s]/g, '') // Remove special characters except spaces
                 .replace(/\s+/g, '-') // Replace spaces with hyphens
                 .replace(/-+/g, '-') // Replace multiple hyphens with single
@@ -323,15 +380,20 @@
 
                 const sectionHeader = document.createElement('button');
                 sectionHeader.className = `menu-item flex items-center w-full text-left font-medium ${currentSection === section.id ? 'active' : ''}`;
-                sectionHeader.innerHTML = `<i class="${section.icon} mr-3 w-4 flex-shrink-0"></i><span>${section.title}</span>`;
-                sectionHeader.onclick = () => showSection(section.id);
+                
+                // Add chevron for sections with subsections
+                if (section.items && section.items.length > 0) {
+                    sectionHeader.innerHTML = `<i class="fas fa-chevron-right mr-2 w-3 flex-shrink-0 transition-transform duration-200" style="font-size: 0.75rem;"></i><i class="${section.icon} mr-3 w-4 flex-shrink-0"></i><span>${section.title}</span>`;
+                } else {
+                    sectionHeader.innerHTML = `<i class="${section.icon} mr-3 w-4 flex-shrink-0"></i><span>${section.title}</span>`;
+                }
                 
                 sectionDiv.appendChild(sectionHeader);
 
                 // Add subsections if available
                 if (section.items) {
                     const subsectionDiv = document.createElement('div');
-                    subsectionDiv.className = 'nav-subsection space-y-1';
+                    subsectionDiv.className = 'nav-subsection space-y-1 expanded';
                     
                     section.items.forEach(item => {
                         const itemButton = document.createElement('button');
@@ -342,9 +404,85 @@
                     });
                     
                     sectionDiv.appendChild(subsectionDiv);
+                    
+                    // Add click handler for collapse/expand
+                    sectionHeader.onclick = (e) => {
+                        e.preventDefault();
+                        toggleSection(sectionDiv, section.id);
+                    };
+                } else {
+                    // No subsections, just navigate to section
+                    sectionHeader.onclick = () => showSection(section.id);
                 }
 
                 menuContainer.appendChild(sectionDiv);
+            });
+            
+            // Restore collapsed state after rendering
+            restoreCollapsedState();
+        }
+
+        // Toggle section collapse/expand
+        function toggleSection(sectionDiv, sectionId) {
+            const subsection = sectionDiv.querySelector('.nav-subsection');
+            const chevron = sectionDiv.querySelector('.fa-chevron-right');
+            
+            if (subsection) {
+                const isExpanded = subsection.classList.contains('expanded');
+                
+                if (isExpanded) {
+                    subsection.classList.remove('expanded');
+                    subsection.classList.add('collapsed');
+                    if (chevron) chevron.style.transform = 'rotate(0deg)';
+                } else {
+                    subsection.classList.remove('collapsed');
+                    subsection.classList.add('expanded');
+                    if (chevron) chevron.style.transform = 'rotate(90deg)';
+                }
+                
+                // Save state to localStorage
+                const collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '[]');
+                if (isExpanded) {
+                    if (!collapsedSections.includes(sectionId)) {
+                        collapsedSections.push(sectionId);
+                    }
+                } else {
+                    const index = collapsedSections.indexOf(sectionId);
+                    if (index > -1) {
+                        collapsedSections.splice(index, 1);
+                    }
+                }
+                localStorage.setItem('collapsedSections', JSON.stringify(collapsedSections));
+            }
+        }
+
+        // Restore collapsed state from localStorage
+        function restoreCollapsedState() {
+            const collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '[]');
+            
+            document.querySelectorAll('.nav-section').forEach(sectionDiv => {
+                const subsection = sectionDiv.querySelector('.nav-subsection');
+                const chevron = sectionDiv.querySelector('.fa-chevron-right');
+                const sectionHeader = sectionDiv.querySelector('.menu-item');
+                
+                if (subsection && sectionHeader) {
+                    // Get section ID from the onclick handler or text content
+                    const sectionText = sectionHeader.textContent.trim();
+                    
+                    // Check if this section should be collapsed
+                    const shouldCollapse = collapsedSections.some(collapsedId => {
+                        // Match by section text or ID
+                        return sectionText.includes(collapsedId) || collapsedId.includes(sectionText.toLowerCase().replace(/\s+/g, '-'));
+                    });
+                    
+                    if (shouldCollapse) {
+                        subsection.classList.remove('expanded');
+                        subsection.classList.add('collapsed');
+                        if (chevron) chevron.style.transform = 'rotate(0deg)';
+                    } else {
+                        if (chevron) chevron.style.transform = 'rotate(90deg)';
+                    }
+                }
             });
         }
 
@@ -354,6 +492,9 @@
                 document.getElementById('content').innerHTML = '<div class="text-center py-12"><i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-4"></i><p class="text-red-500">Cannot load content. Please try again.</p></div>';
                 return;
             }
+            
+            // Clear any search highlights
+            clearHighlights();
             
             currentSection = sectionId;
             renderMenu();
@@ -396,17 +537,30 @@
             setTimeout(() => {
                 const headings = document.querySelectorAll('#content h1, #content h2, #content h3');
                 for (const heading of headings) {
-                    const headingText = cleanHeadingText(heading.textContent);
-                    if (headingText === targetTitle) {
-                        // Get header height to offset scroll position
-                        const headerHeight = document.querySelector('header').offsetHeight;
-                        const elementPosition = heading.offsetTop;
-                        const offsetPosition = elementPosition - headerHeight - 80;
-
-                        document.querySelector('main').scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
+                    // Use text-only version for comparison
+                    const headingTextOnly = getTextOnly(heading.textContent);
+                    const targetTextOnly = getTextOnly(targetTitle);
+                    
+                    // Try exact match first (text only)
+                    if (headingTextOnly === targetTextOnly) {
+                        scrollToHeading(heading);
+                        return;
+                    }
+                    
+                    // Try partial match (useful for complex headings)
+                    if (headingTextOnly.includes(targetTextOnly) || targetTextOnly.includes(headingTextOnly)) {
+                        scrollToHeading(heading);
+                        return;
+                    }
+                }
+                
+                // If we can't find the section, try to match by section ID directly
+                const allHeadings = document.querySelectorAll('#content h1, #content h2, #content h3');
+                for (const heading of allHeadings) {
+                    const textOnly = getTextOnly(heading.textContent);
+                    const headingId = generateId(textOnly);
+                    if (headingId === sectionId) {
+                        scrollToHeading(heading);
                         return;
                     }
                 }
@@ -415,9 +569,302 @@
                 document.querySelector('main').scrollTop = 0;
             }, 100); // Small delay to ensure content is rendered
         }
+        
+        function scrollToHeading(heading) {
+            // Get header height to offset scroll position
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const elementPosition = heading.offsetTop;
+            const offsetPosition = elementPosition - headerHeight - 80;
+
+            document.querySelector('main').scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Clear highlights function (moved here to be available for showSection)
+        function clearHighlights() {
+            const highlights = document.querySelectorAll('.search-highlight');
+            highlights.forEach(highlight => {
+                const parent = highlight.parentNode;
+                if (parent) {
+                    parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+                    parent.normalize();
+                }
+            });
+        }
+
+        // Search functionality
+        let searchResults = [];
+        let currentSearchTerm = '';
+        
+        function initializeSearch() {
+            const searchInput = document.getElementById('search-input');
+            const clearButton = document.getElementById('clear-search');
+            const resultsContainer = document.getElementById('search-results');
+            
+            let searchTimeout;
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                // Show/hide clear button
+                if (query) {
+                    clearButton.classList.remove('hidden');
+                } else {
+                    clearButton.classList.add('hidden');
+                    hideSearchResults();
+                    return;
+                }
+                
+                // Debounce search
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    performSearch(query);
+                }, 300);
+            });
+            
+            // Clear search
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                clearButton.classList.add('hidden');
+                hideSearchResults();
+                clearHighlights();
+            });
+            
+            // Hide results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!resultsContainer.contains(e.target) && !searchInput.contains(e.target)) {
+                    hideSearchResults();
+                }
+            });
+            
+            // Handle keyboard navigation
+            searchInput.addEventListener('keydown', function(e) {
+                const results = document.querySelectorAll('.search-result-item');
+                const currentActive = document.querySelector('.search-result-item.active');
+                let activeIndex = -1;
+                
+                if (currentActive) {
+                    activeIndex = Array.from(results).indexOf(currentActive);
+                }
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (activeIndex < results.length - 1) {
+                        if (currentActive) currentActive.classList.remove('active');
+                        results[activeIndex + 1].classList.add('active');
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (activeIndex > 0) {
+                        if (currentActive) currentActive.classList.remove('active');
+                        results[activeIndex - 1].classList.add('active');
+                    }
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentActive) {
+                        const sectionId = currentActive.getAttribute('data-section-id');
+                        navigateToSearchResult(sectionId);
+                    } else if (results.length > 0) {
+                        const sectionId = results[0].getAttribute('data-section-id');
+                        navigateToSearchResult(sectionId);
+                    }
+                } else if (e.key === 'Escape') {
+                    hideSearchResults();
+                    searchInput.blur();
+                }
+            });
+        }
+        
+        function performSearch(query) {
+            if (!markdownContent || query.length < 2) {
+                hideSearchResults();
+                return;
+            }
+            
+            currentSearchTerm = query.toLowerCase();
+            searchResults = [];
+            
+            // Split markdown into sections
+            const sections = markdownContent.split(/^#\s/m);
+            
+            for (let i = 1; i < sections.length; i++) {
+                const section = sections[i];
+                const lines = section.split('\n');
+                const title = lines[0];
+                const content = section.toLowerCase();
+                
+                if (content.includes(currentSearchTerm)) {
+                    // Find matching lines with context
+                    const matchingLines = [];
+                    const sectionLines = section.split('\n');
+                    
+                    for (let j = 0; j < sectionLines.length; j++) {
+                        const line = sectionLines[j].toLowerCase();
+                        if (line.includes(currentSearchTerm) && sectionLines[j].trim()) {
+                            // Get context (line before and after)
+                            const context = [];
+                            if (j > 0 && sectionLines[j-1].trim()) context.push(sectionLines[j-1]);
+                            context.push(sectionLines[j]);
+                            if (j < sectionLines.length - 1 && sectionLines[j+1].trim()) context.push(sectionLines[j+1]);
+                            
+                            matchingLines.push({
+                                line: sectionLines[j],
+                                context: context,
+                                lineNumber: j
+                            });
+                        }
+                    }
+                    
+                    if (matchingLines.length > 0) {
+                        searchResults.push({
+                            title: cleanHeadingText(title), // Keep icons for display
+                            id: generateId(getTextOnly(title)), // Use text-only for ID
+                            matches: matchingLines.slice(0, 3) // Limit to 3 matches per section
+                        });
+                    }
+                }
+            }
+            
+            displaySearchResults();
+        }
+        
+        function displaySearchResults() {
+            const resultsContainer = document.getElementById('search-results');
+            const resultsContent = document.getElementById('search-results-content');
+            const noResults = document.getElementById('search-no-results');
+            
+            if (searchResults.length === 0) {
+                resultsContent.innerHTML = '';
+                noResults.classList.remove('hidden');
+                resultsContainer.classList.remove('hidden');
+                return;
+            }
+            
+            noResults.classList.add('hidden');
+            
+            let html = '';
+            searchResults.forEach((result, index) => {
+                html += `<div class="search-result-section">`;
+                html += `<div class="px-4 py-2 border-b border-gray-100">`;
+                html += `<h4 class="font-medium text-gray-900 text-sm">${highlightText(result.title, currentSearchTerm)}</h4>`;
+                html += `</div>`;
+                
+                result.matches.forEach((match, matchIndex) => {
+                    const contextText = match.context.join(' ').replace(/[#*`]/g, '').trim();
+                    const truncatedContext = contextText.length > 100 ? contextText.substring(0, 100) + '...' : contextText;
+                    
+                    html += `<div class="search-result-item px-4 py-3 cursor-pointer hover:bg-gray-50 ${index === 0 && matchIndex === 0 ? 'active bg-gray-50' : ''}" 
+                             data-section-id="${result.id}">`;
+                    html += `<p class="text-sm text-gray-600">${highlightText(truncatedContext, currentSearchTerm)}</p>`;
+                    html += `</div>`;
+                });
+                
+                html += `</div>`;
+            });
+            
+            resultsContent.innerHTML = html;
+            resultsContainer.classList.remove('hidden');
+            
+            // Add click event listeners to search result items
+            resultsContent.querySelectorAll('.search-result-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section-id');
+                    navigateToSearchResult(sectionId);
+                });
+            });
+        }
+        
+        function navigateToSearchResult(sectionId) {
+            hideSearchResults();
+            
+            // Clear search input
+            document.getElementById('search-input').value = '';
+            document.getElementById('clear-search').classList.add('hidden');
+            
+            // Navigate to section
+            showSection(sectionId);
+            
+            // Highlight the matching text after a short delay
+            setTimeout(() => {
+                highlightSearchTerm(currentSearchTerm);
+            }, 200);
+        }
+        
+        function highlightSearchTerm(searchTerm) {
+            clearHighlights();
+            
+            if (!searchTerm) return;
+            
+            const content = document.getElementById('content');
+            const walker = document.createTreeWalker(
+                content,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            const textNodes = [];
+            let node;
+            while (node = walker.nextNode()) {
+                if (node.nodeValue.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    textNodes.push(node);
+                }
+            }
+            
+            textNodes.forEach(textNode => {
+                const parent = textNode.parentNode;
+                const text = textNode.nodeValue;
+                const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+                const highlightedText = text.replace(regex, '<mark class="search-highlight bg-yellow-200 px-1 rounded">$1</mark>');
+                
+                if (highlightedText !== text) {
+                    const wrapper = document.createElement('span');
+                    wrapper.innerHTML = highlightedText;
+                    parent.replaceChild(wrapper, textNode);
+                }
+            });
+            
+            // Scroll to first highlight
+            const firstHighlight = content.querySelector('.search-highlight');
+            if (firstHighlight) {
+                const headerHeight = document.querySelector('header').offsetHeight;
+                const elementPosition = firstHighlight.offsetTop;
+                const offsetPosition = elementPosition - headerHeight - 100;
+                
+                document.querySelector('main').scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        function hideSearchResults() {
+            document.getElementById('search-results').classList.add('hidden');
+        }
+        
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+            const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+            return text.replace(regex, '<strong class="text-blue-600">$1</strong>');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
 
         // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initializeContent);
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeContent();
+            initializeSearch();
+        });
     </script>
 </body>
 </html>
