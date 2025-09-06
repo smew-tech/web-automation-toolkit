@@ -730,6 +730,488 @@ SMEW Automation Toolkit is a powerful workflow automation tool that allows you t
 
 ---
 
+## Advanced Assertions
+
+### assertEnabled - Assert Enabled
+**Purpose**: Verify element is enabled and interactive.
+
+#### Parameters
+- **selector** (selector): CSS selector of element to check
+
+#### JSON Format
+```json
+{
+  "id": "node-609",
+  "type": "assertEnabled",
+  "x": 100,
+  "y": 1000,
+  "params": {
+    "selector": "#submit-button"
+  }
+}
+```
+
+---
+
+### assertDisabled - Assert Disabled
+**Purpose**: Verify element is disabled and not interactive.
+
+#### Parameters
+- **selector** (selector): CSS selector of element to check
+
+#### JSON Format
+```json
+{
+  "id": "node-610",
+  "type": "assertDisabled",
+  "x": 300,
+  "y": 1000,
+  "params": {
+    "selector": "#submit-button"
+  }
+}
+```
+
+---
+
+### assertChecked - Assert Checked
+**Purpose**: Verify checkbox or radio button is checked.
+
+#### Parameters
+- **selector** (selector): CSS selector of checkbox/radio element
+
+#### JSON Format
+```json
+{
+  "id": "node-611",
+  "type": "assertChecked",
+  "x": 500,
+  "y": 1000,
+  "params": {
+    "selector": "#agree-terms"
+  }
+}
+```
+
+---
+
+### assertUnchecked - Assert Unchecked
+**Purpose**: Verify checkbox or radio button is not checked.
+
+#### Parameters
+- **selector** (selector): CSS selector of checkbox/radio element
+
+#### JSON Format
+```json
+{
+  "id": "node-612",
+  "type": "assertUnchecked",
+  "x": 700,
+  "y": 1000,
+  "params": {
+    "selector": "#newsletter"
+  }
+}
+```
+
+---
+
+### assertCSSProperty - Assert CSS Property
+**Purpose**: Verify element's CSS property has expected value.
+
+#### Parameters
+- **selector** (selector): CSS selector of element
+- **property** (text): CSS property name
+- **expectedValue** (text): Expected property value
+
+#### JSON Format
+```json
+{
+  "id": "node-613",
+  "type": "assertCSSProperty",
+  "x": 900,
+  "y": 1000,
+  "params": {
+    "selector": ".highlight",
+    "property": "background-color",
+    "expectedValue": "rgb(255, 255, 0)"
+  }
+}
+```
+
+---
+
+## Quality Assurance Nodes
+
+### validateForm - Validate Form
+**Purpose**: Comprehensive form validation check.
+
+#### Parameters
+- **selector** (selector): CSS selector of form element
+- **validationType** (select): Type of validation
+  - **required**: Check required fields
+  - **format**: Check input formats
+  - **all**: Complete validation
+
+#### JSON Format
+```json
+{
+  "id": "node-614",
+  "type": "validateForm",
+  "x": 100,
+  "y": 1100,
+  "params": {
+    "selector": "#contact-form",
+    "validationType": "all"
+  }
+}
+```
+
+---
+
+### checkBrokenLinks - Check Broken Links
+**Purpose**: Scan page for broken or invalid links.
+
+#### Parameters
+- **scope** (select): Scope of link checking
+  - **page**: Current page only
+  - **domain**: Same domain links
+  - **all**: All links
+
+#### JSON Format
+```json
+{
+  "id": "node-615",
+  "type": "checkBrokenLinks",
+  "x": 300,
+  "y": 1100,
+  "params": {
+    "scope": "page"
+  }
+}
+```
+
+---
+
+### checkImageLoading - Check Image Loading
+**Purpose**: Verify all images load successfully.
+
+#### Parameters
+- **selector** (selector, optional): CSS selector for specific images (empty = all images)
+
+#### JSON Format
+```json
+{
+  "id": "node-616",
+  "type": "checkImageLoading",
+  "x": 500,
+  "y": 1100,
+  "params": {
+    "selector": ".gallery img"
+  }
+}
+```
+
+---
+
+### checkPageSpeed - Check Page Speed
+**Purpose**: Measure page loading performance.
+
+#### Parameters
+- **metric** (select): Performance metric to measure
+  - **load**: Page load time
+  - **dom**: DOM ready time
+  - **first-paint**: First contentful paint
+- **threshold** (number): Maximum acceptable time in milliseconds
+
+#### JSON Format
+```json
+{
+  "id": "node-617",
+  "type": "checkPageSpeed",
+  "x": 700,
+  "y": 1100,
+  "params": {
+    "metric": "load",
+    "threshold": "3000"
+  }
+}
+```
+
+---
+
+### checkResponsive - Check Responsive Design
+**Purpose**: Test responsive design across different screen sizes.
+
+#### Parameters
+- **devices** (select): Device types to test
+  - **mobile**: Mobile devices
+  - **tablet**: Tablet devices
+  - **desktop**: Desktop sizes
+  - **all**: All device types
+
+#### JSON Format
+```json
+{
+  "id": "node-618",
+  "type": "checkResponsive",
+  "x": 900,
+  "y": 1100,
+  "params": {
+    "devices": "all"
+  }
+}
+```
+
+---
+
+### checkAccessibility - Check Accessibility
+**Purpose**: Test WCAG accessibility compliance.
+
+#### Parameters
+- **level** (select): WCAG compliance level
+  - **A**: Level A compliance
+  - **AA**: Level AA compliance
+  - **AAA**: Level AAA compliance
+
+#### JSON Format
+```json
+{
+  "id": "node-619",
+  "type": "checkAccessibility",
+  "x": 100,
+  "y": 1200,
+  "params": {
+    "level": "AA"
+  }
+}
+```
+
+---
+
+### checkSEO - Check SEO
+**Purpose**: Analyze page SEO factors.
+
+#### Parameters
+- **checks** (select): SEO elements to check
+  - **meta**: Meta tags
+  - **headings**: Heading structure
+  - **images**: Image alt texts
+  - **links**: Link structure
+  - **all**: All SEO factors
+
+#### JSON Format
+```json
+{
+  "id": "node-620",
+  "type": "checkSEO",
+  "x": 300,
+  "y": 1200,
+  "params": {
+    "checks": "all"
+  }
+}
+```
+
+---
+
+## Network & Performance Nodes
+
+### interceptNetwork - Intercept Network
+**Purpose**: Intercept and modify network requests.
+
+#### Parameters
+- **url** (text): URL pattern to intercept
+- **method** (select): HTTP method to intercept
+- **action** (select): Action to take
+  - **block**: Block the request
+  - **modify**: Modify the request
+  - **delay**: Add delay to request
+
+#### JSON Format
+```json
+{
+  "id": "node-621",
+  "type": "interceptNetwork",
+  "x": 500,
+  "y": 1200,
+  "params": {
+    "url": "*/api/users",
+    "method": "GET",
+    "action": "delay"
+  }
+}
+```
+
+---
+
+### setCookie - Set Cookie
+**Purpose**: Set browser cookies for testing.
+
+#### Parameters
+- **name** (text): Cookie name
+- **value** (text): Cookie value
+- **domain** (text, optional): Cookie domain
+
+#### JSON Format
+```json
+{
+  "id": "node-622",
+  "type": "setCookie",
+  "x": 700,
+  "y": 1200,
+  "params": {
+    "name": "sessionId",
+    "value": "test123",
+    "domain": "example.com"
+  }
+}
+```
+
+---
+
+### checkConsoleErrors - Check Console Errors
+**Purpose**: Monitor and validate browser console for errors.
+
+#### Parameters
+- **threshold** (number): Maximum acceptable error count
+
+#### JSON Format
+```json
+{
+  "id": "node-623",
+  "type": "checkConsoleErrors",
+  "x": 900,
+  "y": 1200,
+  "params": {
+    "threshold": "0"
+  }
+}
+```
+
+---
+
+### checkMemoryUsage - Check Memory Usage
+**Purpose**: Monitor memory consumption during test execution.
+
+#### Parameters
+- **threshold** (number): Maximum memory usage in MB
+
+#### JSON Format
+```json
+{
+  "id": "node-624",
+  "type": "checkMemoryUsage",
+  "x": 100,
+  "y": 1300,
+  "params": {
+    "threshold": "512"
+  }
+}
+```
+
+---
+
+### checkLocalStorage - Check Local Storage
+**Purpose**: Validate browser local storage data.
+
+#### Parameters
+- **key** (text): Storage key to check
+- **expectedValue** (text, optional): Expected value
+
+#### JSON Format
+```json
+{
+  "id": "node-625",
+  "type": "checkLocalStorage",
+  "x": 300,
+  "y": 1300,
+  "params": {
+    "key": "userPreferences",
+    "expectedValue": "dark-mode"
+  }
+}
+```
+
+---
+
+### checkSessionStorage - Check Session Storage
+**Purpose**: Validate browser session storage data.
+
+#### Parameters
+- **key** (text): Storage key to check
+- **expectedValue** (text, optional): Expected value
+
+#### JSON Format
+```json
+{
+  "id": "node-626",
+  "type": "checkSessionStorage",
+  "x": 500,
+  "y": 1300,
+  "params": {
+    "key": "cartItems",
+    "expectedValue": "2"
+  }
+}
+```
+
+---
+
+### testCrossBrowser - Test Cross Browser
+**Purpose**: Execute test across multiple browser engines.
+
+#### Parameters
+- **browsers** (select): Browsers to test
+  - **chrome**: Google Chrome
+  - **firefox**: Mozilla Firefox
+  - **safari**: Safari
+  - **edge**: Microsoft Edge
+  - **all**: All browsers
+
+#### JSON Format
+```json
+{
+  "id": "node-627",
+  "type": "testCrossBrowser",
+  "x": 700,
+  "y": 1300,
+  "params": {
+    "browsers": "all"
+  }
+}
+```
+
+---
+
+### simulateNetworkCondition - Simulate Network Condition
+**Purpose**: Test under different network conditions.
+
+#### Parameters
+- **condition** (select): Network condition preset
+  - **fast-3g**: Fast 3G
+  - **slow-3g**: Slow 3G
+  - **offline**: Offline mode
+  - **custom**: Custom condition
+- **downloadSpeed** (number, optional): Download speed in Kbps
+- **uploadSpeed** (number, optional): Upload speed in Kbps
+- **latency** (number, optional): Network latency in ms
+
+#### JSON Format
+```json
+{
+  "id": "node-628",
+  "type": "simulateNetworkCondition",
+  "x": 900,
+  "y": 1300,
+  "params": {
+    "condition": "slow-3g"
+  }
+}
+```
+
+---
+
 # Usage Tips
 
 ## Common CSS Selectors

@@ -730,6 +730,435 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 
 ---
 
+## Kiểm Tra Nâng Cao (Advanced Assertions)
+
+### assertEnabled - Kiểm Tra Kích Hoạt
+**Công dụng**: Xác minh element có thể tương tác được (không bị disabled).
+
+#### Parameters
+- **selector** (selector): CSS selector của element cần kiểm tra
+
+#### JSON Format
+```json
+{
+  "id": "node-609",
+  "type": "assertEnabled",
+  "x": 700,
+  "y": 900,
+  "params": {
+    "selector": "#submit-button"
+  }
+}
+```
+
+---
+
+### assertDisabled - Kiểm Tra Vô Hiệu Hóa
+**Công dụng**: Xác minh element bị vô hiệu hóa (disabled).
+
+#### Parameters
+- **selector** (selector): CSS selector của element cần kiểm tra
+
+#### JSON Format
+```json
+{
+  "id": "node-610",
+  "type": "assertDisabled",
+  "x": 900,
+  "y": 900,
+  "params": {
+    "selector": "#checkout-button"
+  }
+}
+```
+
+---
+
+### assertChecked - Kiểm Tra Được Chọn
+**Công dụng**: Xác minh checkbox/radio button đã được chọn.
+
+#### Parameters
+- **selector** (selector): CSS selector của checkbox/radio
+
+#### JSON Format
+```json
+{
+  "id": "node-611",
+  "type": "assertChecked",
+  "x": 100,
+  "y": 1000,
+  "params": {
+    "selector": "input[name='terms']"
+  }
+}
+```
+
+---
+
+### assertUnchecked - Kiểm Tra Không Được Chọn
+**Công dụng**: Xác minh checkbox/radio button chưa được chọn.
+
+#### Parameters
+- **selector** (selector): CSS selector của checkbox/radio
+
+#### JSON Format
+```json
+{
+  "id": "node-612",
+  "type": "assertUnchecked",
+  "x": 300,
+  "y": 1000,
+  "params": {
+    "selector": "input[name='newsletter']"
+  }
+}
+```
+
+---
+
+### assertCSSProperty - Kiểm Tra CSS
+**Công dụng**: Xác minh CSS property của element.
+
+#### Parameters
+- **selector** (selector): CSS selector của element
+- **property** (text): Tên CSS property (ví dụ: "color", "display")
+- **expectedValue** (text): Giá trị CSS mong đợi
+
+#### JSON Format
+```json
+{
+  "id": "node-613",
+  "type": "assertCSSProperty",
+  "x": 500,
+  "y": 1000,
+  "params": {
+    "selector": ".error-message",
+    "property": "color",
+    "expectedValue": "rgb(255, 0, 0)"
+  }
+}
+```
+
+---
+
+## Đảm Bảo Chất Lượng (Quality Assurance)
+
+### validateForm - Kiểm Tra Form
+**Công dụng**: Xác minh tính hợp lệ của form và các trường bắt buộc.
+
+#### Parameters
+- **formSelector** (selector): CSS selector của form
+- **requiredFields** (text): Danh sách các trường bắt buộc (phân cách bởi dấu phẩy)
+
+#### JSON Format
+```json
+{
+  "id": "node-701",
+  "type": "validateForm",
+  "x": 700,
+  "y": 1000,
+  "params": {
+    "formSelector": "#registration-form",
+    "requiredFields": "name,email,password"
+  }
+}
+```
+
+---
+
+### checkBrokenLinks - Kiểm Tra Link Hỏng
+**Công dụng**: Kiểm tra tất cả links trên trang có hoạt động không.
+
+#### Parameters
+- **containerSelector** (selector, optional): CSS selector của vùng chứa links (để trống = toàn trang)
+
+#### JSON Format
+```json
+{
+  "id": "node-702",
+  "type": "checkBrokenLinks",
+  "x": 900,
+  "y": 1000,
+  "params": {
+    "containerSelector": ".main-content"
+  }
+}
+```
+
+---
+
+### checkImageLoading - Kiểm Tra Tải Hình
+**Công dụng**: Xác minh tất cả hình ảnh trên trang được tải thành công.
+
+#### JSON Format
+```json
+{
+  "id": "node-703",
+  "type": "checkImageLoading",
+  "x": 100,
+  "y": 1100,
+  "params": {}
+}
+```
+
+---
+
+### checkPageSpeed - Kiểm Tra Tốc Độ
+**Công dụng**: Đo thời gian load trang và các metrics hiệu suất.
+
+#### Parameters
+- **maxLoadTime** (number): Thời gian load tối đa cho phép (ms)
+
+#### JSON Format
+```json
+{
+  "id": "node-704",
+  "type": "checkPageSpeed",
+  "x": 300,
+  "y": 1100,
+  "params": {
+    "maxLoadTime": "3000"
+  }
+}
+```
+
+---
+
+### checkResponsive - Kiểm Tra Responsive
+**Công dụng**: Test giao diện trên các kích thước màn hình khác nhau.
+
+#### Parameters
+- **viewports** (text): Danh sách kích thước màn hình (width,height)
+
+#### JSON Format
+```json
+{
+  "id": "node-705",
+  "type": "checkResponsive",
+  "x": 500,
+  "y": 1100,
+  "params": {
+    "viewports": "320,568;768,1024;1920,1080"
+  }
+}
+```
+
+---
+
+### checkAccessibility - Kiểm Tra Khả Năng Tiếp Cận
+**Công dụng**: Đánh giá tính accessibility của trang web.
+
+#### JSON Format
+```json
+{
+  "id": "node-706",
+  "type": "checkAccessibility",
+  "x": 700,
+  "y": 1100,
+  "params": {}
+}
+```
+
+---
+
+### checkSEO - Kiểm Tra SEO
+**Công dụng**: Đánh giá các yếu tố SEO cơ bản của trang.
+
+#### JSON Format
+```json
+{
+  "id": "node-707",
+  "type": "checkSEO",
+  "x": 900,
+  "y": 1100,
+  "params": {}
+}
+```
+
+---
+
+## Mạng & Hiệu Suất (Network & Performance)
+
+### interceptNetwork - Chặn Mạng
+**Công dụng**: Theo dõi và can thiệp các request mạng.
+
+#### Parameters
+- **urlPattern** (text): Pattern URL cần chặn (regex supported)
+- **action** (select): Hành động thực hiện
+  - **block**: Chặn request
+  - **modify**: Chỉnh sửa request
+  - **monitor**: Chỉ theo dõi
+
+#### JSON Format
+```json
+{
+  "id": "node-801",
+  "type": "interceptNetwork",
+  "x": 100,
+  "y": 1200,
+  "params": {
+    "urlPattern": "**/api/analytics",
+    "action": "block"
+  }
+}
+```
+
+---
+
+### setCookie - Đặt Cookie
+**Công dụng**: Tạo hoặc cập nhật cookie trong browser.
+
+#### Parameters
+- **name** (text): Tên cookie
+- **value** (text): Giá trị cookie
+- **domain** (text, optional): Domain cho cookie
+
+#### JSON Format
+```json
+{
+  "id": "node-802",
+  "type": "setCookie",
+  "x": 300,
+  "y": 1200,
+  "params": {
+    "name": "sessionToken",
+    "value": "abc123xyz",
+    "domain": ".example.com"
+  }
+}
+```
+
+---
+
+### checkConsoleErrors - Kiểm Tra Lỗi Console
+**Công dụng**: Kiểm tra các lỗi JavaScript trong browser console.
+
+#### JSON Format
+```json
+{
+  "id": "node-803",
+  "type": "checkConsoleErrors",
+  "x": 500,
+  "y": 1200,
+  "params": {}
+}
+```
+
+---
+
+### checkMemoryUsage - Kiểm Tra Bộ Nhớ
+**Công dụng**: Theo dõi mức sử dụng memory của trang.
+
+#### Parameters
+- **maxMemoryMB** (number): Mức memory tối đa cho phép (MB)
+
+#### JSON Format
+```json
+{
+  "id": "node-804",
+  "type": "checkMemoryUsage",
+  "x": 700,
+  "y": 1200,
+  "params": {
+    "maxMemoryMB": "100"
+  }
+}
+```
+
+---
+
+### checkLocalStorage - Kiểm Tra Local Storage
+**Công dụng**: Xác minh dữ liệu trong localStorage.
+
+#### Parameters
+- **key** (text): Key cần kiểm tra
+- **expectedValue** (text, optional): Giá trị mong đợi
+
+#### JSON Format
+```json
+{
+  "id": "node-805",
+  "type": "checkLocalStorage",
+  "x": 900,
+  "y": 1200,
+  "params": {
+    "key": "userPreferences",
+    "expectedValue": "{\"theme\":\"dark\"}"
+  }
+}
+```
+
+---
+
+### checkSessionStorage - Kiểm Tra Session Storage
+**Công dụng**: Xác minh dữ liệu trong sessionStorage.
+
+#### Parameters
+- **key** (text): Key cần kiểm tra
+- **expectedValue** (text, optional): Giá trị mong đợi
+
+#### JSON Format
+```json
+{
+  "id": "node-806",
+  "type": "checkSessionStorage",
+  "x": 100,
+  "y": 1300,
+  "params": {
+    "key": "cartItems",
+    "expectedValue": "[{\"id\":1,\"qty\":2}]"
+  }
+}
+```
+
+---
+
+### testCrossBrowser - Kiểm Tra Đa Trình Duyệt
+**Công dụng**: Test tương thích trên nhiều browsers khác nhau.
+
+#### Parameters
+- **browsers** (text): Danh sách browsers (chrome,firefox,safari,edge)
+
+#### JSON Format
+```json
+{
+  "id": "node-807",
+  "type": "testCrossBrowser",
+  "x": 300,
+  "y": 1300,
+  "params": {
+    "browsers": "chrome,firefox,edge"
+  }
+}
+```
+
+---
+
+### simulateNetworkCondition - Mô Phỏng Mạng
+**Công dụng**: Mô phỏng các điều kiện mạng khác nhau (3G, 4G, slow...).
+
+#### Parameters
+- **condition** (select): Điều kiện mạng
+  - **fast3G**: Mạng 3G nhanh
+  - **slow3G**: Mạng 3G chậm
+  - **offline**: Không có mạng
+  - **custom**: Tùy chỉnh
+
+#### JSON Format
+```json
+{
+  "id": "node-808",
+  "type": "simulateNetworkCondition",
+  "x": 500,
+  "y": 1300,
+  "params": {
+    "condition": "slow3G"
+  }
+}
+```
+
+---
+
 # Mẹo Sử Dụng
 
 ## CSS Selectors Thông Dụng
