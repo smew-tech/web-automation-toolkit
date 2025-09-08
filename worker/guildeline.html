@@ -604,6 +604,9 @@
             return;
         }
 
+        // Set navigation flag to prevent scroll spy interference
+        isNavigating = true;
+
         // Clear any search highlights
         clearHighlights();
 
@@ -696,11 +699,29 @@
         const headerHeight = document.querySelector('header').offsetHeight;
         const elementPosition = heading.offsetTop;
         const offsetPosition = elementPosition - headerHeight - 80;
+        
+        const mainElement = document.querySelector('main');
+        const startPosition = mainElement.scrollTop;
+        const distance = Math.abs(offsetPosition - startPosition);
+        
+        // Calculate appropriate timeout based on scroll distance
+        const scrollDuration = Math.min(Math.max(distance / 2, 500), 2000);
 
-        document.querySelector('main').scrollTo({
+        mainElement.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
         });
+
+        // Clear navigation flag after scroll animation completes
+        setTimeout(() => {
+            isNavigating = false;
+            // Force update active section to ensure correct selection
+            setTimeout(() => {
+                if (!isNavigating) {
+                    updateActiveSection();
+                }
+            }, 100);
+        }, scrollDuration);
     }
 
     // Clear highlights function (moved here to be available for showSection)
@@ -982,12 +1003,14 @@
     }
 
     // Scroll spy functionality
+    let isNavigating = false; // Flag to prevent scroll spy during navigation
+
     function initializeScrollSpy() {
         const mainContent = document.querySelector('main');
         let isScrolling = false;
         
         mainContent.addEventListener('scroll', () => {
-            if (isScrolling) return;
+            if (isScrolling || isNavigating) return;
             
             isScrolling = true;
             requestAnimationFrame(() => {
@@ -998,9 +1021,10 @@
     }
 
     function updateActiveSection() {
+        if (isNavigating) return; // Don't update during navigation
+        
         const headings = Array.from(document.querySelectorAll('#content h1, #content h2, #content h3'));
-        const menuItems = Array.from(document.querySelectorAll('.menu-item'));
-        const scrollPosition = document.querySelector('main').scrollTop + 100; // Offset for header
+        const scrollPosition = document.querySelector('main').scrollTop + 100;
         
         let activeHeading = null;
         
@@ -1013,33 +1037,13 @@
             }
         }
         
-        // Clear all active states
-        menuItems.forEach(item => {
-            item.classList.remove('active', 'current-section');
-        });
-        
         if (activeHeading) {
-            const headingText = getTextOnly(activeHeading.textContent);
-            const headingId = generateId(headingText);
+            const headingText = activeHeading.textContent.trim();
+            const headingId = headingText.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
             
-            // Find and activate the corresponding menu item
-            menuItems.forEach(item => {
-                if (item.onclick && item.onclick.toString().includes(headingId)) {
-                    item.classList.add('current-section');
-                    
-                    // Also expand parent sections if collapsed
-                    const parentSection = item.closest('.nav-section');
-                    if (parentSection) {
-                        const subsection = parentSection.querySelector('.nav-subsection');
-                        if (subsection && subsection.classList.contains('collapsed')) {
-                            subsection.classList.remove('collapsed');
-                            subsection.classList.add('expanded');
-                            const chevron = parentSection.querySelector('.section-toggle');
-                            if (chevron) chevron.classList.add('rotated');
-                        }
-                    }
-                }
-            });
+            // Update currentSection and re-render menu to show active state
+            currentSection = headingId;
+            renderMenu();
         }
     }
 

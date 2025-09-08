@@ -94,43 +94,128 @@
             background-color: #e5e7eb;
             margin: 2rem 0;
         }
+        /* Google Docs-style Menu */
         .menu-item {
-            display: block;
+            display: flex;
+            align-items: center;
             width: 100%;
             text-align: left;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            color: #374151;
-            transition: all 0.2s;
-            border-radius: 0.5rem;
-            margin-bottom: 0.125rem;
+            padding: 6px 12px;
+            font-size: 13px;
+            color: #3c4043;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 4px;
+            margin-bottom: 1px;
+            cursor: pointer;
+            position: relative;
+            line-height: 1.4;
         }
         .menu-item:hover {
-            background-color: #eff6ff;
-            color: #2563eb;
+            background-color: #f1f3f4;
+            color: #1a73e8;
         }
         .menu-item.active {
-            background-color: #dbeafe;
-            color: #1d4ed8;
+            background-color: #e8f0fe;
+            color: #1a73e8;
             font-weight: 500;
         }
+        .menu-item.h1-item.active {
+            border-left: 3px solid #1a73e8;
+            padding-left: 9px;
+        }
+        .menu-item.h2-item.active {
+            border-left: 3px solid #1a73e8;
+            margin-left: 13px;
+            padding-left: 17px;
+        }
+        .menu-item.h3-item.active {
+            border-left: 3px solid #1a73e8;
+            margin-left: 29px;
+            padding-left: 21px;
+        }
+
+        /* H1 Items - Main sections */
+        .menu-item.h1-item {
+            font-weight: 500;
+            font-size: 14px;
+            color: #202124;
+            padding: 8px 12px;
+            margin-top: 8px;
+        }
+        .menu-item.h1-item:hover {
+            background-color: #f1f3f4;
+        }
+
+        /* H2 Items - Subsections */
+        .menu-item.h2-item {
+            margin-left: 16px;
+            font-size: 13px;
+            color: #5f6368;
+            padding: 5px 12px 5px 20px;
+            position: relative;
+        }
+        .menu-item.h2-item:not(:has(.section-toggle))::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            width: 4px;
+            height: 4px;
+            background-color: #dadce0;
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+        .menu-item.h2-item:hover:not(:has(.section-toggle))::before {
+            background-color: #1a73e8;
+        }
+        .menu-item.h2-item.active:not(:has(.section-toggle))::before {
+            background-color: #1a73e8;
+        }
+
+        /* H2 items with toggles (collapsible sections) */
+        .menu-item.h2-item .section-toggle {
+            margin-right: 8px;
+            margin-left: -4px;
+        }
+
+        /* H3 Items - Sub-subsections */
+        .menu-item.h3-item {
+            margin-left: 32px;
+            font-size: 12px;
+            color: #80868b;
+            padding: 4px 12px 4px 24px;
+            position: relative;
+        }
+        .menu-item.h3-item::before {
+            content: '–';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #dadce0;
+            font-size: 10px;
+        }
+        .menu-item.h3-item:hover::before {
+            color: #1a73e8;
+        }
+        .menu-item.h3-item.active::before {
+            color: #1a73e8;
+        }
+
         .category-header {
-            padding: 0.5rem 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #6b7280;
+            padding: 12px 12px 8px 12px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #5f6368;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 1px solid #e5e7eb;
-            margin-bottom: 0.5rem;
+            letter-spacing: 0.8px;
+            margin-bottom: 4px;
         }
         .nav-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 0;
         }
         .nav-subsection {
-            margin-left: 1rem;
-            margin-top: 0.5rem;
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            transition: max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
         .nav-subsection.collapsed {
@@ -142,10 +227,25 @@
             opacity: 1;
         }
         .section-toggle {
-            transition: transform 0.3s ease;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-right: 8px;
+            color: #5f6368;
+            font-size: 12px;
         }
         .section-toggle.rotated {
             transform: rotate(90deg);
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Active section indicator */
+        .menu-item.current-section {
+            background-color: #f8f9fa;
+            color: #1a73e8;
+            font-weight: 500;
         }
         .language-btn {
             background-color: #f3f4f6;
@@ -163,86 +263,86 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white shadow-sm border-b">
-        <div class="max-w-full mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <h1 class="text-xl font-semibold text-gray-900">
-                        <span id="page-title">SMEW Automation Docs</span>
-                    </h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500" id="node-count"></span>
-                    
-                    <!-- Search Box -->
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white shadow-sm border-b">
+    <div class="max-w-full mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-xl font-semibold text-gray-900">
+                    <span id="page-title">SMEW worker Docs</span>
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-500" id="node-count"></span>
+
+                <!-- Search Box -->
+                <div class="relative">
                     <div class="relative">
-                        <div class="relative">
-                            <input type="text" 
-                                   id="search-input" 
-                                   placeholder="Search documentation..." 
-                                   class="w-80 pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-                                   autocomplete="off">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-gray-400 text-sm"></i>
-                            </div>
-                            <button id="clear-search" 
-                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 hidden"
-                                    title="Clear search">
-                                <i class="fas fa-times text-sm"></i>
-                            </button>
+                        <input type="text"
+                               id="search-input"
+                               placeholder="Search documentation..."
+                               class="w-80 pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                               autocomplete="off">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
                         </div>
-                        
-                        <!-- Search Results Dropdown -->
-                        <div id="search-results" 
-                             class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 hidden">
-                            <div id="search-results-content"></div>
-                            <div id="search-no-results" class="px-4 py-3 text-sm text-gray-500 text-center hidden">
-                                No results found
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center space-x-2">
-                         <button onclick="switchLanguage('en')" 
-                                class="language-btn px-3 py-1 text-sm rounded transition-colors" 
-                                id="lang-en"
-                                title="Switch to English">
-                            🇺🇸 EN
-                        </button>
-                        <button onclick="switchLanguage('vi')" 
-                                class="language-btn px-3 py-1 text-sm rounded transition-colors" 
-                                id="lang-vi"
-                                title="Switch to Vietnamese">
-                            🇻🇳 VI
+                        <button id="clear-search"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 hidden"
+                                title="Clear search">
+                            <i class="fas fa-times text-sm"></i>
                         </button>
                     </div>
-                    <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" title="Go back to main toolkit">
-                        <span id="toolkit-btn">SMEW Toolkit</span>
-                    </a>
+
+                    <!-- Search Results Dropdown -->
+                    <div id="search-results"
+                         class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 hidden">
+                        <div id="search-results-content"></div>
+                        <div id="search-no-results" class="px-4 py-3 text-sm text-gray-500 text-center hidden">
+                            No results found
+                        </div>
+                    </div>
                 </div>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="switchLanguage('en')"
+                            class="language-btn px-3 py-1 text-sm rounded transition-colors"
+                            id="lang-en"
+                            title="Switch to English">
+                        🇺🇸 EN
+                    </button>
+                    <button onclick="switchLanguage('vi')"
+                            class="language-btn px-3 py-1 text-sm rounded transition-colors"
+                            id="lang-vi"
+                            title="Switch to Vietnamese">
+                        🇻🇳 VI
+                    </button>
+                </div>
+                <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" title="Go back to main toolkit">
+                    <span id="toolkit-btn">SMEW worker</span>
+                </a>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Container -->
-    <div class="flex">
-        <!-- Left Sidebar -->
-        <div class="w-80 bg-white shadow-lg h-screen overflow-y-auto" style="position: fixed; top: 73px; left: 0; width: 320px; height: calc(100vh - 73px);">
-            <div class="p-4">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4" id="categories-title">Contents</h2>
-                <div id="navigation-menu"></div>
-            </div>
+<!-- Container -->
+<div class="flex">
+    <!-- Left Sidebar -->
+    <div class="w-80 bg-white shadow-lg h-screen overflow-y-auto" style="position: fixed; top: 73px; left: 0; width: 320px; height: calc(100vh - 73px);">
+        <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4" id="categories-title">Contents</h2>
+            <div id="navigation-menu"></div>
         </div>
+    </div>
 
-        <!-- Main Content -->
-        <div style="margin-left: 320px; width: calc(100vw - 320px);">
-            <main class="h-screen overflow-y-auto" style="height: calc(100vh - 73px);">
-                <div class="max-w-4xl mx-auto p-8">
+    <!-- Main Content -->
+    <div style="margin-left: 320px; width: calc(100vw - 320px);">
+        <main class="h-screen overflow-y-auto" style="height: calc(100vh - 73px);">
+            <div class="max-w-4xl mx-auto p-8">
                 <div id="content" class="markdown-content">
                     <div class="text-center py-12">
                         <i class="fas fa-spinner fa-spin text-3xl text-gray-400 mb-4"></i>
-                        <p class="text-gray-500">Đang tải nội dung...</p>
+                        <p class="text-gray-500">Loading...</p>
                     </div>
                 </div>
             </div>
@@ -253,8 +353,8 @@
         let markdownContent = '';
         let currentLanguage = 'vi';
         let currentSection = 'overview';
-        
-        // Common Markdown Parser - Extract menu structure from any markdown content
+
+        // Simple and reliable markdown parser
         function getMenuStructure() {
             if (!markdownContent) return [];
 
@@ -281,12 +381,12 @@
                 // H1 sections
                 if (line.startsWith('# ') && !line.startsWith('## ')) {
                     const title = line.substring(2).trim();
-                    
+
                     // Skip if empty
                     if (!title) continue;
 
-                    const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
-                    
+                    const id = generateId(title);
+
                     currentH1 = {
                         title: title,
                         id: id,
@@ -296,14 +396,15 @@
                     menuItems.push(currentH1);
                 }
 
-                // H2 sections
+                // H2 sections only
                 else if (line.startsWith('## ') && !line.startsWith('### ') && currentH1) {
                     const title = line.substring(3).trim();
-                    
-                    if (!title) continue;
 
-                    const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
-                    
+                    // Skip if empty or looks like code comment
+                    if (!title || title.includes('curl') || title.includes('External system')) continue;
+
+                    const id = generateId(title);
+
                     currentH1.items.push({
                         title: title,
                         id: id
@@ -317,27 +418,29 @@
         // Clean heading text by removing markdown syntax and emojis, but keep HTML icons
         function cleanHeadingText(text) {
             return text.replace(/^[#\s]*/, '') // Only remove leading # and spaces
-                      .replace(/[🎮🧭👆⏱️📊🔍]/g, '') // Remove emoji icons
-                      .trim();
+                .replace(/[🎮🧭👆⏱️📊🔍]/g, '') // Remove emoji icons
+                .trim();
         }
-        
+
         // Get text content only (without HTML) for ID generation and matching
         function getTextOnly(text) {
             return text.replace(/^[#\s]*/, '')
-                      .replace(/[🎮🧭👆⏱️📊🔍]/g, '')
-                      .replace(/<[^>]*>/g, '') // Remove HTML tags for matching only
-                      .trim();
+                .replace(/[🎮🧭👆⏱️📊🔍]/g, '')
+                .replace(/<[^>]*>/g, '') // Remove HTML tags for matching only
+                .replace(/\s*-\s*/g, ' ') // Replace " - " with single space to avoid duplication
+                .trim();
         }
-        
+
         // Generate ID from title
         function generateId(title) {
             // Use getTextOnly to remove HTML tags before generating ID
             const cleanTitle = getTextOnly(title);
             return cleanTitle.toLowerCase()
-                .replace(/[^a-z0-9\s]/g, '') // Remove special characters except spaces
+                .trim()
+                .replace(/[^\w\s-]/g, '') // Remove special characters except word chars, spaces, hyphens
                 .replace(/\s+/g, '-') // Replace spaces with hyphens
                 .replace(/-+/g, '-') // Replace multiple hyphens with single
-                .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+                .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
         }
 
         // Load markdown content - try fetch first, fallback to showing instruction
@@ -345,17 +448,16 @@
             try {
                 const filename = language === 'en' ? 'guideline-en.md' : 'guideline-vi.md';
                 const response = await fetch(filename);
-                
+
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
                 }
-                
-                const text = await response.text();
-                markdownContent = text;
+
+                markdownContent = await response.text();
                 currentLanguage = language;
                 updateLanguageButtons();
                 renderMenu();
-                showSection('overview');
+                showSection(getFirstSectionId());
             } catch (error) {
                 console.error('Error loading markdown:', error);
                 document.getElementById('content').innerHTML = '<div class="text-center py-12"><i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-4"></i><p class="text-red-500">Cannot load content. Please try again.</p></div>';
@@ -381,6 +483,20 @@
         function initializeContent() {
             loadMarkdown('en'); // Default to English for common use
         }
+        
+        // Get first available section ID for initial load
+        function getFirstSectionId() {
+            const menuItems = getMenuStructure();
+            if (menuItems.length > 0) {
+                // Try H1 first
+                if (menuItems[0].id) return menuItems[0].id;
+                // Then try first H2
+                if (menuItems[0].items && menuItems[0].items.length > 0) {
+                    return menuItems[0].items[0].id;
+                }
+            }
+            return 'overview';
+        }
 
         // Render navigation menu
         function renderMenu() {
@@ -388,33 +504,35 @@
             const menuItems = getMenuStructure();
 
             if (!menuItems || menuItems.length === 0) {
-                menuContainer.innerHTML = '<p class="text-gray-500">Không có nội dung</p>';
+                menuContainer.innerHTML = '<p class="text-gray-500">No content found</p>';
                 return;
             }
 
             let html = '';
 
             menuItems.forEach(section => {
-                // H1 section title
-                html += `<div class="mb-3">
-                            <h3 class="font-semibold text-base text-gray-800 px-2 py-1 border-b border-gray-200">
-                                ${section.title}
-                            </h3>
-                         </div>`;
+                // H1 sections
+                const isH1Active = currentSection === section.id;
+                html += `<div class="mb-2">
+                        <button class="w-full text-left px-3 py-2.5 rounded-lg text-base font-semibold transition-all duration-200 ${isH1Active ? 'bg-blue-100 text-blue-700 border-l-4 border-blue-700' : 'text-gray-800 hover:bg-gray-100 hover:text-gray-900'}"
+                                onclick="showSection('${section.id}')">
+                            ${section.title}
+                        </button>`;
 
                 // H2 sections
-                section.items.forEach(item => {
-                    const isActive = currentSection === item.id;
-                    
-                    html += `<div class="mb-1">
-                                <button class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive ? 'bg-blue-100 text-blue-700 border-l-3 border-blue-700' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'}"
-                                        onclick="showSection('${item.id}')">
-                                    ${item.title}
-                                </button>
-                            </div>`;
-                });
+                if (section.items && section.items.length > 0) {
+                    html += '<div class="ml-4 space-y-1 mt-1 mb-2">';
+                    section.items.forEach(item => {
+                        const isH2Active = currentSection === item.id;
+                        html += `<button class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isH2Active ? 'bg-blue-50 text-blue-600 border-l-3 border-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-700'}"
+                                    onclick="showSection('${item.id}')">
+                                • ${item.title}
+                            </button>`;
+                    });
+                    html += '</div>';
+                }
 
-                html += '<div class="mb-4"></div>'; // Spacing between H1 sections
+                html += '</div>';
             });
 
             menuContainer.innerHTML = html;
@@ -424,10 +542,10 @@
         function toggleSection(sectionDiv, sectionId) {
             const subsection = sectionDiv.querySelector('.nav-subsection');
             const chevron = sectionDiv.querySelector('.fa-chevron-right');
-            
+
             if (subsection) {
                 const isExpanded = subsection.classList.contains('expanded');
-                
+
                 if (isExpanded) {
                     subsection.classList.remove('expanded');
                     subsection.classList.add('collapsed');
@@ -437,7 +555,7 @@
                     subsection.classList.add('expanded');
                     if (chevron) chevron.style.transform = 'rotate(90deg)';
                 }
-                
+
                 // Save state to localStorage
                 const collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '[]');
                 if (isExpanded) {
@@ -457,22 +575,22 @@
         // Restore collapsed state from localStorage
         function restoreCollapsedState() {
             const collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '[]');
-            
+
             document.querySelectorAll('.nav-section').forEach(sectionDiv => {
                 const subsection = sectionDiv.querySelector('.nav-subsection');
                 const chevron = sectionDiv.querySelector('.fa-chevron-right');
                 const sectionHeader = sectionDiv.querySelector('.menu-item');
-                
+
                 if (subsection && sectionHeader) {
                     // Get section ID from the onclick handler or text content
                     const sectionText = sectionHeader.textContent.trim();
-                    
+
                     // Check if this section should be collapsed
                     const shouldCollapse = collapsedSections.some(collapsedId => {
                         // Match by section text or ID
                         return sectionText.includes(collapsedId) || collapsedId.includes(sectionText.toLowerCase().replace(/\s+/g, '-'));
                     });
-                    
+
                     if (shouldCollapse) {
                         subsection.classList.remove('expanded');
                         subsection.classList.add('collapsed');
@@ -490,70 +608,81 @@
                 document.getElementById('content').innerHTML = '<div class="text-center py-12"><i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-4"></i><p class="text-red-500">Cannot load content. Please try again.</p></div>';
                 return;
             }
-            
+
             // Clear any search highlights
             clearHighlights();
+
+            // Only set navigation flag if content needs to be re-rendered
+            const needsRerender = document.getElementById('content').innerHTML !== marked.parse(markdownContent);
             
+            if (needsRerender) {
+                // Render full content
+                document.getElementById('content').innerHTML = marked.parse(markdownContent);
+                // Reinitialize scroll spy for new content
+                initializeScrollSpy();
+            }
+
+            // Set navigation flag to prevent scroll spy interference during scrolling
+            isNavigating = true;
+
             currentSection = sectionId;
             renderMenu();
-            
-            // Render full content
-            document.getElementById('content').innerHTML = marked.parse(markdownContent);
-            
+
             // Scroll to the target section
             scrollToSection(sectionId);
         }
-        
+
         // Scroll to specific section by ID
         function scrollToSection(sectionId) {
             // Find the section title from menu structure
             const menuItems = getMenuStructure();
             let targetTitle = '';
-            
+
             for (const section of menuItems) {
                 if (section.id === sectionId) {
                     targetTitle = section.title;
                     break;
                 }
-                
+
                 if (section.items) {
                     for (const item of section.items) {
                         if (item.id === sectionId) {
                             targetTitle = item.title;
                             break;
                         }
+
                     }
                 }
             }
-            
+
             if (!targetTitle) {
                 document.querySelector('main').scrollTop = 0;
                 return;
             }
-            
+
             // Find the heading element in rendered content
             setTimeout(() => {
-                const headings = document.querySelectorAll('#content h1, #content h2, #content h3');
+                const headings = document.querySelectorAll('#content h1, #content h2, #content h3, #content h4');
                 for (const heading of headings) {
                     // Use text-only version for comparison
                     const headingTextOnly = getTextOnly(heading.textContent);
                     const targetTextOnly = getTextOnly(targetTitle);
-                    
+
                     // Try exact match first (text only)
                     if (headingTextOnly === targetTextOnly) {
                         scrollToHeading(heading);
                         return;
                     }
-                    
+
                     // Try partial match (useful for complex headings)
                     if (headingTextOnly.includes(targetTextOnly) || targetTextOnly.includes(headingTextOnly)) {
                         scrollToHeading(heading);
                         return;
                     }
                 }
-                
+
                 // If we can't find the section, try to match by section ID directly
-                const allHeadings = document.querySelectorAll('#content h1, #content h2, #content h3');
+                const allHeadings = document.querySelectorAll('#content h1, #content h2, #content h3, #content h4');
                 for (const heading of allHeadings) {
                     const textOnly = getTextOnly(heading.textContent);
                     const headingId = generateId(textOnly);
@@ -562,24 +691,36 @@
                         return;
                     }
                 }
-                
+
                 // Fallback: scroll to top
                 document.querySelector('main').scrollTop = 0;
             }, 100); // Small delay to ensure content is rendered
         }
-        
+
         function scrollToHeading(heading) {
             // Get header height to offset scroll position
             const headerHeight = document.querySelector('header').offsetHeight;
             const elementPosition = heading.offsetTop;
             const offsetPosition = elementPosition - headerHeight - 80;
 
-            document.querySelector('main').scrollTo({
+            const mainElement = document.querySelector('main');
+            const startPosition = mainElement.scrollTop;
+            const distance = Math.abs(offsetPosition - startPosition);
+
+            // Calculate appropriate timeout based on scroll distance
+            const scrollDuration = Math.min(Math.max(distance / 2, 500), 2000);
+
+            mainElement.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth'
             });
+
+            // Clear navigation flag after scroll animation completes
+            setTimeout(() => {
+                isNavigating = false;
+            }, Math.min(scrollDuration + 100, 800)); // Shorter duration to allow scroll spy sooner
         }
-        
+
         // Clear highlights function (moved here to be available for showSection)
         function clearHighlights() {
             const highlights = document.querySelectorAll('.search-highlight');
@@ -595,17 +736,17 @@
         // Search functionality
         let searchResults = [];
         let currentSearchTerm = '';
-        
+
         function initializeSearch() {
             const searchInput = document.getElementById('search-input');
             const clearButton = document.getElementById('clear-search');
             const resultsContainer = document.getElementById('search-results');
-            
+
             let searchTimeout;
-            
+
             searchInput.addEventListener('input', function() {
                 const query = this.value.trim();
-                
+
                 // Show/hide clear button
                 if (query) {
                     clearButton.classList.remove('hidden');
@@ -614,14 +755,14 @@
                     hideSearchResults();
                     return;
                 }
-                
+
                 // Debounce search
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     performSearch(query);
                 }, 300);
             });
-            
+
             // Clear search
             clearButton.addEventListener('click', function() {
                 searchInput.value = '';
@@ -629,24 +770,24 @@
                 hideSearchResults();
                 clearHighlights();
             });
-            
+
             // Hide results when clicking outside
             document.addEventListener('click', function(e) {
                 if (!resultsContainer.contains(e.target) && !searchInput.contains(e.target)) {
                     hideSearchResults();
                 }
             });
-            
+
             // Handle keyboard navigation
             searchInput.addEventListener('keydown', function(e) {
                 const results = document.querySelectorAll('.search-result-item');
                 const currentActive = document.querySelector('.search-result-item.active');
                 let activeIndex = -1;
-                
+
                 if (currentActive) {
                     activeIndex = Array.from(results).indexOf(currentActive);
                 }
-                
+
                 if (e.key === 'ArrowDown') {
                     e.preventDefault();
                     if (activeIndex < results.length - 1) {
@@ -674,30 +815,30 @@
                 }
             });
         }
-        
+
         function performSearch(query) {
             if (!markdownContent || query.length < 2) {
                 hideSearchResults();
                 return;
             }
-            
+
             currentSearchTerm = query.toLowerCase();
             searchResults = [];
-            
+
             // Split markdown into sections
             const sections = markdownContent.split(/^#\s/m);
-            
+
             for (let i = 1; i < sections.length; i++) {
                 const section = sections[i];
                 const lines = section.split('\n');
                 const title = lines[0];
                 const content = section.toLowerCase();
-                
+
                 if (content.includes(currentSearchTerm)) {
                     // Find matching lines with context
                     const matchingLines = [];
                     const sectionLines = section.split('\n');
-                    
+
                     for (let j = 0; j < sectionLines.length; j++) {
                         const line = sectionLines[j].toLowerCase();
                         if (line.includes(currentSearchTerm) && sectionLines[j].trim()) {
@@ -706,7 +847,7 @@
                             if (j > 0 && sectionLines[j-1].trim()) context.push(sectionLines[j-1]);
                             context.push(sectionLines[j]);
                             if (j < sectionLines.length - 1 && sectionLines[j+1].trim()) context.push(sectionLines[j+1]);
-                            
+
                             matchingLines.push({
                                 line: sectionLines[j],
                                 context: context,
@@ -714,7 +855,7 @@
                             });
                         }
                     }
-                    
+
                     if (matchingLines.length > 0) {
                         searchResults.push({
                             title: cleanHeadingText(title), // Keep icons for display
@@ -724,47 +865,47 @@
                     }
                 }
             }
-            
+
             displaySearchResults();
         }
-        
+
         function displaySearchResults() {
             const resultsContainer = document.getElementById('search-results');
             const resultsContent = document.getElementById('search-results-content');
             const noResults = document.getElementById('search-no-results');
-            
+
             if (searchResults.length === 0) {
                 resultsContent.innerHTML = '';
                 noResults.classList.remove('hidden');
                 resultsContainer.classList.remove('hidden');
                 return;
             }
-            
+
             noResults.classList.add('hidden');
-            
+
             let html = '';
             searchResults.forEach((result, index) => {
                 html += `<div class="search-result-section">`;
                 html += `<div class="px-4 py-2 border-b border-gray-100">`;
                 html += `<h4 class="font-medium text-gray-900 text-sm">${highlightText(result.title, currentSearchTerm)}</h4>`;
                 html += `</div>`;
-                
+
                 result.matches.forEach((match, matchIndex) => {
                     const contextText = match.context.join(' ').replace(/[#*`]/g, '').trim();
                     const truncatedContext = contextText.length > 100 ? contextText.substring(0, 100) + '...' : contextText;
-                    
-                    html += `<div class="search-result-item px-4 py-3 cursor-pointer hover:bg-gray-50 ${index === 0 && matchIndex === 0 ? 'active bg-gray-50' : ''}" 
+
+                    html += `<div class="search-result-item px-4 py-3 cursor-pointer hover:bg-gray-50 ${index === 0 && matchIndex === 0 ? 'active bg-gray-50' : ''}"
                              data-section-id="${result.id}">`;
                     html += `<p class="text-sm text-gray-600">${highlightText(truncatedContext, currentSearchTerm)}</p>`;
                     html += `</div>`;
                 });
-                
+
                 html += `</div>`;
             });
-            
+
             resultsContent.innerHTML = html;
             resultsContainer.classList.remove('hidden');
-            
+
             // Add click event listeners to search result items
             resultsContent.querySelectorAll('.search-result-item').forEach(item => {
                 item.addEventListener('click', function() {
@@ -773,28 +914,28 @@
                 });
             });
         }
-        
+
         function navigateToSearchResult(sectionId) {
             hideSearchResults();
-            
+
             // Clear search input
             document.getElementById('search-input').value = '';
             document.getElementById('clear-search').classList.add('hidden');
-            
+
             // Navigate to section
             showSection(sectionId);
-            
+
             // Highlight the matching text after a short delay
             setTimeout(() => {
                 highlightSearchTerm(currentSearchTerm);
             }, 200);
         }
-        
+
         function highlightSearchTerm(searchTerm) {
             clearHighlights();
-            
+
             if (!searchTerm) return;
-            
+
             const content = document.getElementById('content');
             const walker = document.createTreeWalker(
                 content,
@@ -802,7 +943,7 @@
                 null,
                 false
             );
-            
+
             const textNodes = [];
             let node;
             while (node = walker.nextNode()) {
@@ -810,58 +951,123 @@
                     textNodes.push(node);
                 }
             }
-            
+
             textNodes.forEach(textNode => {
                 const parent = textNode.parentNode;
                 const text = textNode.nodeValue;
                 const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
                 const highlightedText = text.replace(regex, '<mark class="search-highlight bg-yellow-200 px-1 rounded">$1</mark>');
-                
+
                 if (highlightedText !== text) {
                     const wrapper = document.createElement('span');
                     wrapper.innerHTML = highlightedText;
                     parent.replaceChild(wrapper, textNode);
                 }
             });
-            
+
             // Scroll to first highlight
             const firstHighlight = content.querySelector('.search-highlight');
             if (firstHighlight) {
                 const headerHeight = document.querySelector('header').offsetHeight;
                 const elementPosition = firstHighlight.offsetTop;
                 const offsetPosition = elementPosition - headerHeight - 100;
-                
+
                 document.querySelector('main').scrollTo({
                     top: offsetPosition,
                     behavior: 'smooth'
                 });
             }
         }
-        
+
         function hideSearchResults() {
             document.getElementById('search-results').classList.add('hidden');
         }
-        
+
         function highlightText(text, searchTerm) {
             if (!searchTerm) return text;
             const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
             return text.replace(regex, '<strong class="text-blue-600">$1</strong>');
         }
-        
+
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
-        
+
         function escapeRegExp(string) {
             return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
+
+        // Scroll spy functionality
+        let isNavigating = false; // Flag to prevent scroll spy during navigation
+
+        let intersectionObserver = null;
+
+        function initializeScrollSpy() {
+            // Clean up existing observer
+            if (intersectionObserver) {
+                intersectionObserver.disconnect();
+            }
+
+            // Create intersection observer
+            const observerOptions = {
+                root: document.querySelector('main'),
+                rootMargin: '-80px 0px -70% 0px', // Trigger when heading is in top 30% of viewport
+                threshold: 0
+            };
+
+            intersectionObserver = new IntersectionObserver((entries) => {
+                if (isNavigating) return; // Don't update when user clicked menu
+
+                let visibleHeadings = [];
+                
+                // Collect all visible headings with their positions
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const rect = entry.boundingClientRect;
+                        const mainRect = document.querySelector('main').getBoundingClientRect();
+                        const relativeTop = rect.top - mainRect.top;
+                        
+                        if (relativeTop >= 0 && relativeTop <= 300) {
+                            visibleHeadings.push({
+                                element: entry.target,
+                                top: relativeTop
+                            });
+                        }
+                    }
+                });
+
+                // Sort by position and pick the topmost one
+                if (visibleHeadings.length > 0) {
+                    visibleHeadings.sort((a, b) => a.top - b.top);
+                    const topHeading = visibleHeadings[0].element;
+                    
+                    const headingText = getTextOnly(topHeading.textContent);
+                    const headingId = generateId(headingText);
+                    
+                    if (currentSection !== headingId) {
+                        currentSection = headingId;
+                        renderMenu();
+                    }
+                }
+            }, observerOptions);
+
+            // Observe all headings when content is ready
+            setTimeout(() => {
+                const headings = document.querySelectorAll('#content h1, #content h2');
+                headings.forEach(heading => {
+                    intersectionObserver.observe(heading);
+                });
+            }, 300);
+        }
+
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             initializeContent();
             initializeSearch();
+            initializeScrollSpy();
         });
     </script>
 </body>
