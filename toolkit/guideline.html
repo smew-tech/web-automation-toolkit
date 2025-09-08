@@ -225,21 +225,20 @@
         </div>
     </header>
 
-    <div class="flex h-screen">
+    <!-- Container -->
+    <div class="flex">
         <!-- Left Sidebar -->
-        <nav class="w-80 bg-white shadow-lg overflow-y-auto">
+        <div class="w-80 bg-white shadow-lg h-screen overflow-y-auto" style="position: fixed; top: 73px; left: 0; width: 320px; height: calc(100vh - 73px);">
             <div class="p-4">
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-3" id="categories-title">Contents</h2>
-                    <div class="space-y-1" id="navigation-menu">
-                    </div>
-                </div>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4" id="categories-title">Contents</h2>
+                <div id="navigation-menu"></div>
             </div>
-        </nav>
+        </div>
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
-            <div class="max-w-4xl mx-auto p-8">
+        <div style="margin-left: 320px; width: calc(100vw - 320px);">
+            <main class="h-screen overflow-y-auto" style="height: calc(100vh - 73px);">
+                <div class="max-w-4xl mx-auto p-8">
                 <div id="content" class="markdown-content">
                     <div class="text-center py-12">
                         <i class="fas fa-spinner fa-spin text-3xl text-gray-400 mb-4"></i>
@@ -258,44 +257,60 @@
         // Common Markdown Parser - Extract menu structure from any markdown content
         function getMenuStructure() {
             if (!markdownContent) return [];
-            
+
             const lines = markdownContent.split('\n');
             const menuItems = [];
             let currentH1 = null;
-            
-            // Parse line by line following markdown hierarchy
+            let inCodeBlock = false;
+
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
-                
-                // H1 headings become main menu items
+
+                // Simple code block detection
+                if (line.startsWith('```') || line.startsWith('~~~')) {
+                    inCodeBlock = !inCodeBlock;
+                    continue;
+                }
+
+                // Skip lines in code blocks
+                if (inCodeBlock) continue;
+
+                // Skip indented code
+                if (lines[i].startsWith('    ') || lines[i].startsWith('\t')) continue;
+
+                // H1 sections
                 if (line.startsWith('# ') && !line.startsWith('## ')) {
-                    const fullTitle = cleanHeadingText(line.substring(2)); // Keep icons for display
-                    const textOnly = getTextOnly(line.substring(2)); // Text only for ID generation
-                    const id = generateId(textOnly);
+                    const title = line.substring(2).trim();
+                    
+                    // Skip if empty
+                    if (!title) continue;
+
+                    const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
                     
                     currentH1 = {
-                        title: fullTitle, // This will include icons
-                        id,
-                        icon: 'fas fa-file-alt',
+                        title: title,
+                        id: id,
                         items: []
                     };
-                    
+
                     menuItems.push(currentH1);
                 }
-                
-                // H2 headings become sub-menu items under current H1
+
+                // H2 sections
                 else if (line.startsWith('## ') && !line.startsWith('### ') && currentH1) {
-                    const fullTitle = cleanHeadingText(line.substring(3)); // Keep icons for display
-                    const textOnly = getTextOnly(line.substring(3)); // Text only for ID generation
-                    const id = generateId(textOnly);
+                    const title = line.substring(3).trim();
+                    
+                    if (!title) continue;
+
+                    const id = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
                     
                     currentH1.items.push({
-                        title: fullTitle, // This will include icons
-                        id
+                        title: title,
+                        id: id
                     });
                 }
             }
-            
+
             return menuItems;
         }
 
@@ -370,56 +385,39 @@
         // Render navigation menu
         function renderMenu() {
             const menuContainer = document.getElementById('navigation-menu');
-            menuContainer.innerHTML = '';
+            const menuItems = getMenuStructure();
 
-            const menuStructure = getMenuStructure();
-            menuStructure.forEach(section => {
-                // Create section header
-                const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'nav-section';
+            if (!menuItems || menuItems.length === 0) {
+                menuContainer.innerHTML = '<p class="text-gray-500">Không có nội dung</p>';
+                return;
+            }
 
-                const sectionHeader = document.createElement('button');
-                sectionHeader.className = `menu-item flex items-center w-full text-left font-medium ${currentSection === section.id ? 'active' : ''}`;
-                
-                // Add chevron for sections with subsections
-                if (section.items && section.items.length > 0) {
-                    sectionHeader.innerHTML = `<i class="fas fa-chevron-right mr-2 w-3 flex-shrink-0 transition-transform duration-200" style="font-size: 0.75rem;"></i><i class="${section.icon} mr-3 w-4 flex-shrink-0"></i><span>${section.title}</span>`;
-                } else {
-                    sectionHeader.innerHTML = `<i class="${section.icon} mr-3 w-4 flex-shrink-0"></i><span>${section.title}</span>`;
-                }
-                
-                sectionDiv.appendChild(sectionHeader);
+            let html = '';
 
-                // Add subsections if available
-                if (section.items) {
-                    const subsectionDiv = document.createElement('div');
-                    subsectionDiv.className = 'nav-subsection space-y-1 expanded';
+            menuItems.forEach(section => {
+                // H1 section title
+                html += `<div class="mb-3">
+                            <h3 class="font-semibold text-base text-gray-800 px-2 py-1 border-b border-gray-200">
+                                ${section.title}
+                            </h3>
+                         </div>`;
+
+                // H2 sections
+                section.items.forEach(item => {
+                    const isActive = currentSection === item.id;
                     
-                    section.items.forEach(item => {
-                        const itemButton = document.createElement('button');
-                        itemButton.className = `menu-item text-sm ${currentSection === item.id ? 'active' : ''}`;
-                        itemButton.innerHTML = `<span class="pl-2">${item.title}</span>`;
-                        itemButton.onclick = () => showSection(item.id);
-                        subsectionDiv.appendChild(itemButton);
-                    });
-                    
-                    sectionDiv.appendChild(subsectionDiv);
-                    
-                    // Add click handler for collapse/expand
-                    sectionHeader.onclick = (e) => {
-                        e.preventDefault();
-                        toggleSection(sectionDiv, section.id);
-                    };
-                } else {
-                    // No subsections, just navigate to section
-                    sectionHeader.onclick = () => showSection(section.id);
-                }
+                    html += `<div class="mb-1">
+                                <button class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive ? 'bg-blue-100 text-blue-700 border-l-3 border-blue-700' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'}"
+                                        onclick="showSection('${item.id}')">
+                                    ${item.title}
+                                </button>
+                            </div>`;
+                });
 
-                menuContainer.appendChild(sectionDiv);
+                html += '<div class="mb-4"></div>'; // Spacing between H1 sections
             });
-            
-            // Restore collapsed state after rendering
-            restoreCollapsedState();
+
+            menuContainer.innerHTML = html;
         }
 
         // Toggle section collapse/expand
