@@ -696,6 +696,12 @@
                                 <i class="fas fa-code-branch text-indigo-500 dark:text-indigo-400 text-lg"></i>
                             </div>
                         </div>
+                        <div class="action-card" draggable="true" data-action-type="advancedCondition" data-tooltip-text="Điều Kiện Nâng Cao">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-project-diagram text-blue-500 dark:text-blue-400 text-lg"></i>
+                            </div>
+                        </div>
                         <div class="action-card" draggable="true" data-action-type="forEach"
                             data-tooltip-text="Vòng Lặp">
                             <div
@@ -881,6 +887,69 @@
                             <div
                                 class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-gray-400 aspect-square flex items-center justify-center">
                                 <i class="fas fa-camera text-gray-500 dark:text-gray-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="sessionCache"
+                            data-tooltip-text="Session Cache">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-orange-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-memory text-orange-500 dark:text-orange-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="customApiRequest"
+                            data-tooltip-text="Custom API Request">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-blue-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-paper-plane text-blue-500 dark:text-blue-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="responseProcessor"
+                            data-tooltip-text="Response Processor">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-green-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-cogs text-green-500 dark:text-green-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="storageSettings"
+                            data-tooltip-text="Storage Settings">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-purple-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-hdd text-purple-500 dark:text-purple-400 text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Node Validation Header -->
+                    <div class="px-1.5 py-1 text-xs font-normal text-slate-600 dark:text-gray-400 uppercase tracking-wide border-b border-slate-300 dark:border-gray-600" id="node-validation-header">
+                        Kiểm Tra Node ID
+                    </div>
+                    <div class="grid grid-cols-4 gap-1 p-2">
+                        <div class="action-card" draggable="true" data-action-type="checkNodeExists"
+                            data-tooltip-text="Kiểm Tra Node Tồn Tại">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-cyan-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-search text-cyan-500 dark:text-cyan-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="checkNodeValue"
+                            data-tooltip-text="Kiểm Tra Giá Trị Node">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-teal-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-check-circle text-teal-500 dark:text-teal-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="getNodeList"
+                            data-tooltip-text="Lấy Danh Sách Node">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-indigo-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-list text-indigo-500 dark:text-indigo-400 text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="action-card" draggable="true" data-action-type="validateNodeData"
+                            data-tooltip-text="Validate Dữ Liệu Node">
+                            <div
+                                class="bg-slate-50 dark:bg-gray-700 p-1.5 rounded-md border border-slate-200 dark:border-gray-600 hover:border-emerald-400 aspect-square flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-emerald-500 dark:text-emerald-400 text-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -1188,10 +1257,12 @@
                 elementStates: "Element States",
                 pageQuality: "Page Quality",
                 advancedTesting: "Advanced Testing",
+                nodeValidation: "Node Validation",
                 properties: "Properties",
                 selectBlockToView: "Select a block to view properties.",
 
                 condition: "Condition",
+                advancedCondition: "Advanced Condition",
                 loop: "Loop",
                 setVariable: "Set Variable",
                 stop: "Stop",
@@ -1214,6 +1285,14 @@
                 getAttribute: "Get Attribute",
                 getInputValue: "Get Input Value",
                 screenshot: "Screenshot",
+                sessionCache: "Session Cache",
+                customApiRequest: "Custom API Request",
+                responseProcessor: "Response Processor",
+                storageSettings: "Storage Settings",
+                checkNodeExists: "Check Node Exists",
+                checkNodeValue: "Check Node Value",
+                getNodeList: "Get Node List",
+                validateNodeData: "Validate Node Data",
                 assertVisible: "Assert Visible",
                 assertText: "Assert Text",
                 assertURL: "Assert URL",
@@ -1269,10 +1348,12 @@
                 elementStates: "Trạng Thái Element", 
                 pageQuality: "Chất Lượng Trang",
                 advancedTesting: "Kiểm Tra Nâng Cao",
+                nodeValidation: "Kiểm Tra Node ID",
                 properties: "Thuộc tính",
                 selectBlockToView: "Chọn một khối để xem thuộc tính.",
 
                 condition: "Điều Kiện",
+                advancedCondition: "Điều Kiện Nâng Cao",
                 loop: "Vòng Lặp",
                 setVariable: "Gán Biến",
                 stop: "Dừng",
@@ -1295,6 +1376,14 @@
                 getAttribute: "Lấy Thuộc tính",
                 getInputValue: "Lấy Giá trị Input",
                 screenshot: "Chụp Ảnh",
+                sessionCache: "Session Cache",
+                customApiRequest: "Custom API Request",
+                responseProcessor: "Xử Lý Response",
+                storageSettings: "Cài Đặt Lưu Trữ",
+                checkNodeExists: "Kiểm Tra Node Tồn Tại",
+                checkNodeValue: "Kiểm Tra Giá Trị Node",
+                getNodeList: "Lấy Danh Sách Node",
+                validateNodeData: "Validate Dữ Liệu Node",
                 assertVisible: "Kiểm tra Hiển thị",
                 assertText: "Kiểm tra Văn bản",
                 assertURL: "Kiểm tra URL",
@@ -1356,11 +1445,13 @@
             document.getElementById('element-states-header').textContent = lang.elementStates;
             document.getElementById('page-quality-header').textContent = lang.pageQuality;
             document.getElementById('advanced-testing-header').textContent = lang.advancedTesting;
+            document.getElementById('node-validation-header').textContent = lang.nodeValidation;
             document.getElementById('export-button').innerHTML = `<i class="fas fa-download mr-2"></i>${lang.export}`;
 
 
             const tooltipMapping = {
                 'if': lang.condition,
+                'advancedCondition': lang.advancedCondition,
                 'forEach': lang.loop,
                 'setVariable': lang.setVariable,
                 'stop': lang.stop,
@@ -1383,6 +1474,14 @@
                 'getAttribute': lang.getAttribute,
                 'getInputValue': lang.getInputValue,
                 'screenshot': lang.screenshot,
+                'sessionCache': lang.sessionCache,
+                'customApiRequest': lang.customApiRequest,
+                'responseProcessor': lang.responseProcessor,
+                'storageSettings': lang.storageSettings,
+                'checkNodeExists': lang.checkNodeExists,
+                'checkNodeValue': lang.checkNodeValue,
+                'getNodeList': lang.getNodeList,
+                'validateNodeData': lang.validateNodeData,
                 'assertVisible': lang.assertVisible,
                 'assertText': lang.assertText,
                 'assertURL': lang.assertURL,
@@ -1472,6 +1571,50 @@
             let scale = 1, panX = 0, panY = 0, isPanning = false, isSpacePressed = false, panStart = { x: 0, y: 0 };
             let isTesting = false;
             let isTestStopped = false;
+            
+            // Node ID generation system
+            let nodeCounters = {};
+            
+            function generateNodeId(type) {
+                // Initialize counter if not exists
+                if (!nodeCounters[type]) {
+                    nodeCounters[type] = 0;
+                }
+                
+                // Increment counter
+                nodeCounters[type]++;
+                
+                // Generate readable ID based on type
+                const typeMap = {
+                    'start': 'start',
+                    'stop': 'stop',
+                    'goto': 'goToUrl',
+                    'fill': 'inputText',
+                    'click': 'clickElement',
+                    'getText': 'getText',
+                    'getAttribute': 'getAttribute',
+                    'waitElement': 'waitElement',
+                    'sessionCache': 'sessionCache',
+                    'customApiRequest': 'apiRequest',
+                    'responseProcessor': 'processResponse',
+                    'storageSettings': 'storageSettings',
+                    'checkNodeExists': 'checkNodeExists',
+                    'checkNodeValue': 'checkNodeValue',
+                    'getNodeList': 'getNodeList',
+                    'validateNodeData': 'validateNodeData',
+                    'if': 'condition',
+                    'advancedCondition': 'advancedCondition',
+                    'forEach': 'loop',
+                    'comment': 'comment'
+                };
+                
+                const baseName = typeMap[type] || type;
+                return `${baseName}_${nodeCounters[type]}`;
+            }
+            
+            function resetNodeCounters() {
+                nodeCounters = {};
+            }
 
             const canvasContainer = document.getElementById('canvas-container');
             const transformContainer = document.getElementById('transform-container');
@@ -1490,7 +1633,52 @@
                 const lang = translations[currentLanguage];
                 return {
                     'start': { icon: 'fa-play-circle text-green-500 dark:text-green-400', name: lang.start, params: [] },
-                    'if': { icon: 'fa-code-branch text-indigo-500 dark:text-indigo-400', name: lang.condition, params: [{ id: 'condition', label: currentLanguage === 'vi' ? 'Điều kiện' : 'Condition', type: 'text', placeholder: currentLanguage === 'vi' ? 'biến == "giá trị"' : 'variable == "value"' }] },
+                    'if': { icon: 'fa-code-branch text-indigo-500 dark:text-indigo-400', name: lang.condition, params: [
+                        { id: 'leftOperand', label: currentLanguage === 'vi' ? 'Giá trị bên trái' : 'Left operand', type: 'text', placeholder: '{{sessionCache_1.phone}}' },
+                        { id: 'operator', label: currentLanguage === 'vi' ? 'Toán tử so sánh' : 'Comparison operator', type: 'select', options: [
+                            { value: 'equals', text: 'Equals (=)' },
+                            { value: 'notEquals', text: 'Not Equals (!=)' },
+                            { value: 'greater', text: 'Greater (>)' },
+                            { value: 'greaterEqual', text: 'Greater Equal (>=)' },
+                            { value: 'less', text: 'Less (<)' },
+                            { value: 'lessEqual', text: 'Less Equal (<=)' },
+                            { value: 'contains', text: 'Contains' },
+                            { value: 'notContains', text: 'Not Contains' },
+                            { value: 'startsWith', text: 'Starts With' },
+                            { value: 'endsWith', text: 'Ends With' },
+                            { value: 'isEmpty', text: 'Is Empty' },
+                            { value: 'isNotEmpty', text: 'Is Not Empty' },
+                            { value: 'matches', text: 'Matches Regex' }
+                        ], value: 'equals' },
+                        { id: 'rightOperand', label: currentLanguage === 'vi' ? 'Giá trị bên phải' : 'Right operand', type: 'text', placeholder: '{{apiRequest_1.status}} or "success"' },
+                        { id: 'logicalOperator', label: currentLanguage === 'vi' ? 'Toán tử logic (tùy chọn)' : 'Logical operator (optional)', type: 'select', options: [
+                            { value: 'none', text: currentLanguage === 'vi' ? 'Không có' : 'None' },
+                            { value: 'and', text: 'AND' },
+                            { value: 'or', text: 'OR' }
+                        ], value: 'none' },
+                        { id: 'secondCondition', label: currentLanguage === 'vi' ? 'Điều kiện thứ 2 (tùy chọn)' : 'Second condition (optional)', type: 'textarea', placeholder: '{{processResponse_1.user_id}} > 0\n{{sessionCache_1.email}} contains "@"' },
+                        { id: 'description', label: currentLanguage === 'vi' ? 'Mô tả điều kiện' : 'Condition description', type: 'text', placeholder: currentLanguage === 'vi' ? 'Kiểm tra đăng nhập thành công' : 'Check login success' }
+                    ] },
+                    'advancedCondition': { icon: 'fa-project-diagram text-blue-500 dark:text-blue-400', name: lang.advancedCondition, params: [
+                        { id: 'conditions', label: currentLanguage === 'vi' ? 'Danh sách điều kiện' : 'Conditions list', type: 'textarea', placeholder: '{{sessionCache_1.phone}} equals "0123456789"\n{{apiRequest_1.status}} equals "success"\n{{processResponse_1.user_id}} > 0\n{{sessionCache_1.email}} contains "@gmail.com"' },
+                        { id: 'logicExpression', label: currentLanguage === 'vi' ? 'Biểu thức logic' : 'Logic expression', type: 'text', placeholder: '(1 AND 2) OR (3 AND 4)' },
+                        { id: 'evaluationMode', label: currentLanguage === 'vi' ? 'Chế độ đánh giá' : 'Evaluation mode', type: 'select', options: [
+                            { value: 'all', text: currentLanguage === 'vi' ? 'Tất cả phải đúng (AND)' : 'All must be true (AND)' },
+                            { value: 'any', text: currentLanguage === 'vi' ? 'Chỉ cần 1 đúng (OR)' : 'Any must be true (OR)' },
+                            { value: 'custom', text: currentLanguage === 'vi' ? 'Biểu thức tùy chỉnh' : 'Custom expression' }
+                        ], value: 'all' },
+                        { id: 'onTrueAction', label: currentLanguage === 'vi' ? 'Khi điều kiện đúng' : 'When condition is true', type: 'select', options: [
+                            { value: 'continue', text: currentLanguage === 'vi' ? 'Tiếp tục THEN' : 'Continue to THEN' },
+                            { value: 'jump', text: currentLanguage === 'vi' ? 'Nhảy đến node' : 'Jump to node' },
+                            { value: 'stop', text: currentLanguage === 'vi' ? 'Dừng workflow' : 'Stop workflow' }
+                        ], value: 'continue' },
+                        { id: 'onFalseAction', label: currentLanguage === 'vi' ? 'Khi điều kiện sai' : 'When condition is false', type: 'select', options: [
+                            { value: 'continue', text: currentLanguage === 'vi' ? 'Tiếp tục ELSE' : 'Continue to ELSE' },
+                            { value: 'jump', text: currentLanguage === 'vi' ? 'Nhảy đến node' : 'Jump to node' },
+                            { value: 'stop', text: currentLanguage === 'vi' ? 'Dừng workflow' : 'Stop workflow' }
+                        ], value: 'continue' },
+                        { id: 'description', label: currentLanguage === 'vi' ? 'Mô tả logic' : 'Logic description', type: 'text', placeholder: currentLanguage === 'vi' ? 'Kiểm tra đăng nhập và validate user' : 'Check login and validate user' }
+                    ] },
                     'forEach': { icon: 'fa-sync-alt text-purple-500 dark:text-purple-400', name: lang.loop, params: [{ id: 'list', label: currentLanguage === 'vi' ? 'Mảng hoặc Số Lần' : 'Array or Count', type: 'text', placeholder: 'myArray | 5' }, { id: 'variable', label: currentLanguage === 'vi' ? 'Biến phần tử' : 'Item Variable', type: 'text', placeholder: 'item' }] },
                     'setVariable': { icon: 'fa-equals text-pink-500 dark:text-pink-400', name: lang.setVariable, params: [{ id: 'variable', label: currentLanguage === 'vi' ? 'Tên biến' : 'Variable Name', type: 'text', placeholder: 'myVar' }, { id: 'value', label: currentLanguage === 'vi' ? 'Giá trị' : 'Value', type: 'text', placeholder: '"Hello World!"' }] },
                     'stop': { icon: 'fa-stop-circle text-red-500 dark:text-red-400', name: lang.stop, params: [] },
@@ -1513,6 +1701,111 @@
                     'getAttribute': { icon: 'fa-at text-lime-500 dark:text-lime-400', name: lang.getAttribute, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: 'a.product' }, { id: 'attribute', label: currentLanguage === 'vi' ? 'Tên thuộc tính' : 'Attribute Name', type: 'text', placeholder: 'href' }, { id: 'variable', label: currentLanguage === 'vi' ? 'Tên biến' : 'Variable Name', type: 'text', placeholder: 'productUrl' }] },
                     'getInputValue': { icon: 'fa-i-cursor text-purple-500 dark:text-purple-400', name: lang.getInputValue, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '#firstname' }, { id: 'variable', label: currentLanguage === 'vi' ? 'Tên biến' : 'Variable Name', type: 'text', placeholder: 'firstName' }] },
                     'screenshot': { icon: 'fa-camera text-gray-500 dark:text-gray-400', name: lang.screenshot, params: [{ id: 'filename', label: currentLanguage === 'vi' ? 'Tên tệp' : 'Filename', type: 'text', placeholder: 'screenshot.png' }, { id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn (tùy chọn)' : 'Selector (optional)', type: 'selector', placeholder: currentLanguage === 'vi' ? 'Chụp 1 phần tử' : 'Capture element' }] },
+                    'sessionCache': { icon: 'fa-memory text-orange-500 dark:text-orange-400', name: lang.sessionCache, params: [
+                        { id: 'cacheName', label: currentLanguage === 'vi' ? 'Tên Cache' : 'Cache Name', type: 'text', placeholder: 'user_session' },
+                        { id: 'inputCapture', label: currentLanguage === 'vi' ? 'Lưu Input Elements' : 'Input Elements Capture', type: 'textarea', placeholder: '#phoneNumber -> phone\n#email -> email\n#username -> user_name' },
+                        { id: 'fromPreviousNodes', label: currentLanguage === 'vi' ? 'Lấy từ node trước' : 'From Previous Nodes', type: 'textarea', placeholder: '{{getText_1.text}} -> extracted_text\n{{getAttribute_1.value}} -> page_url\n{{inputText_1.value}} -> user_input' },
+                        { id: 'systemData', label: currentLanguage === 'vi' ? 'Dữ liệu hệ thống' : 'System Data', type: 'textarea', placeholder: 'current_url -> page_url\ntimestamp -> login_time\npage_title -> page_name' },
+                        { id: 'customData', label: currentLanguage === 'vi' ? 'Dữ liệu tùy chỉnh' : 'Custom Data', type: 'textarea', placeholder: 'browser_type -> chrome\ndevice_type -> desktop\nsource -> automation' }
+                    ] },
+                    'customApiRequest': { icon: 'fa-paper-plane text-blue-500 dark:text-blue-400', name: lang.customApiRequest, params: [
+                        { id: 'method', label: currentLanguage === 'vi' ? 'Phương thức' : 'Method', type: 'select', options: [
+                            { value: 'GET', text: 'GET' },
+                            { value: 'POST', text: 'POST' },
+                            { value: 'PUT', text: 'PUT' },
+                            { value: 'DELETE', text: 'DELETE' }
+                        ], value: 'POST' },
+                        { id: 'url', label: 'API URL', type: 'text', placeholder: 'https://api.example.com/user/register' },
+                        { id: 'headers', label: 'Headers', type: 'textarea', placeholder: '{\n  "Content-Type": "application/json",\n  "Authorization": "Bearer YOUR_TOKEN"\n}' },
+                        { id: 'bodyTemplate', label: currentLanguage === 'vi' ? 'Body Template' : 'Body Template', type: 'textarea', placeholder: '{\n  "phone": "{{sessionCache_1.phone}}",\n  "loginTime": "{{sessionCache_1.login_time}}",\n  "pageUrl": "{{sessionCache_1.page_url}}",\n  "extractedData": "{{getText_1.text}}",\n  "userInput": "{{inputText_1.value}}"\n}' },
+                        { id: 'cacheReferences', label: currentLanguage === 'vi' ? 'Tham chiếu từ các Node' : 'Node References', type: 'textarea', placeholder: '{{sessionCache_1.phone}}\n{{sessionCache_1.login_time}}\n{{getText_1.text}}\n{{inputText_1.value}}' },
+                        { id: 'outputCacheName', label: currentLanguage === 'vi' ? 'Lưu response vào cache' : 'Save response to cache', type: 'text', placeholder: 'api_response' },
+                        { id: 'responseMapping', label: currentLanguage === 'vi' ? 'Mapping response' : 'Response mapping', type: 'textarea', placeholder: 'data.userId -> user_id\ndata.status -> api_status\ndata.token -> auth_token' }
+                    ] },
+                    'responseProcessor': { icon: 'fa-cogs text-green-500 dark:text-green-400', name: lang.responseProcessor, params: [
+                        { id: 'inputSource', label: currentLanguage === 'vi' ? 'Lấy từ Node' : 'Input from Node', type: 'text', placeholder: '{{apiRequest_1.response}}' },
+                        { id: 'extractAndSave', label: currentLanguage === 'vi' ? 'Trích xuất và lưu' : 'Extract and save', type: 'textarea', placeholder: 'data.userId -> user_id\ndata.status -> api_status\ndata.profile.name -> user_name\ndata.token -> auth_token' },
+                        { id: 'outputCacheName', label: currentLanguage === 'vi' ? 'Lưu vào cache' : 'Output cache name', type: 'text', placeholder: 'processed_data' },
+                        { id: 'validationRules', label: currentLanguage === 'vi' ? 'Quy tắc validate' : 'Validation rules', type: 'textarea', placeholder: 'REQUIRED: data.userId\nREQUIRED: data.status\nEQUALS: data.status -> success\nNOT_EMPTY: data.token' },
+                        { id: 'onValidationFail', label: currentLanguage === 'vi' ? 'Khi validate thất bại' : 'On validation fail', type: 'select', options: [
+                            { value: 'stop', text: currentLanguage === 'vi' ? 'Dừng workflow' : 'Stop workflow' },
+                            { value: 'continue', text: currentLanguage === 'vi' ? 'Tiếp tục' : 'Continue' },
+                            { value: 'retry', text: currentLanguage === 'vi' ? 'Thử lại' : 'Retry' }
+                        ], value: 'stop' }
+                    ] },
+                    'storageSettings': { icon: 'fa-hdd text-purple-500 dark:text-purple-400', name: lang.storageSettings, params: [
+                        { id: 'storageType', label: currentLanguage === 'vi' ? 'Loại lưu trữ' : 'Storage type', type: 'select', options: [
+                            { value: 'database', text: 'Database' },
+                            { value: 'excel', text: 'Excel File' },
+                            { value: 'both', text: currentLanguage === 'vi' ? 'Cả hai' : 'Both' }
+                        ], value: 'database' },
+                        { id: 'inputSources', label: currentLanguage === 'vi' ? 'Nguồn dữ liệu từ các Node' : 'Data sources from Nodes', type: 'textarea', placeholder: '{{sessionCache_1}}\n{{processResponse_1}}\n{{apiRequest_1}}' },
+                        { id: 'databaseConfig', label: currentLanguage === 'vi' ? 'Cấu hình Database' : 'Database config', type: 'textarea', placeholder: 'Server: localhost:3306\nDatabase: userdb\nTable: registered_users\nUsername: dbuser\nPassword: dbpass' },
+                        { id: 'excelConfig', label: currentLanguage === 'vi' ? 'Cấu hình Excel' : 'Excel config', type: 'textarea', placeholder: 'File: /path/to/users.xlsx\nSheet: UserData\nStartRow: 1' },
+                        { id: 'dataMapping', label: currentLanguage === 'vi' ? 'Ánh xạ dữ liệu' : 'Data mapping', type: 'textarea', placeholder: '{{sessionCache_1.phone}} -> phone_column\n{{processResponse_1.user_id}} -> user_id_column\n{{sessionCache_1.login_time}} -> created_at' },
+                        { id: 'onSuccess', label: currentLanguage === 'vi' ? 'Khi thành công' : 'On success', type: 'select', options: [
+                            { value: 'continue', text: currentLanguage === 'vi' ? 'Tiếp tục workflow' : 'Continue workflow' },
+                            { value: 'stop', text: currentLanguage === 'vi' ? 'Dừng workflow' : 'Stop workflow' },
+                            { value: 'notification', text: currentLanguage === 'vi' ? 'Gửi thông báo' : 'Send notification' }
+                        ], value: 'continue' }
+                    ] },
+                    'checkNodeExists': { icon: 'fa-search text-cyan-500 dark:text-cyan-400', name: lang.checkNodeExists, params: [
+                        { id: 'nodeId', label: currentLanguage === 'vi' ? 'Node ID cần kiểm tra' : 'Node ID to check', type: 'text', placeholder: 'sessionCache_1' },
+                        { id: 'outputField', label: currentLanguage === 'vi' ? 'Field cần kiểm tra (tùy chọn)' : 'Output field to check (optional)', type: 'text', placeholder: 'phone' },
+                        { id: 'onNotExists', label: currentLanguage === 'vi' ? 'Khi không tồn tại' : 'When not exists', type: 'select', options: [
+                            { value: 'stop', text: currentLanguage === 'vi' ? 'Dừng workflow' : 'Stop workflow' },
+                            { value: 'continue', text: currentLanguage === 'vi' ? 'Tiếp tục' : 'Continue' },
+                            { value: 'log', text: currentLanguage === 'vi' ? 'Ghi log' : 'Log only' }
+                        ], value: 'stop' }
+                    ] },
+                    'checkNodeValue': { icon: 'fa-check-circle text-teal-500 dark:text-teal-400', name: lang.checkNodeValue, params: [
+                        { id: 'nodeReference', label: currentLanguage === 'vi' ? 'Tham chiếu Node' : 'Node reference', type: 'text', placeholder: '{{sessionCache_1.phone}}' },
+                        { id: 'operator', label: currentLanguage === 'vi' ? 'Toán tử so sánh' : 'Comparison operator', type: 'select', options: [
+                            { value: 'equals', text: 'Equals (=)' },
+                            { value: 'notEquals', text: 'Not Equals (!=)' },
+                            { value: 'contains', text: 'Contains' },
+                            { value: 'notEmpty', text: 'Not Empty' },
+                            { value: 'isEmpty', text: 'Is Empty' },
+                            { value: 'greater', text: 'Greater (>)' },
+                            { value: 'less', text: 'Less (<)' }
+                        ], value: 'notEmpty' },
+                        { id: 'expectedValue', label: currentLanguage === 'vi' ? 'Giá trị mong đợi' : 'Expected value', type: 'text', placeholder: '0123456789' },
+                        { id: 'onValidationFail', label: currentLanguage === 'vi' ? 'Khi validate thất bại' : 'On validation fail', type: 'select', options: [
+                            { value: 'stop', text: currentLanguage === 'vi' ? 'Dừng workflow' : 'Stop workflow' },
+                            { value: 'continue', text: currentLanguage === 'vi' ? 'Tiếp tục' : 'Continue' },
+                            { value: 'retry', text: currentLanguage === 'vi' ? 'Thử lại' : 'Retry' }
+                        ], value: 'stop' }
+                    ] },
+                    'getNodeList': { icon: 'fa-list text-indigo-500 dark:text-indigo-400', name: lang.getNodeList, params: [
+                        { id: 'filterByType', label: currentLanguage === 'vi' ? 'Lọc theo loại node' : 'Filter by node type', type: 'select', options: [
+                            { value: 'all', text: currentLanguage === 'vi' ? 'Tất cả' : 'All' },
+                            { value: 'sessionCache', text: 'Session Cache' },
+                            { value: 'customApiRequest', text: 'API Request' },
+                            { value: 'responseProcessor', text: 'Response Processor' },
+                            { value: 'storageSettings', text: 'Storage Settings' },
+                            { value: 'getText', text: 'Get Text' },
+                            { value: 'getAttribute', text: 'Get Attribute' }
+                        ], value: 'all' },
+                        { id: 'outputFormat', label: currentLanguage === 'vi' ? 'Định dạng output' : 'Output format', type: 'select', options: [
+                            { value: 'list', text: currentLanguage === 'vi' ? 'Danh sách' : 'List' },
+                            { value: 'json', text: 'JSON' },
+                            { value: 'count', text: currentLanguage === 'vi' ? 'Đếm số lượng' : 'Count only' }
+                        ], value: 'list' },
+                        { id: 'saveToVariable', label: currentLanguage === 'vi' ? 'Lưu vào biến' : 'Save to variable', type: 'text', placeholder: 'nodeList' }
+                    ] },
+                    'validateNodeData': { icon: 'fa-shield-alt text-emerald-500 dark:text-emerald-400', name: lang.validateNodeData, params: [
+                        { id: 'nodeReferences', label: currentLanguage === 'vi' ? 'Danh sách Node cần validate' : 'Node references to validate', type: 'textarea', placeholder: '{{sessionCache_1.phone}}\n{{apiRequest_1.response}}\n{{processResponse_1.user_id}}' },
+                        { id: 'validationRules', label: currentLanguage === 'vi' ? 'Quy tắc validate' : 'Validation rules', type: 'textarea', placeholder: 'REQUIRED: {{sessionCache_1.phone}}\nNOT_EMPTY: {{apiRequest_1.response}}\nMATCH_PATTERN: {{sessionCache_1.phone}} -> /^\\d{10}$/\nRANGE: {{processResponse_1.user_id}} -> 1-999999' },
+                        { id: 'onValidationPass', label: currentLanguage === 'vi' ? 'Khi validate thành công' : 'On validation pass', type: 'select', options: [
+                            { value: 'continue', text: currentLanguage === 'vi' ? 'Tiếp tục workflow' : 'Continue workflow' },
+                            { value: 'log', text: currentLanguage === 'vi' ? 'Ghi log' : 'Log only' }
+                        ], value: 'continue' },
+                        { id: 'onValidationFail', label: currentLanguage === 'vi' ? 'Khi validate thất bại' : 'On validation fail', type: 'select', options: [
+                            { value: 'stop', text: currentLanguage === 'vi' ? 'Dừng workflow' : 'Stop workflow' },
+                            { value: 'continue', text: currentLanguage === 'vi' ? 'Tiếp tục' : 'Continue' },
+                            { value: 'retry', text: currentLanguage === 'vi' ? 'Thử lại' : 'Retry' }
+                        ], value: 'stop' }
+                    ] },
                     'assertVisible': { icon: 'fa-eye text-green-500 dark:text-green-400', name: lang.assertVisible, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: '.welcome-message' }] },
                     'assertText': { icon: 'fa-check-double text-yellow-500 dark:text-yellow-400', name: lang.assertText, params: [{ id: 'selector', label: currentLanguage === 'vi' ? 'Bộ chọn' : 'Selector', type: 'selector', placeholder: 'h1' }, { id: 'text', label: currentLanguage === 'vi' ? 'Văn bản mong muốn' : 'Expected Text', type: 'text', placeholder: currentLanguage === 'vi' ? 'Chào mừng' : 'Welcome' }] },
                     'assertURL': { icon: 'fa-link text-blue-500 dark:text-blue-400', name: lang.assertURL, params: [{ id: 'expectedURL', label: currentLanguage === 'vi' ? 'URL mong muốn' : 'Expected URL', type: 'text', placeholder: 'https://example.com/dashboard' }] },
@@ -1545,9 +1838,9 @@
                 };
             };
 
-            function createNode(type, x, y) {
-                const id = `node_${Date.now()}${Math.floor(Math.random() * 1000)}`;
-                const node = { id, type, x, y, params: {} };
+            function createNode(type, x, y, customId = null) {
+                const id = customId || generateNodeId(type);
+                const node = { id, type, x, y, params: {}, displayName: id };
                 const actionConfig = getActionConfig();
                 if (actionConfig[type] && actionConfig[type].params) {
                     actionConfig[type].params.forEach(p => {
@@ -1591,7 +1884,10 @@
                     el.style.left = `${node.x}px`;
                     el.style.top = `${node.y}px`;
 
-                    let contentHTML = `<div class="node-header border-b border-slate-200 dark:border-gray-600"><i class="fas ${config.icon} mr-2"></i>${config.name}</div>`;
+                    let contentHTML = `<div class="node-header border-b border-slate-200 dark:border-gray-600">
+                        <div><i class="fas ${config.icon} mr-2"></i>${config.name}</div>
+                        <div class="text-xs text-slate-300 dark:text-gray-400 mt-0.5 font-mono italic font-normal">#${node.displayName || node.id}</div>
+                    </div>`;
                     if (config.params.length > 0) {
                         const summary = Object.values(node.params).find(v => v) || (currentLanguage === 'vi' ? 'Chưa cấu hình' : 'Not configured');
                         contentHTML += `<div class="node-content text-slate-600 dark:text-gray-400 text-xs truncate"><strong>${config.params[0].label}:</strong> ${summary}</div>`;
@@ -1612,6 +1908,7 @@
                             portsHTML = '';
                             break;
                         case 'if':
+                        case 'advancedCondition':
                             portsHTML = `${createPortWithTooltip('port-left', 'input', 'in')}${createPortWithTooltip('port-if-then', 'output', 'then')}${createPortWithTooltip('port-if-else', 'output', 'else')}`;
                             labelsHTML = `<span class="port-label label-then text-green-500">THEN</span><span class="port-label label-else text-red-500">ELSE</span>`;
                             break;
@@ -1648,9 +1945,18 @@
 
                 const actionConfig = getActionConfig();
                 const config = actionConfig[node.type];
-                let nodeHeight = 40;
-                if (config && config.params && config.params.length > 0) {
-                    nodeHeight += 44;
+                
+                // Get actual node height from DOM element
+                const nodeElement = document.getElementById(node.id);
+                let nodeHeight = 40; // fallback
+                if (nodeElement) {
+                    nodeHeight = nodeElement.offsetHeight;
+                } else {
+                    // Fallback calculation if element not found
+                    nodeHeight = 40;
+                    if (config && config.params && config.params.length > 0) {
+                        nodeHeight += 44;
+                    }
                 }
 
                 let portOffsetX = 0;
@@ -2005,7 +2311,49 @@
                         condition: "Network condition to simulate for testing",
                         downloadSpeed: "Download speed in Kbps for custom network conditions",
                         uploadSpeed: "Upload speed in Kbps for custom network conditions",
-                        latency: "Network latency in milliseconds"
+                        latency: "Network latency in milliseconds",
+                        // Session Cache & API nodes
+                        cacheName: "Name for the cache container to store session data",
+                        inputCapture: "Map input elements to cache keys (format: #selector -> key)",
+                        fromPreviousNodes: "Reference data from previous nodes (format: {{nodeId.field}} -> key)",
+                        systemData: "Automatically captured system data (current_url, timestamp, page_title)",
+                        customData: "Custom static data to include (format: key -> value)",
+                        bodyTemplate: "HTTP request body template using {{nodeId.field}} references",
+                        cacheReferences: "List of node references used in this request",
+                        nodeReference: "Node reference to validate (format: {{nodeId.field}})",
+                        nodeReferences: "List of node references to validate",
+                        outputCacheName: "Cache name to store processed results",
+                        responseMapping: "Map response fields to cache keys (format: path -> key)",
+                        inputSource: "Node reference for input data (format: {{nodeId.field}})",
+                        inputSources: "List of node references for data sources",
+                        extractAndSave: "Extract response fields and save to cache",
+                        validationRules: "Rules to validate data (REQUIRED, NOT_EMPTY, EQUALS, etc.)",
+                        onValidationFail: "Action when validation fails",
+                        onValidationPass: "Action when validation passes",
+                        storageType: "Where to store data (database, excel, or both)",
+                        databaseConfig: "Database connection settings",
+                        excelConfig: "Excel file configuration",
+                        dataMapping: "Map cache data to storage columns",
+                        onSuccess: "Action when storage succeeds",
+                        // Node checking parameters
+                        nodeId: "ID of the node to check for existence",
+                        outputField: "Specific output field to verify (optional)",
+                        onNotExists: "Action when node or field doesn't exist",
+                        expectedValue: "Value to compare against node data",
+                        filterByType: "Filter nodes by their type",
+                        outputFormat: "Format for the node list output",
+                        saveToVariable: "Variable name to store the result",
+                        // Advanced condition parameters
+                        leftOperand: "Left side value for comparison (use {{nodeId.field}})",
+                        rightOperand: "Right side value for comparison (node reference or literal)",
+                        logicalOperator: "Combine conditions with AND/OR logic",
+                        secondCondition: "Additional condition for complex logic",
+                        conditions: "List of conditions to evaluate",
+                        logicExpression: "Custom logic expression using condition numbers",
+                        evaluationMode: "How to evaluate multiple conditions",
+                        onTrueAction: "Action when condition evaluates to true",
+                        onFalseAction: "Action when condition evaluates to false",
+                        description: "Human-readable description of the logic"
                     },
                     vi: {
                         selector: "Bộ chọn CSS để nhắm mục tiêu phần tử HTML. Ví dụ: #myId, .myClass, button[type='submit']",
@@ -2047,7 +2395,49 @@
                         condition: "Điều kiện mạng để mô phỏng cho testing",
                         downloadSpeed: "Tốc độ tải xuống tính bằng Kbps cho điều kiện mạng tùy chỉnh",
                         uploadSpeed: "Tốc độ tải lên tính bằng Kbps cho điều kiện mạng tùy chỉnh",
-                        latency: "Độ trễ mạng tính bằng mili giây"
+                        latency: "Độ trễ mạng tính bằng mili giây",
+                        // Session Cache & API nodes (Vietnamese)
+                        cacheName: "Tên container cache để lưu trữ dữ liệu session",
+                        inputCapture: "Ánh xạ input elements thành cache keys (định dạng: #selector -> key)",
+                        fromPreviousNodes: "Tham chiếu dữ liệu từ các node trước (định dạng: {{nodeId.field}} -> key)",
+                        systemData: "Dữ liệu hệ thống tự động thu thập (current_url, timestamp, page_title)",
+                        customData: "Dữ liệu tĩnh tùy chỉnh để bao gồm (định dạng: key -> value)",
+                        bodyTemplate: "Template body HTTP request sử dụng tham chiếu {{nodeId.field}}",
+                        cacheReferences: "Danh sách tham chiếu node được sử dụng trong request này",
+                        nodeReference: "Tham chiếu node để validate (định dạng: {{nodeId.field}})",
+                        nodeReferences: "Danh sách tham chiếu node để validate",
+                        outputCacheName: "Tên cache để lưu trữ kết quả đã xử lý",
+                        responseMapping: "Ánh xạ các field response thành cache keys (định dạng: path -> key)",
+                        inputSource: "Tham chiếu node cho dữ liệu đầu vào (định dạng: {{nodeId.field}})",
+                        inputSources: "Danh sách tham chiếu node cho nguồn dữ liệu",
+                        extractAndSave: "Trích xuất các field response và lưu vào cache",
+                        validationRules: "Quy tắc để validate dữ liệu (REQUIRED, NOT_EMPTY, EQUALS, v.v.)",
+                        onValidationFail: "Hành động khi validation thất bại",
+                        onValidationPass: "Hành động khi validation thành công",
+                        storageType: "Nơi lưu trữ dữ liệu (database, excel, hoặc cả hai)",
+                        databaseConfig: "Cài đặt kết nối database",
+                        excelConfig: "Cấu hình file Excel",
+                        dataMapping: "Ánh xạ dữ liệu cache tới các cột lưu trữ",
+                        onSuccess: "Hành động khi lưu trữ thành công",
+                        // Node checking parameters (Vietnamese)
+                        nodeId: "ID của node cần kiểm tra sự tồn tại",
+                        outputField: "Field output cụ thể để xác minh (tùy chọn)",
+                        onNotExists: "Hành động khi node hoặc field không tồn tại",
+                        expectedValue: "Giá trị để so sánh với dữ liệu node",
+                        filterByType: "Lọc nodes theo loại của chúng",
+                        outputFormat: "Định dạng cho đầu ra danh sách node",
+                        saveToVariable: "Tên biến để lưu trữ kết quả",
+                        // Advanced condition parameters (Vietnamese)
+                        leftOperand: "Giá trị bên trái để so sánh (sử dụng {{nodeId.field}})",
+                        rightOperand: "Giá trị bên phải để so sánh (tham chiếu node hoặc literal)",
+                        logicalOperator: "Kết hợp điều kiện với logic AND/OR",
+                        secondCondition: "Điều kiện bổ sung cho logic phức tạp",
+                        conditions: "Danh sách điều kiện để đánh giá",
+                        logicExpression: "Biểu thức logic tùy chỉnh sử dụng số thứ tự điều kiện",
+                        evaluationMode: "Cách đánh giá nhiều điều kiện",
+                        onTrueAction: "Hành động khi điều kiện đánh giá là đúng",
+                        onFalseAction: "Hành động khi điều kiện đánh giá là sai",
+                        description: "Mô tả có thể đọc được của logic"
                     }
                 };
                 
@@ -2070,6 +2460,19 @@
                 const config = actionConfig[node.type];
                 if (!config) return;
                 let formHTML = '';
+                
+                // Add Node ID field at the top
+                const nodeIdInputId = `prop-input-${node.id}-nodeId`;
+                const nodeIdLabel = currentLanguage === 'vi' ? 'ID Node' : 'Node ID';
+                const nodeIdPlaceholder = currentLanguage === 'vi' ? 'Nhập ID tùy chỉnh...' : 'Enter custom ID...';
+                const commonClasses = "w-full px-3 py-2 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-800 dark:text-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500";
+                
+                formHTML += `<div class="mb-4 p-3 bg-slate-50 dark:bg-gray-800 rounded-md border border-slate-200 dark:border-gray-600">
+                    <label for="${nodeIdInputId}" class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">${nodeIdLabel}</label>
+                    <input type="text" id="${nodeIdInputId}" data-param-id="nodeId" placeholder="${nodeIdPlaceholder}" value="${node.displayName || node.id}" class="${commonClasses} font-mono text-sm">
+                    <p class="text-xs text-slate-500 dark:text-gray-400 mt-1">${currentLanguage === 'vi' ? 'ID này sẽ được sử dụng để tham chiếu từ các node khác' : 'This ID will be used to reference from other nodes'}</p>
+                </div>`;
+                
                 config.params.forEach(param => {
                     const value = node.params[param.id] || '';
                     const inputId = `prop-input-${node.id}-${param.id}`;
@@ -2109,8 +2512,26 @@
 
                 panel.querySelectorAll('input, textarea, select').forEach(input => {
                     input.addEventListener('input', e => {
-                        node.params[e.target.dataset.paramId] = e.target.value;
-                        renderNodes();
+                        const paramId = e.target.dataset.paramId;
+                        if (paramId === 'nodeId') {
+                            // Handle node ID change
+                            const newId = e.target.value.trim();
+                            if (newId && newId !== node.displayName) {
+                                // Check if ID is unique
+                                const idExists = nodes.some(n => n.id !== node.id && (n.displayName === newId || n.id === newId));
+                                if (!idExists) {
+                                    node.displayName = newId;
+                                    renderNodes();
+                                } else {
+                                    // Reset to previous value if ID already exists
+                                    e.target.value = node.displayName || node.id;
+                                    alert(currentLanguage === 'vi' ? 'ID đã tồn tại!' : 'ID already exists!');
+                                }
+                            }
+                        } else {
+                            node.params[paramId] = e.target.value;
+                            renderNodes();
+                        }
                     });
                 });
 
@@ -2345,6 +2766,47 @@
                 scale = data.scale || 1;
                 nodes = data.nodes;
                 connections = data.connections;
+                
+                // Reset node counters and ensure all nodes have displayName
+                resetNodeCounters();
+                nodes.forEach(node => {
+                    if (!node.displayName) {
+                        node.displayName = node.id;
+                    }
+                    // Update counters based on existing nodes
+                    const typeMap = {
+                        'start': 'start',
+                        'stop': 'stop',
+                        'goto': 'goToUrl',
+                        'fill': 'inputText',
+                        'click': 'clickElement',
+                        'getText': 'getText',
+                        'getAttribute': 'getAttribute',
+                        'waitElement': 'waitElement',
+                        'sessionCache': 'sessionCache',
+                        'customApiRequest': 'apiRequest',
+                        'responseProcessor': 'processResponse',
+                        'storageSettings': 'storageSettings',
+                        'checkNodeExists': 'checkNodeExists',
+                        'checkNodeValue': 'checkNodeValue',
+                        'getNodeList': 'getNodeList',
+                        'validateNodeData': 'validateNodeData',
+                        'if': 'condition',
+                        'advancedCondition': 'advancedCondition',
+                        'forEach': 'loop',
+                        'comment': 'comment'
+                    };
+                    
+                    const baseName = typeMap[node.type] || node.type;
+                    const match = node.displayName.match(new RegExp(`^${baseName}_(\\d+)$`));
+                    if (match) {
+                        const counter = parseInt(match[1]);
+                        if (!nodeCounters[node.type] || nodeCounters[node.type] < counter) {
+                            nodeCounters[node.type] = counter;
+                        }
+                    }
+                });
+                
                 selectedNodeId = data.nodes[0]?.id || null;
                 renderAll();
             }
