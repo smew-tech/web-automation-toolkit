@@ -1,0 +1,5 @@
+# SMEW Worker Web UI Requirements
+flask>=3.0.0
+flask-socketio>=5.3.6
+# Playwright causes build issues with Python 3.13 - uncomment when needed
+# playwright>=1.47.0

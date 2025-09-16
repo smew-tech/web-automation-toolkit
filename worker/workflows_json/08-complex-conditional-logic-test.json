@@ -1,0 +1,137 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 350,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 350,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "extract_page_title_1",
+      "type": "getText",
+      "x": 350,
+      "y": 320,
+      "params": {
+        "selector": "h1",
+        "variable": "pageTitle"
+      },
+      "displayName": "extract_page_title_1"
+    },
+    {
+      "id": "count_sections_1",
+      "type": "assertElementCount",
+      "x": 350,
+      "y": 460,
+      "params": {
+        "selector": "section",
+        "count": 6
+      },
+      "displayName": "count_sections_1"
+    },
+    {
+      "id": "set_section_count_1",
+      "type": "setVariable",
+      "x": 200,
+      "y": 600,
+      "params": {
+        "name": "sectionCount",
+        "value": "6"
+      },
+      "displayName": "set_section_count_1"
+    },
+    {
+      "id": "advanced_condition_1",
+      "type": "advancedCondition",
+      "x": 350,
+      "y": 600,
+      "params": {
+        "conditions": "${pageTitle} contains \"Demo\"\n${sectionCount} equals \"6\"\n${pageTitle} contains \"SMEW\"",
+        "logicExpression": "(1 AND 2) AND 3",
+        "evaluationMode": "custom",
+        "onTrueAction": "continue",
+        "onFalseAction": "stop",
+        "description": "Validate page structure and content"
+      },
+      "displayName": "advanced_condition_1"
+    },
+    {
+      "id": "success_action_1",
+      "type": "click",
+      "x": 500,
+      "y": 600,
+      "params": {
+        "selector": "#click-test"
+      },
+      "displayName": "success_action_1"
+    },
+    {
+      "id": "screenshot_success_1",
+      "type": "screenshot",
+      "x": 350,
+      "y": 780,
+      "params": {
+        "filename": "conditional-logic-success.png"
+      },
+      "displayName": "screenshot_success_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "extract_page_title_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_page_title_1",
+      "fromPort": "out_bottom",
+      "toNode": "count_sections_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "count_sections_1",
+      "fromPort": "out_right",
+      "toNode": "set_section_count_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "set_section_count_1",
+      "fromPort": "out_bottom",
+      "toNode": "advanced_condition_1",
+      "toPort": "in"
+    },
+    {
+      "fromNode": "advanced_condition_1",
+      "fromPort": "then",
+      "toNode": "success_action_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "success_action_1",
+      "fromPort": "out_bottom",
+      "toNode": "screenshot_success_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

@@ -1,0 +1,49 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 100,
+      "y": 100,
+      "params": {},
+      "displayName": "Start"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 300,
+      "y": 100,
+      "params": {
+        "url": "https://example.com"
+      },
+      "displayName": "Go to Example"
+    },
+    {
+      "id": "click_1",
+      "type": "click",
+      "x": 500,
+      "y": 100,
+      "params": {
+        "selector": "#button"
+      },
+      "displayName": "Click Button"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out",
+      "toNode": "click_1",
+      "toPort": "in"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

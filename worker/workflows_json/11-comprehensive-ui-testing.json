@@ -1,0 +1,165 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "assert_page_title_1",
+      "type": "assertTitle",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "expectedTitle": "SMEW Automation Toolkit - Demo Test Page"
+      },
+      "displayName": "assert_page_title_1"
+    },
+    {
+      "id": "check_all_sections_1",
+      "type": "assertElementCount",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "selector": "section",
+        "operator": "equals",
+        "expectedCount": 6
+      },
+      "displayName": "check_all_sections_1"
+    },
+    {
+      "id": "validate_navigation_buttons_1",
+      "type": "assertVisible",
+      "x": 200,
+      "y": 600,
+      "params": {
+        "selector": "#goto-btn"
+      },
+      "displayName": "validate_navigation_buttons_1"
+    },
+    {
+      "id": "validate_form_elements_1",
+      "type": "assertVisible",
+      "x": 400,
+      "y": 600,
+      "params": {
+        "selector": "#test-form"
+      },
+      "displayName": "validate_form_elements_1"
+    },
+    {
+      "id": "validate_product_list_1",
+      "type": "assertElementCount",
+      "x": 600,
+      "y": 600,
+      "params": {
+        "selector": ".product-item",
+        "operator": "equals",
+        "expectedCount": 3
+      },
+      "displayName": "validate_product_list_1"
+    },
+    {
+      "id": "check_interactive_buttons_1",
+      "type": "assertVisible",
+      "x": 200,
+      "y": 780,
+      "params": {
+        "selector": "#click-test"
+      },
+      "displayName": "check_interactive_buttons_1"
+    },
+    {
+      "id": "check_api_buttons_1",
+      "type": "assertVisible",
+      "x": 400,
+      "y": 780,
+      "params": {
+        "selector": "#mock-api-success"
+      },
+      "displayName": "check_api_buttons_1"
+    },
+    {
+      "id": "final_screenshot_1",
+      "type": "screenshot",
+      "x": 400,
+      "y": 920,
+      "params": {
+        "filename": "comprehensive-ui-validation.png"
+      },
+      "displayName": "final_screenshot_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "assert_page_title_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "assert_page_title_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_all_sections_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_all_sections_1",
+      "fromPort": "out_bottom",
+      "toNode": "validate_navigation_buttons_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "validate_navigation_buttons_1",
+      "fromPort": "out_right",
+      "toNode": "validate_form_elements_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "validate_form_elements_1",
+      "fromPort": "out_right",
+      "toNode": "validate_product_list_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "validate_product_list_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_interactive_buttons_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_interactive_buttons_1",
+      "fromPort": "out_right",
+      "toNode": "check_api_buttons_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_api_buttons_1",
+      "fromPort": "out_bottom",
+      "toNode": "final_screenshot_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

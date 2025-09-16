@@ -1,0 +1,244 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "click_api_success_1",
+      "type": "click",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "selector": "#mock-api-success"
+      },
+      "displayName": "click_api_success_1"
+    },
+    {
+      "id": "wait_for_loading_1",
+      "type": "waitElement",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "selector": ".loading-indicator:not(.hidden)",
+        "timeout": 3000
+      },
+      "displayName": "wait_for_loading_1"
+    },
+    {
+      "id": "wait_api_response_1",
+      "type": "waitElement",
+      "x": 400,
+      "y": 600,
+      "params": {
+        "selector": "#api-response:not(.hidden)",
+        "timeout": 5000
+      },
+      "displayName": "wait_api_response_1"
+    },
+    {
+      "id": "extract_api_content_1",
+      "type": "getText",
+      "x": 400,
+      "y": 740,
+      "params": {
+        "selector": "#api-content",
+        "variable": "apiResponseData"
+      },
+      "displayName": "extract_api_content_1"
+    },
+    {
+      "id": "process_api_response_1",
+      "type": "responseProcessor",
+      "x": 400,
+      "y": 880,
+      "params": {
+        "inputSource": "{{extract_api_content_1.apiResponseData}}",
+        "extractAndSave": "status -> responseStatus\ndata.userId -> extractedUserId\ndata.message -> responseMessage"
+      },
+      "displayName": "process_api_response_1"
+    },
+    {
+      "id": "validate_response_success_1",
+      "type": "if",
+      "x": 400,
+      "y": 1020,
+      "params": {
+        "leftOperand": "{{process_api_response_1.responseStatus}}",
+        "operator": "equals",
+        "rightOperand": "success",
+        "description": "Check if API response is successful"
+      },
+      "displayName": "validate_response_success_1"
+    },
+    {
+      "id": "cache_successful_data_1",
+      "type": "sessionCache",
+      "x": 600,
+      "y": 1160,
+      "params": {
+        "cacheName": "api_success_data",
+        "variableCapture": "{{process_api_response_1.extractedUserId}} -> user_id\n{{process_api_response_1.responseMessage}} -> message",
+        "systemData": "timestamp -> extraction_time\ncurrent_url -> page_url"
+      },
+      "displayName": "cache_successful_data_1"
+    },
+    {
+      "id": "extract_all_products_1",
+      "type": "forEach",
+      "x": 400,
+      "y": 1300,
+      "params": {
+        "list": "3",
+        "variable": "productIndex"
+      },
+      "displayName": "extract_all_products_1"
+    },
+    {
+      "id": "get_product_title_1",
+      "type": "getText",
+      "x": 200,
+      "y": 1440,
+      "params": {
+        "selector": ".product-item:nth-child({{productIndex}}) .title",
+        "variable": "currentProductTitle"
+      },
+      "displayName": "get_product_title_1"
+    },
+    {
+      "id": "get_product_price_1",
+      "type": "getText",
+      "x": 400,
+      "y": 1440,
+      "params": {
+        "selector": ".product-item:nth-child({{productIndex}}) .price",
+        "variable": "currentProductPrice"
+      },
+      "displayName": "get_product_price_1"
+    },
+    {
+      "id": "validate_product_data_1",
+      "type": "if",
+      "x": 400,
+      "y": 1580,
+      "params": {
+        "leftOperand": "{{get_product_title_1.currentProductTitle}}",
+        "operator": "notEmpty",
+        "rightOperand": "",
+        "logicalOperator": "and",
+        "secondCondition": "{{get_product_price_1.currentProductPrice}} contains \"$\"",
+        "description": "Validate product has title and valid price"
+      },
+      "displayName": "validate_product_data_1"
+    },
+    {
+      "id": "store_product_data_1",
+      "type": "sessionCache",
+      "x": 400,
+      "y": 1720,
+      "params": {
+        "cacheName": "product_{{productIndex}}",
+        "variableCapture": "{{get_product_title_1.currentProductTitle}} -> title\n{{get_product_price_1.currentProductPrice}} -> price",
+        "systemData": "index -> {{productIndex}}"
+      },
+      "displayName": "store_product_data_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "click_api_success_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "click_api_success_1",
+      "fromPort": "out_bottom",
+      "toNode": "wait_for_loading_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "wait_for_loading_1",
+      "fromPort": "out_bottom",
+      "toNode": "wait_api_response_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "wait_api_response_1",
+      "fromPort": "out_bottom",
+      "toNode": "extract_api_content_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_api_content_1",
+      "fromPort": "out_bottom",
+      "toNode": "process_api_response_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "process_api_response_1",
+      "fromPort": "out_bottom",
+      "toNode": "validate_response_success_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "validate_response_success_1",
+      "fromPort": "then",
+      "toNode": "cache_successful_data_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "cache_successful_data_1",
+      "fromPort": "out_bottom",
+      "toNode": "extract_all_products_1",
+      "toPort": "in"
+    },
+    {
+      "fromNode": "extract_all_products_1",
+      "fromPort": "loopBody",
+      "toNode": "get_product_title_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "get_product_title_1",
+      "fromPort": "out_right",
+      "toNode": "get_product_price_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "get_product_price_1",
+      "fromPort": "out_bottom",
+      "toNode": "validate_product_data_1",
+      "toPort": "in"
+    },
+    {
+      "fromNode": "validate_product_data_1",
+      "fromPort": "then",
+      "toNode": "store_product_data_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

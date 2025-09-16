@@ -1,0 +1,178 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "test_click_button_1",
+      "type": "click",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "selector": "#click-test"
+      },
+      "displayName": "test_click_button_1"
+    },
+    {
+      "id": "verify_click_text_1",
+      "type": "assertText",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "selector": "#click-test",
+        "text": "Clicked!"
+      },
+      "displayName": "verify_click_text_1"
+    },
+    {
+      "id": "hover_menu_trigger_1",
+      "type": "hover",
+      "x": 400,
+      "y": 600,
+      "params": {
+        "selector": "#hover-trigger"
+      },
+      "displayName": "hover_menu_trigger_1"
+    },
+    {
+      "id": "verify_menu_visible_1",
+      "type": "assertVisible",
+      "x": 400,
+      "y": 740,
+      "params": {
+        "selector": "#hover-menu:not(.hidden)"
+      },
+      "displayName": "verify_menu_visible_1"
+    },
+    {
+      "id": "open_modal_1",
+      "type": "click",
+      "x": 400,
+      "y": 880,
+      "params": {
+        "selector": "#modal-trigger"
+      },
+      "displayName": "open_modal_1"
+    },
+    {
+      "id": "verify_modal_open_1",
+      "type": "assertVisible",
+      "x": 400,
+      "y": 1020,
+      "params": {
+        "selector": "#test-modal.show"
+      },
+      "displayName": "verify_modal_open_1"
+    },
+    {
+      "id": "close_modal_1",
+      "type": "click",
+      "x": 400,
+      "y": 1160,
+      "params": {
+        "selector": "#modal-confirm"
+      },
+      "displayName": "close_modal_1"
+    },
+    {
+      "id": "verify_modal_closed_1",
+      "type": "assertNotVisible",
+      "x": 400,
+      "y": 1300,
+      "params": {
+        "selector": "#test-modal.show"
+      },
+      "displayName": "verify_modal_closed_1"
+    },
+    {
+      "id": "final_screenshot_1",
+      "type": "screenshot",
+      "x": 400,
+      "y": 1440,
+      "params": {
+        "filename": "interactive-test-complete.png"
+      },
+      "displayName": "final_screenshot_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "test_click_button_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "test_click_button_1",
+      "fromPort": "out_bottom",
+      "toNode": "verify_click_text_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "verify_click_text_1",
+      "fromPort": "out_bottom",
+      "toNode": "hover_menu_trigger_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "hover_menu_trigger_1",
+      "fromPort": "out_bottom",
+      "toNode": "verify_menu_visible_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "verify_menu_visible_1",
+      "fromPort": "out_bottom",
+      "toNode": "open_modal_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "open_modal_1",
+      "fromPort": "out_bottom",
+      "toNode": "verify_modal_open_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "verify_modal_open_1",
+      "fromPort": "out_bottom",
+      "toNode": "close_modal_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "close_modal_1",
+      "fromPort": "out_bottom",
+      "toNode": "verify_modal_closed_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "verify_modal_closed_1",
+      "fromPort": "out_bottom",
+      "toNode": "final_screenshot_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

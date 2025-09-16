@@ -1,0 +1,133 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 350,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 350,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "fill_invalid_email_1",
+      "type": "fill",
+      "x": 200,
+      "y": 320,
+      "params": {
+        "selector": "#email",
+        "value": "invalid-email-format"
+      },
+      "displayName": "fill_invalid_email_1"
+    },
+    {
+      "id": "fill_short_phone_1",
+      "type": "fill",
+      "x": 500,
+      "y": 320,
+      "params": {
+        "selector": "#phoneNumber",
+        "value": "123"
+      },
+      "displayName": "fill_short_phone_1"
+    },
+    {
+      "id": "submit_invalid_1",
+      "type": "click",
+      "x": 350,
+      "y": 500,
+      "params": {
+        "selector": "#submit-button"
+      },
+      "displayName": "submit_invalid_1"
+    },
+    {
+      "id": "validate_form_1",
+      "type": "validateForm",
+      "x": 350,
+      "y": 640,
+      "params": {
+        "selector": "#test-form"
+      },
+      "displayName": "validate_form_1"
+    },
+    {
+      "id": "check_email_validity_1",
+      "type": "assertAttribute",
+      "x": 350,
+      "y": 780,
+      "params": {
+        "selector": "#email:invalid",
+        "attribute": "type",
+        "value": "email"
+      },
+      "displayName": "check_email_validity_1"
+    },
+    {
+      "id": "screenshot_validation_1",
+      "type": "screenshot",
+      "x": 350,
+      "y": 920,
+      "params": {
+        "filename": "form-validation-errors.png"
+      },
+      "displayName": "screenshot_validation_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "fill_invalid_email_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_invalid_email_1",
+      "fromPort": "out_bottom",
+      "toNode": "fill_short_phone_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_short_phone_1",
+      "fromPort": "out_bottom",
+      "toNode": "submit_invalid_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "submit_invalid_1",
+      "fromPort": "out_bottom",
+      "toNode": "validate_form_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "validate_form_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_email_validity_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_email_validity_1",
+      "fromPort": "out_bottom",
+      "toNode": "screenshot_validation_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

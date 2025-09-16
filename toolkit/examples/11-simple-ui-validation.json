@@ -1,0 +1,117 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "assert_page_title_1",
+      "type": "assertTitle",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "expectedTitle": "SMEW Automation Toolkit - Demo Test Page"
+      },
+      "displayName": "assert_page_title_1"
+    },
+    {
+      "id": "check_sections_count_1",
+      "type": "assertElementCount",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "selector": "section",
+        "operator": "equals",
+        "expectedCount": 6
+      },
+      "displayName": "check_sections_count_1"
+    },
+    {
+      "id": "validate_form_visible_1",
+      "type": "assertVisible",
+      "x": 400,
+      "y": 600,
+      "params": {
+        "selector": "#test-form"
+      },
+      "displayName": "validate_form_visible_1"
+    },
+    {
+      "id": "validate_products_count_1",
+      "type": "assertElementCount",
+      "x": 400,
+      "y": 740,
+      "params": {
+        "selector": ".product-item",
+        "operator": "equals",
+        "expectedCount": 3
+      },
+      "displayName": "validate_products_count_1"
+    },
+    {
+      "id": "screenshot_validation_1",
+      "type": "screenshot",
+      "x": 400,
+      "y": 880,
+      "params": {
+        "filename": "ui-validation-complete.png"
+      },
+      "displayName": "screenshot_validation_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "assert_page_title_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "assert_page_title_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_sections_count_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_sections_count_1",
+      "fromPort": "out_bottom",
+      "toNode": "validate_form_visible_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "validate_form_visible_1",
+      "fromPort": "out_bottom",
+      "toNode": "validate_products_count_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "validate_products_count_1",
+      "fromPort": "out_bottom",
+      "toNode": "screenshot_validation_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

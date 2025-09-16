@@ -1,0 +1,116 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "click_success_api_1",
+      "type": "click",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "selector": "#mock-api-success"
+      },
+      "displayName": "click_success_api_1"
+    },
+    {
+      "id": "wait_loading_1",
+      "type": "waitElement",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "selector": ".loading-indicator:not(.hidden)",
+        "timeout": 1000
+      },
+      "displayName": "wait_loading_1"
+    },
+    {
+      "id": "wait_response_1",
+      "type": "waitElement",
+      "x": 400,
+      "y": 600,
+      "params": {
+        "selector": "#api-response:not(.hidden)",
+        "timeout": 5000
+      },
+      "displayName": "wait_response_1"
+    },
+    {
+      "id": "extract_response_1",
+      "type": "getText",
+      "x": 400,
+      "y": 740,
+      "params": {
+        "selector": "#api-content",
+        "variable": "apiResponse"
+      },
+      "displayName": "extract_response_1"
+    },
+    {
+      "id": "screenshot_result_1",
+      "type": "screenshot",
+      "x": 400,
+      "y": 880,
+      "params": {
+        "filename": "api-success-response.png"
+      },
+      "displayName": "screenshot_result_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "click_success_api_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "click_success_api_1",
+      "fromPort": "out_bottom",
+      "toNode": "wait_loading_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "wait_loading_1",
+      "fromPort": "out_bottom",
+      "toNode": "wait_response_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "wait_response_1",
+      "fromPort": "out_bottom",
+      "toNode": "extract_response_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_response_1",
+      "fromPort": "out_bottom",
+      "toNode": "screenshot_result_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

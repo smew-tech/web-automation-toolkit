@@ -4,199 +4,118 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a web automation toolkit consisting of two main components:
-1. **Visual Workflow Builder** (`toolkit/`) - A standalone web application for creating automation workflows through drag-and-drop interface
-2. **Chrome Extension** (`extension/`) - Element selector tool for generating CSS selectors
+A comprehensive web automation toolkit consisting of three main components:
 
-The project enables users to create, test, and execute web automation workflows without external dependencies.
-
-## Development Commands
-
-### Chrome Extension Development
-- **Load Extension**: Open `chrome://extensions/`, enable Developer mode, click "Load unpacked" and select the `extension/` folder
-- **Testing**: Use the `extension/test.html` file for testing extension functionality
-- **Manifest**: Follows Manifest V3 specifications with service worker architecture
-
-### Workflow Builder Development
-- **Run Locally**: Open `toolkit/index.html` directly in any modern browser
-- **No Build Required**: Pure vanilla JavaScript/HTML/CSS with CDN dependencies (Tailwind CSS, Font Awesome)
-- **Testing**: Use the built-in Test button within the workflow builder interface
+1. **Visual Workflow Builder** (`toolkit/`) - Drag-and-drop web interface for creating automation workflows
+2. **Chrome Extension** (`extension/`) - Element selector tool for generating CSS selectors  
+3. **Python Worker System** (`worker/`) - Backend execution engine using Playwright with Strategy and State patterns
 
 ## Architecture
 
-### Chrome Extension Architecture
-- **Background Service Worker** (`background.js`): Handles cross-tab communication and message routing
-- **Content Script** (`content.js`): Injected into web pages for element selection and CSS selector generation
-- **Popup Interface** (`popup.js/html`): Extension control panel with start/stop functionality
-- **Multi-language Support** (`lang.js`): English/Vietnamese localization system
+### Workflow Builder (`toolkit/`)
+- Standalone web application in `toolkit/index.html`
+- Canvas-based node editor with SVG connections
+- Exports workflows as JSON files for the worker system
+- No build process required - pure HTML/CSS/JS
 
-### Workflow Builder Architecture
-- **Canvas-based Editor**: SVG connections between workflow nodes with pan/zoom functionality
-- **Modular Action System**: 47+ predefined action types organized in categories (Logic, Navigation, Interactions, Data Extraction, Validation)
-- **State Management**: Variables and workflow execution context managed in JavaScript
-- **Real-time Testing**: Step-by-step execution simulation with visual feedback
+### Chrome Extension (`extension/`)
+- Manifest V3 extension for element selection
+- Content scripts for page interaction and selector generation
+- Multi-language support (English/Vietnamese)
+- Communicates with workflow builder via cross-tab messaging
 
-### Key Components
-- **CSS Selector Generation**: Multiple fallback strategies (ID → Class → Data attributes → Structural → Full path)
-- **Workflow JSON Export/Import**: Standard format for workflow persistence and sharing
-- **Cross-component Integration**: Extension communicates with workflow builder via URL parameters and clipboard
+### Python Worker System (`worker/`)
+- **Strategy Pattern**: Each node type (`goto`, `click`, `fill`, etc.) has its own strategy class in `strategies/node_strategies.py`
+- **State Pattern**: Workflow states (`Pending`, `Running`, `Completed`) managed in `states/workflow_states.py`
+- **Core Components**:
+  - `core/workflow_manager.py` - Manages multiple concurrent workflows
+  - `core/workflow.py` - Individual workflow execution
+  - `core/node.py` - Individual automation steps
+- **Control Panel**: Comprehensive web UI for workflow management in `worker/web_ui/`
 
-## File Structure
+### Worker Control Panel (`worker/web_ui/`)
+- **Flask-based Web Interface**: Complete control panel for workflow management
+- **Real-time Monitoring**: WebSocket-based live updates and system monitoring
+- **Features**:
+  - Dashboard with workflow statistics and system metrics
+  - Drag & drop workflow upload functionality
+  - Canvas-based workflow visualization with interactive nodes
+  - Multi-workflow execution control (single, batch, concurrent)
+  - Real-time logs streaming with filtering and search
+  - Per-workflow proxy settings and system configuration
+  - Responsive design with mobile support
 
+## Development Commands
+
+### Worker Control Panel
+```bash
+# Quick setup and launch (recommended)
+cd worker
+python quick_start.py  # Interactive setup guide
+
+# Full mode with Playwright support
+./start_control_panel.sh  # Auto-setup and start at http://localhost:5001
+
+# Demo mode (no Playwright required)
+cd worker/web_ui
+python run_demo.py  # Simulation mode with mock data
+
+# Manual setup
+cd worker/web_ui
+python3 -m venv venv
+source venv/bin/activate  # Linux/macOS
+# venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+python app.py  # Full mode
 ```
-├── extension/              # Chrome extension files
-│   ├── manifest.json      # Extension manifest (v3)
-│   ├── popup.html/js      # Extension popup interface
-│   ├── content.js         # Element selection content script
-│   ├── background.js      # Service worker for message handling
-│   ├── lang.js           # Internationalization support
-│   └── tutorial.html     # User documentation
-├── toolkit/               # Workflow builder application
-│   ├── index.html        # Main application (self-contained)
-│   ├── guideline-*.md    # Development guidelines
-│   └── archive/          # Previous versions
-└── worker/                # Future automation worker implementation
-    └── system-architecture-en.md  # Worker architecture specification
+
+### Python Worker System (CLI)
+```bash
+# Install Playwright (for CLI execution)
+cd worker
+pip install playwright
+playwright install
+
+# Run workflows via command line
+python main.py --load-dir workflows_json --run-all
+python main.py --load sample.json --run sample_workflow
 ```
 
-## Workflow Node Types
+### Testing
+```bash
+# Test worker system architecture
+cd worker
+python test_system.py
 
-The system supports these action categories:
-- **Logic**: If conditions, loops, variables, comments
-- **Navigation**: URL navigation, page reload, browser history
-- **Interactions**: Click, fill input, checkboxes, dropdowns, hover, keyboard input, file upload
-- **Wait Operations**: Timeout delays, element waiting
-- **Data Extraction**: Text/attribute extraction, screenshots, HTTP requests, data export
-- **Validation**: Element visibility and text assertions
+# Test workflow execution
+python main_demo.py
+```
 
-### Advanced Data Processing Nodes with Command System
+## Key Configuration Files
 
-**HTTP Request Node** (`httpRequest`):
-- **Methods**: GET, POST, PUT, DELETE
-- **Data Source Commands**: `GET_VARIABLE:variableName`, `GET_CONTEXT:contextPath`
-- **Body Template**: Uses `${data.fieldName}` syntax for dynamic data substitution
-- **Processing Modes**: Single request, forEach loop, or batch processing
-- **Response Handling Commands**:
-  - `STORE_VARIABLE:variableName` - Store complete response
-  - `EXTRACT_FIELD:jsonPath>variableName` - Extract specific fields
-- **Error Handling**: Stop workflow, continue, or retry on failure
-
-**Extract Multiple Data Node** (`extractMultiple`):
-- **Container/Item Selectors**: Target repeated content structures
-- **Extraction Commands**:
-  - `EXTRACT_TEXT:selector>variableName` - Extract text content
-  - `EXTRACT_ATTR:element@attribute>variableName` - Extract attributes
-- **Output Formats**: Array of objects, CSV, or JSON string
-- **Storage Command**: `STORE_VARIABLE:variableName`
-- **Filtering Commands**:
-  - `FILTER_NOT_EMPTY:fieldName` - Remove empty entries
-  - `FILTER_CONTAINS:fieldName>value` - Filter by content
-  - `FILTER_LIMIT:number` - Limit results
-
-**Export Excel Node** (`exportExcel`):
-- **Data Source Command**: `GET_VARIABLE:variableName`
-- **Column Mapping**: `sourceField>Column Header`
-- **Formatting Commands**:
-  - `HEADER_STYLE:bold` - Style headers
-  - `NUMBER_FORMAT:field>format` - Format numbers
-  - `DATE_FORMAT:field>format` - Format dates
-- **Dynamic Filenames**: Support `${TIMESTAMP}` placeholders
-
-**Export Database Node** (`exportDatabase`):
-- **Data Source Command**: `GET_VARIABLE:variableName`
-- **Field Mapping**: `sourceField>dbColumn`
-- **Operations**: INSERT, UPDATE, UPSERT
-- **Constraint Commands**:
-  - `PRIMARY_KEY:fieldName`
-  - `UNIQUE:fieldName`
-  - `NOT_NULL:fieldName`
-
-## Development Guidelines
-
-### Chrome Extension Development
-- All content scripts run in isolated environments with minimal permissions
-- Use `chrome.runtime.sendMessage` for cross-component communication
-- Store user preferences in `chrome.storage.local`
-- Follow security best practices - no external server communication
-
-### Workflow Builder Development
-- Maintain vanilla JavaScript approach for maximum compatibility
-- Use existing CSS classes and Tailwind utilities for consistency
-- Canvas operations use transform-based positioning for performance
-- Workflow JSON must validate against the established schema
-
-### Code Style
-- Use descriptive variable names following camelCase convention
-- Maintain consistent indentation (2 spaces for HTML/CSS, 4 for JavaScript)
-- Add comments for complex selector generation algorithms
-- Follow existing error handling patterns
+- `worker/workflows_json/` - Contains workflow JSON definitions
+- `worker/requirements.txt` - Python dependencies (minimal for testing)
+- `worker/web_ui/requirements.txt` - Flask web UI dependencies
+- `extension/manifest.json` - Chrome extension configuration
 
 ## Integration Workflow
 
-### Basic Element Selection
-1. User creates workflow in builder with placeholder selectors
-2. Clicks "crosshairs" button to activate element selection
-3. Extension opens target URL in new tab
-4. User selects elements, extension generates and copies CSS selectors
-5. User pastes selectors back into workflow configuration
-6. Workflow can be tested using built-in simulation mode
+1. **Create workflows**: Use `toolkit/index.html` drag-and-drop interface
+2. **Select elements**: Use Chrome extension to generate CSS selectors
+3. **Export workflows**: Save as JSON files to `worker/workflows_json/`
+4. **Execute workflows**: Choose execution method:
+   - **Web UI (Recommended)**: Use Control Panel at http://localhost:5001
+   - **Command Line**: Use `python main.py` with various options
+   - **Programmatic**: Import and use core classes directly
 
-### Data Flow Between Nodes
-1. **Extract Multiple Data Node** → extracts array of objects from webpage
-2. **HTTP Request Node** → receives data via `sourceVariable` parameter
-3. **Data Mapping** → transforms extracted data using JSON template with `{{sourceData.fieldName}}` syntax
-4. **Request Execution** → sends mapped data to API endpoints
-5. **Export Nodes** → save API responses to Excel files or databases
+## Important Notes
 
-### Example Command-Based Workflow
-
-**1. Extract Multiple Data Node:**
-```
-Container: .product-list
-Item: .product-item
-Extract Commands:
-  EXTRACT_TEXT:.title>name
-  EXTRACT_TEXT:.price>price
-  EXTRACT_ATTR:img@src>image
-  EXTRACT_ATTR:a@href>link
-Storage: STORE_VARIABLE:products
-```
-
-**2. HTTP Request Node:**
-```
-Method: POST
-URL: https://api.example.com/products
-Data Source: GET_VARIABLE:products
-Iteration: forEach
-Body Template: {
-  "name": "${data.name}",
-  "price": "${data.price}",
-  "image_url": "${data.image}"
-}
-Response Handler:
-  STORE_VARIABLE:apiResponse
-  EXTRACT_FIELD:data.id>productId
-  EXTRACT_FIELD:data.status>status
-```
-
-**3. Export Excel Node:**
-```
-Data Source: GET_VARIABLE:apiResponse
-Filename: products_${TIMESTAMP}.xlsx
-Column Mapping:
-  name>Product Name
-  price>Price (USD)
-  productId>API Product ID
-Formatting:
-  HEADER_STYLE:bold
-  NUMBER_FORMAT:price>#,##0.00
-```
-
-This creates a clear command-based workflow that the worker can parse and execute systematically.
-
-## Security Considerations
-
-- Extension requires minimal permissions (`activeTab`, `storage`, `scripting`, `tabs`)
-- No data transmission to external servers
-- All processing happens locally in browser
-- Content scripts isolated from page JavaScript context
+- **Concurrent Execution**: Worker system uses asyncio for running multiple workflows simultaneously
+- **Proxy Support**: Per-workflow proxy configuration available via Control Panel or CLI
+- **Deployment Modes**: 
+  - Demo mode (simulation with mock data)
+  - Full mode (real browser automation with Playwright)
+- **Local Processing**: All data processing happens locally - no external servers required
+- **Zero Dependencies**: Toolkit and extension components require no external dependencies
+- **Real-time Updates**: Control Panel provides WebSocket-based live monitoring
+- **Cross-platform**: Supports Windows, macOS, and Linux environments

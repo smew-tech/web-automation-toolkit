@@ -1,0 +1,167 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 357.454328797389,
+      "y": -41.07907860246052,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 603,
+      "y": 82,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "fill_username_1",
+      "type": "fill",
+      "x": 388.7018268481045,
+      "y": 236.2596346303791,
+      "params": {
+        "selector": "#username",
+        "value": "john_doe"
+      },
+      "displayName": "fill_username_1"
+    },
+    {
+      "id": "fill_email_1",
+      "type": "fill",
+      "x": 663.545543979513,
+      "y": 362.2109610886267,
+      "params": {
+        "selector": "#email",
+        "value": "john@example.com"
+      },
+      "displayName": "fill_email_1"
+    },
+    {
+      "id": "fill_phone_1",
+      "type": "fill",
+      "x": 422.18055602791856,
+      "y": 510.48273229866936,
+      "params": {
+        "selector": "#phoneNumber",
+        "value": "0123456789"
+      },
+      "displayName": "fill_phone_1"
+    },
+    {
+      "id": "fill_password_1",
+      "type": "fill",
+      "x": 758.5882128429828,
+      "y": 606.9046544759227,
+      "params": {
+        "selector": "#password",
+        "value": "securePass123"
+      },
+      "displayName": "fill_password_1"
+    },
+    {
+      "id": "select_country_1",
+      "type": "selectOption",
+      "x": 452.75663229123757,
+      "y": 735.8073073924178,
+      "params": {
+        "selector": "#country",
+        "value": "vietnam"
+      },
+      "displayName": "select_country_1"
+    },
+    {
+      "id": "check_terms_1",
+      "type": "setCheckboxState",
+      "x": 769.7970451490839,
+      "y": 884.6186179036907,
+      "params": {
+        "selector": "#agree-terms",
+        "checked": true
+      },
+      "displayName": "check_terms_1"
+    },
+    {
+      "id": "submit_form_1",
+      "type": "click",
+      "x": 418.2900396910872,
+      "y": 985.7038284075322,
+      "params": {
+        "selector": "#submit-button"
+      },
+      "displayName": "submit_form_1"
+    },
+    {
+      "id": "assert_success_1",
+      "type": "assertVisible",
+      "x": 597.4523272379614,
+      "y": 1148.444193777153,
+      "params": {
+        "selector": ".success-message"
+      },
+      "displayName": "assert_success_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "fill_username_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_email_1",
+      "fromPort": "out_bottom",
+      "toNode": "fill_phone_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_password_1",
+      "fromPort": "out_bottom",
+      "toNode": "select_country_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_terms_1",
+      "fromPort": "out_bottom",
+      "toNode": "submit_form_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "submit_form_1",
+      "fromPort": "out_bottom",
+      "toNode": "assert_success_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_username_1",
+      "fromPort": "out_right",
+      "toNode": "fill_email_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_phone_1",
+      "fromPort": "out_right",
+      "toNode": "fill_password_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "select_country_1",
+      "fromPort": "out_right",
+      "toNode": "check_terms_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

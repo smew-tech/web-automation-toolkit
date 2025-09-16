@@ -1,0 +1,6 @@
+# Playwright requirements
+playwright==1.55.0
+pyee>=9.0.0
+
+# Core requirements cho system test
+asyncio-throttle==1.0.2

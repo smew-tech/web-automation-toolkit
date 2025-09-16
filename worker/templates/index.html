@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Automation Toolkit - N8N Style</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div id="app" class="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1 class="app-title">
+                    <i class="fas fa-robot"></i>
+                    SMEW Worker
+                </h1>
+            </div>
+            <div class="header-center">
+                <div class="execution-controls">
+                    <button id="executeBtn" class="btn btn-primary" disabled>
+                        <i class="fas fa-play"></i>
+                        Execute Workflow
+                    </button>
+                    <button id="executeAllBtn" class="btn btn-success" disabled>
+                        <i class="fas fa-play-circle"></i>
+                        Execute All
+                    </button>
+                    <button id="stopBtn" class="btn btn-danger" disabled>
+                        <i class="fas fa-stop"></i>
+                        Stop
+                    </button>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="connection-status">
+                    <span id="connectionStatus" class="status-indicator offline">
+                        <i class="fas fa-circle"></i>
+                        Offline
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <!-- Left Panel: Workspaces -->
+            <aside class="left-panel">
+                <div class="panel-header">
+                    <h3>
+                        <i class="fas fa-folder"></i>
+                        Workspaces
+                    </h3>
+                    <button id="createWorkspaceBtn" class="btn btn-sm btn-outline">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="workspace-list" id="workspaceList">
+                    <!-- Workspaces will be loaded here -->
+                </div>
+            </aside>
+
+            <!-- Center Panel: Canvas Visualization -->
+            <section class="center-panel">
+                <div class="canvas-header">
+                    <div class="canvas-title">
+                        <h3 id="canvasTitle">Select a workflow to view</h3>
+                        <div class="canvas-controls">
+                            <button id="zoomInBtn" class="btn btn-sm btn-outline">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button id="zoomOutBtn" class="btn btn-sm btn-outline">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button id="fitToScreenBtn" class="btn btn-sm btn-outline">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="canvas-container">
+                    <svg id="workflowCanvas" class="workflow-canvas">
+                        <!-- Canvas content will be rendered here -->
+                    </svg>
+                    <div id="canvasPlaceholder" class="canvas-placeholder">
+                        <i class="fas fa-project-diagram"></i>
+                        <p>Select a workflow from the right panel to visualize it here</p>
+                        <p class="text-muted">The canvas is read-only and will show real-time execution progress</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Workflow Management -->
+            <aside class="right-panel">
+                <div class="panel-header">
+                    <h3 id="workspaceTitle">Select Workspace</h3>
+                    <button id="syncWorkflowsBtn" class="btn btn-sm btn-outline" disabled>
+                        <i class="fas fa-sync"></i>
+                    </button>
+                </div>
+
+                <!-- Workflow List -->
+                <div class="workflow-section">
+                    <div class="section-header">
+                        <h4>
+                            <i class="fas fa-list"></i>
+                            Workflows
+                        </h4>
+                        <div class="header-actions">
+                            <span id="workflowCount" class="count-badge">0</span>
+                            <button id="addWorkflowBtn" class="btn btn-sm btn-outline" title="Add Workflow">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-list" id="workflowList">
+                        <!-- Workflows will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Execution Settings -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h4>
+                            <i class="fas fa-cogs"></i>
+                            Execution Settings
+                        </h4>
+                    </div>
+                    
+                    <div class="settings-content">
+                        <div class="setting-item">
+                            <label for="maxConcurrent">
+                                Max Current:
+                                <span class="setting-hint">workflows</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="number" id="maxConcurrent" value="3" min="1" max="10" 
+                                       placeholder="1-10" title="Maximum number of workflows running simultaneously">
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="switch-row">
+                                <span class="switch-text">Headless Mode</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="headlessMode" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Execution Results -->
+                <div class="results-section">
+                    <div class="section-header">
+                        <h4>
+                            <i class="fas fa-chart-line"></i>
+                            Results
+                        </h4>
+                    </div>
+                    
+                    <div id="executionResults" class="results-content">
+                        <div class="result-placeholder">
+                            <p>Execution results will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Create Workspace Modal -->
+    <div id="createWorkspaceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Workspace</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createWorkspaceForm">
+                    <div class="form-group">
+                        <label for="workspaceName">Workspace Name:</label>
+                        <input type="text" id="workspaceName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="workspaceDescription">Description:</label>
+                        <textarea id="workspaceDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="workspaceMaxConcurrent">Max Concurrent Workflows:</label>
+                        <input type="number" id="workspaceMaxConcurrent" value="3" min="1" max="10">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createWorkspaceModal')">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createWorkspace()">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workspace Settings Modal -->
+    <div id="proxySettingsModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Workspace Settings</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-tabs">
+                    <button class="tab-button active" data-tab="general">
+                        <i class="fas fa-cog"></i> General
+                    </button>
+                    <button class="tab-button" data-tab="proxy">
+                        <i class="fas fa-network-wired"></i> Proxy
+                    </button>
+                    <button class="tab-button" data-tab="schedule">
+                        <i class="fas fa-clock"></i> Schedule
+                    </button>
+                    <button class="tab-button" data-tab="notifications">
+                        <i class="fas fa-bell"></i> Notifications
+                    </button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- General Settings Tab -->
+                    <div id="generalTab" class="tab-panel active">
+                        <form id="generalSettingsForm">
+                            <div class="form-group">
+                                <label for="workspaceNameEdit">Workspace Name:</label>
+                                <input type="text" id="workspaceNameEdit" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="workspaceDescEdit">Description:</label>
+                                <textarea id="workspaceDescEdit" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="maxConcurrentEdit">Max Concurrent Workflows:</label>
+                                <input type="number" id="maxConcurrentEdit" value="3" min="1" max="10">
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Proxy Settings Tab -->
+                    <div id="proxyTab" class="tab-panel">
+                        <form id="proxySettingsForm">
+                            <div class="form-group">
+                                <label for="proxyHost">Proxy Host:</label>
+                                <input type="text" id="proxyHost" placeholder="127.0.0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="proxyPort">Proxy Port:</label>
+                                <input type="number" id="proxyPort" placeholder="8080">
+                            </div>
+                            <div class="form-group">
+                                <label for="proxyUsername">Username (optional):</label>
+                                <input type="text" id="proxyUsername">
+                            </div>
+                            <div class="form-group">
+                                <label for="proxyPassword">Password (optional):</label>
+                                <input type="password" id="proxyPassword">
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Schedule Settings Tab -->
+                    <div id="scheduleTab" class="tab-panel">
+                        <form id="scheduleSettingsForm">
+                            <div class="form-group">
+                                <label class="switch-label">
+                                    <span class="switch-text">Enable Scheduling</span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="enableSchedule">
+                                        <span class="slider"></span>
+                                    </label>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="cronExpression">Cron Expression:</label>
+                                <input type="text" id="cronExpression" placeholder="0 0 * * *" disabled>
+                                <small class="form-hint">Format: minute hour day month day-of-week (e.g., "0 0 * * *" = daily at midnight)</small>
+                            </div>
+                            <div class="cron-presets">
+                                <label>Quick Presets:</label>
+                                <div class="preset-buttons">
+                                    <button type="button" class="preset-btn" data-cron="0 0 * * *">Daily</button>
+                                    <button type="button" class="preset-btn" data-cron="0 0 * * 1">Weekly</button>
+                                    <button type="button" class="preset-btn" data-cron="0 0 1 * *">Monthly</button>
+                                    <button type="button" class="preset-btn" data-cron="0 */6 * * *">Every 6h</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Notifications Tab -->
+                    <div id="notificationsTab" class="tab-panel">
+                        <div class="notification-section">
+                            <h4><i class="fab fa-telegram"></i> Telegram Notifications</h4>
+                            <form id="telegramSettingsForm">
+                                <div class="form-group">
+                                    <label class="switch-label">
+                                        <span class="switch-text">Enable Telegram</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="enableTelegram">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="telegramBotToken">Bot Token:</label>
+                                    <input type="password" id="telegramBotToken" placeholder="123456789:AAABBBCCC..." disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="telegramChatId">Chat ID:</label>
+                                    <input type="text" id="telegramChatId" placeholder="-123456789" disabled>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="notification-section">
+                            <h4><i class="fas fa-webhook"></i> Webhook Notifications</h4>
+                            <form id="webhookSettingsForm">
+                                <div class="form-group">
+                                    <label class="switch-label">
+                                        <span class="switch-text">Enable Webhook</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="enableWebhook">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="webhookUrl">Webhook URL:</label>
+                                    <input type="url" id="webhookUrl" placeholder="https://hooks.example.com/webhook" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="webhookFormat">JSON Format:</label>
+                                    <textarea id="webhookFormat" rows="6" disabled placeholder='{"workspace": "{{workspace}}", "status": "{{status}}", "message": "{{message}}", "timestamp": "{{timestamp}}"}'></textarea>
+                                    <small class="form-hint">Available variables: {{workspace}}, {{status}}, {{message}}, {{timestamp}}, {{workflow_count}}, {{execution_time}}</small>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('proxySettingsModal')">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveWorkspaceSettings()">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Workflow Modal -->
+    <div id="addWorkflowModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Workflow to Workspace</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">Select workflows from the available list to add to this workspace:</p>
+                
+                <div class="form-group">
+                    <label>Search Workflows:</label>
+                    <input type="text" id="workflowSearch" placeholder="Search workflows...">
+                </div>
+                
+                <div class="workflow-selection">
+                    <div id="availableWorkflows" class="available-workflows">
+                        <!-- Available workflows will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addWorkflowModal')">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="addSelectedWorkflows()">Add Selected</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

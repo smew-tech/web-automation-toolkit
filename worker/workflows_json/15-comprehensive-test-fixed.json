@@ -1,0 +1,180 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "run_tests_1",
+      "type": "click",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "selector": "#run-tests"
+      },
+      "displayName": "run_tests_1"
+    },
+    {
+      "id": "wait_completion_1",
+      "type": "waitTimeout",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "timeout": 3000
+      },
+      "displayName": "wait_completion_1"
+    },
+    {
+      "id": "verify_results_visible_1",
+      "type": "assertVisible",
+      "x": 400,
+      "y": 600,
+      "params": {
+        "selector": "#test-results:not(.hidden)"
+      },
+      "displayName": "verify_results_visible_1"
+    },
+    {
+      "id": "extract_results_1",
+      "type": "getText",
+      "x": 400,
+      "y": 740,
+      "params": {
+        "selector": "#results-content",
+        "variable": "testResultsData"
+      },
+      "displayName": "extract_results_1"
+    },
+    {
+      "id": "export_csv_1",
+      "type": "click",
+      "x": 400,
+      "y": 880,
+      "params": {
+        "selector": "#export-csv"
+      },
+      "displayName": "export_csv_1"
+    },
+    {
+      "id": "test_api_success_1",
+      "type": "click",
+      "x": 400,
+      "y": 1020,
+      "params": {
+        "selector": "#mock-api-success"
+      },
+      "displayName": "test_api_success_1"
+    },
+    {
+      "id": "wait_api_response_1",
+      "type": "waitElement",
+      "x": 400,
+      "y": 1160,
+      "params": {
+        "selector": "#api-response:not(.hidden)",
+        "timeout": 5000
+      },
+      "displayName": "wait_api_response_1"
+    },
+    {
+      "id": "verify_api_success_1",
+      "type": "assertContainsText",
+      "x": 400,
+      "y": 1300,
+      "params": {
+        "selector": "#api-content",
+        "containsText": "success"
+      },
+      "displayName": "verify_api_success_1"
+    },
+    {
+      "id": "final_screenshot_1",
+      "type": "screenshot",
+      "x": 400,
+      "y": 1440,
+      "params": {
+        "filename": "comprehensive-test-complete.png"
+      },
+      "displayName": "final_screenshot_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "run_tests_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "run_tests_1",
+      "fromPort": "out_bottom",
+      "toNode": "wait_completion_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "wait_completion_1",
+      "fromPort": "out_bottom",
+      "toNode": "verify_results_visible_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "verify_results_visible_1",
+      "fromPort": "out_bottom",
+      "toNode": "extract_results_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_results_1",
+      "fromPort": "out_bottom",
+      "toNode": "export_csv_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "export_csv_1",
+      "fromPort": "out_bottom",
+      "toNode": "test_api_success_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "test_api_success_1",
+      "fromPort": "out_bottom",
+      "toNode": "wait_api_response_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "wait_api_response_1",
+      "fromPort": "out_bottom",
+      "toNode": "verify_api_success_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "verify_api_success_1",
+      "fromPort": "out_bottom",
+      "toNode": "final_screenshot_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

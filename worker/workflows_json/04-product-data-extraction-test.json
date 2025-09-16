@@ -1,0 +1,141 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "count_products_1",
+      "type": "assertElementCount",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "selector": ".product-item",
+        "count": 3
+      },
+      "displayName": "count_products_1"
+    },
+    {
+      "id": "extract_product1_title_1",
+      "type": "getText",
+      "x": 200,
+      "y": 460,
+      "params": {
+        "selector": ".product-item:first-child .title",
+        "variable": "product1Name"
+      },
+      "displayName": "extract_product1_title_1"
+    },
+    {
+      "id": "extract_product1_price_1",
+      "type": "getText",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "selector": ".product-item:first-child .price",
+        "variable": "product1Price"
+      },
+      "displayName": "extract_product1_price_1"
+    },
+    {
+      "id": "extract_product1_link_1",
+      "type": "getAttribute",
+      "x": 600,
+      "y": 460,
+      "params": {
+        "selector": ".product-item:first-child a",
+        "attribute": "href",
+        "variable": "product1Link"
+      },
+      "displayName": "extract_product1_link_1"
+    },
+    {
+      "id": "validate_product_data_1",
+      "type": "if",
+      "x": 400,
+      "y": 640,
+      "params": {
+        "leftOperand": "${product1Name}",
+        "operator": "equals",
+        "rightOperand": "Product 1",
+        "logicalOperator": "and",
+        "secondCondition": "${product1Price} contains \"$\"",
+        "description": "Validate extracted product data"
+      },
+      "displayName": "validate_product_data_1"
+    },
+    {
+      "id": "session_cache_1",
+      "type": "sessionCache",
+      "x": 400,
+      "y": 820,
+      "params": {
+        "cacheName": "product_data",
+        "variableCapture": "${product1Name} -> name\n${product1Price} -> price\n${product1Link} -> link",
+        "systemData": "current_url -> page_url\ntimestamp -> extraction_time"
+      },
+      "displayName": "session_cache_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "count_products_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "count_products_1",
+      "fromPort": "out_bottom",
+      "toNode": "extract_product1_title_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_product1_title_1",
+      "fromPort": "out_right",
+      "toNode": "extract_product1_price_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_product1_price_1",
+      "fromPort": "out_right",
+      "toNode": "extract_product1_link_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_product1_link_1",
+      "fromPort": "out_bottom",
+      "toNode": "validate_product_data_1",
+      "toPort": "in"
+    },
+    {
+      "fromNode": "validate_product_data_1",
+      "fromPort": "then",
+      "toNode": "session_cache_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMEW Automation Toolkit - Demo Test Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .modal {
+            display: none;
+        }
+        .modal.show {
+            display: block;
+        }
+        .product-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold text-center mb-8 text-blue-600">SMEW Automation Toolkit - Demo Test Page</h1>
+        
+        <!-- Navigation Section -->
+        <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4"><i class="fas fa-compass text-blue-500"></i> Navigation Elements</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button id="goto-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Go to URL</button>
+                <button id="reload-btn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Reload Page</button>
+                <button id="back-btn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Go Back</button>
+            </div>
+        </section>
+
+        <!-- Form Input Section -->
+        <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4"><i class="fas fa-edit text-green-500"></i> Form Elements</h2>
+            <form id="test-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Username:</label>
+                        <input type="text" id="username" placeholder="Enter username" class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Email:</label>
+                        <input type="email" id="email" placeholder="Enter email" class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Phone:</label>
+                        <input type="tel" id="phoneNumber" placeholder="0123456789" class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Password:</label>
+                        <input type="password" id="password" placeholder="Enter password" class="w-full p-2 border rounded">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Country:</label>
+                        <select id="country" class="w-full p-2 border rounded">
+                            <option value="">Select Country</option>
+                            <option value="vietnam">Vietnam</option>
+                            <option value="usa">United States</option>
+                            <option value="japan">Japan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">File Upload:</label>
+                        <input type="file" id="file-upload" class="w-full p-2 border rounded">
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="agree-terms" class="mr-2">
+                        Agree to Terms
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" id="newsletter" class="mr-2">
+                        Subscribe to Newsletter
+                    </label>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button type="submit" id="submit-button" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">Submit Form</button>
+                    <button type="button" id="clear-form" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">Clear Form</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Interactive Elements Section -->
+        <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4"><i class="fas fa-mouse-pointer text-purple-500"></i> Interactive Elements</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button id="click-test" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">Click Test</button>
+                <button id="hover-trigger" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Hover Menu</button>
+                <button id="modal-trigger" class="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600">Open Modal</button>
+            </div>
+            
+            <div id="hover-menu" class="hidden bg-gray-200 p-4 mt-2 rounded">
+                <p class="menu-item">Menu Item 1</p>
+                <p class="menu-item">Menu Item 2</p>
+                <p class="menu-item">Menu Item 3</p>
+            </div>
+        </section>
+
+        <!-- Data Display Section -->
+        <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4"><i class="fas fa-database text-yellow-500"></i> Data Elements</h2>
+            <div class="product-list grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="product-item">
+                    <h3 class="title font-semibold">Product 1</h3>
+                    <p class="price text-green-600">$29.99</p>
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZCIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbWFnZSAxPC90ZXh0Pjwvc3ZnPg==" alt="Product 1" class="w-full h-32 object-cover">
+                    <a href="#product1" class="text-blue-500 hover:underline">View Details</a>
+                </div>
+                <div class="product-item">
+                    <h3 class="title font-semibold">Product 2</h3>
+                    <p class="price text-green-600">$49.99</p>
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZCIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbWFnZSAyPC90ZXh0Pjwvc3ZnPg==" alt="Product 2" class="w-full h-32 object-cover">
+                    <a href="#product2" class="text-blue-500 hover:underline">View Details</a>
+                </div>
+                <div class="product-item">
+                    <h3 class="title font-semibold">Product 3</h3>
+                    <p class="price text-green-600">$79.99</p>
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZCIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbWFnZSAzPC90ZXh0Pjwvc3ZnPg==" alt="Product 3" class="w-full h-32 object-cover">
+                    <a href="#product3" class="text-blue-500 hover:underline">View Details</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Status Messages Section -->
+        <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4"><i class="fas fa-bell text-red-500"></i> Status Messages</h2>
+            <div class="space-y-2">
+                <div class="welcome-message bg-green-100 text-green-800 p-3 rounded">Welcome to Dashboard</div>
+                <div class="error-message bg-red-100 text-red-800 p-3 rounded hidden">Error: Something went wrong</div>
+                <div class="success-message bg-blue-100 text-blue-800 p-3 rounded hidden">Operation completed successfully</div>
+                <div class="loading-indicator hidden">
+                    <div class="loading-spinner mx-auto"></div>
+                    <p class="text-center mt-2">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Results Section -->
+        <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4"><i class="fas fa-chart-bar text-indigo-500"></i> Test Results</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button id="run-tests" class="bg-indigo-500 text-white px-6 py-3 rounded hover:bg-indigo-600">Run All Tests</button>
+                <button id="export-csv" class="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600">Export Results to CSV</button>
+            </div>
+            <div id="test-results" class="mt-4 p-4 bg-gray-100 rounded hidden">
+                <h3 class="font-semibold mb-2">Test Results:</h3>
+                <div id="results-content"></div>
+            </div>
+        </section>
+
+        <!-- API Mock Section -->
+        <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4"><i class="fas fa-server text-cyan-500"></i> API Mock Endpoints</h2>
+            <div class="space-y-2">
+                <button id="mock-api-success" class="bg-green-500 text-white px-4 py-2 rounded">Mock Success API</button>
+                <button id="mock-api-error" class="bg-red-500 text-white px-4 py-2 rounded">Mock Error API</button>
+                <div id="api-response" class="mt-4 p-4 bg-gray-100 rounded hidden">
+                    <h3 class="font-semibold mb-2">API Response:</h3>
+                    <pre id="api-content"></pre>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div id="test-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+            <h3 class="text-xl font-semibold mb-4">Test Modal</h3>
+            <p class="mb-4">This is a test modal for automation testing.</p>
+            <div class="flex space-x-4">
+                <button id="modal-confirm" class="bg-blue-500 text-white px-4 py-2 rounded">Confirm</button>
+                <button id="modal-cancel" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test results storage
+        let testResults = [];
+
+        // Navigation handlers
+        document.getElementById('goto-btn').addEventListener('click', function() {
+            addTestResult('Navigation', 'goto', 'Go to URL clicked');
+        });
+
+        document.getElementById('reload-btn').addEventListener('click', function() {
+            addTestResult('Navigation', 'reload', 'Reload button clicked');
+            setTimeout(() => location.reload(), 1000);
+        });
+
+        document.getElementById('back-btn').addEventListener('click', function() {
+            addTestResult('Navigation', 'goBack', 'Back button clicked');
+            history.back();
+        });
+
+        // Form handlers
+        document.getElementById('test-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            addTestResult('Form', 'submit', 'Form submitted', data);
+            showMessage('success-message', 'Form submitted successfully!');
+        });
+
+        document.getElementById('clear-form').addEventListener('click', function() {
+            document.getElementById('test-form').reset();
+            addTestResult('Form', 'clear', 'Form cleared');
+        });
+
+        // Interactive handlers
+        document.getElementById('click-test').addEventListener('click', function() {
+            addTestResult('Interaction', 'click', 'Click test button clicked');
+            this.textContent = 'Clicked!';
+            setTimeout(() => this.textContent = 'Click Test', 2000);
+        });
+
+        document.getElementById('hover-trigger').addEventListener('mouseenter', function() {
+            document.getElementById('hover-menu').classList.remove('hidden');
+            addTestResult('Interaction', 'hover', 'Hover menu triggered');
+        });
+
+        document.getElementById('hover-trigger').addEventListener('mouseleave', function() {
+            setTimeout(() => {
+                if (!document.getElementById('hover-menu').matches(':hover')) {
+                    document.getElementById('hover-menu').classList.add('hidden');
+                }
+            }, 500);
+        });
+
+        document.getElementById('modal-trigger').addEventListener('click', function() {
+            document.getElementById('test-modal').classList.add('show');
+            addTestResult('Interaction', 'modal', 'Modal opened');
+        });
+
+        document.getElementById('modal-confirm').addEventListener('click', function() {
+            document.getElementById('test-modal').classList.remove('show');
+            addTestResult('Interaction', 'modal', 'Modal confirmed');
+        });
+
+        document.getElementById('modal-cancel').addEventListener('click', function() {
+            document.getElementById('test-modal').classList.remove('show');
+            addTestResult('Interaction', 'modal', 'Modal cancelled');
+        });
+
+        // API Mock handlers
+        document.getElementById('mock-api-success').addEventListener('click', async function() {
+            showLoading();
+            const mockResponse = {
+                status: 'success',
+                data: {
+                    userId: 12345,
+                    message: 'Operation completed successfully',
+                    timestamp: new Date().toISOString()
+                }
+            };
+            
+            setTimeout(() => {
+                hideLoading();
+                showApiResponse(mockResponse);
+                addTestResult('API', 'success', 'Mock API success response', mockResponse);
+            }, 2000);
+        });
+
+        document.getElementById('mock-api-error').addEventListener('click', async function() {
+            showLoading();
+            const mockResponse = {
+                status: 'error',
+                error: {
+                    code: 400,
+                    message: 'Bad request - validation failed',
+                    timestamp: new Date().toISOString()
+                }
+            };
+            
+            setTimeout(() => {
+                hideLoading();
+                showApiResponse(mockResponse);
+                addTestResult('API', 'error', 'Mock API error response', mockResponse);
+                showMessage('error-message', 'API request failed!');
+            }, 2000);
+        });
+
+        // Test execution
+        document.getElementById('run-tests').addEventListener('click', function() {
+            runAllTests();
+        });
+
+        document.getElementById('export-csv').addEventListener('click', function() {
+            exportToCSV();
+        });
+
+        // Utility functions
+        function addTestResult(category, action, description, data = null) {
+            const result = {
+                timestamp: new Date().toISOString(),
+                category: category,
+                action: action,
+                description: description,
+                data: data,
+                status: 'success'
+            };
+            testResults.push(result);
+            console.log('Test Result Added:', result);
+        }
+
+        function showMessage(className, message) {
+            const element = document.querySelector('.' + className);
+            element.textContent = message;
+            element.classList.remove('hidden');
+            setTimeout(() => element.classList.add('hidden'), 3000);
+        }
+
+        function showLoading() {
+            document.querySelector('.loading-indicator').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.querySelector('.loading-indicator').classList.add('hidden');
+        }
+
+        function showApiResponse(response) {
+            document.getElementById('api-response').classList.remove('hidden');
+            document.getElementById('api-content').textContent = JSON.stringify(response, null, 2);
+        }
+
+        function runAllTests() {
+            testResults = []; // Clear previous results
+            
+            // Simulate comprehensive test execution
+            const testScenarios = [
+                { category: 'Navigation', action: 'goto', description: 'Navigate to test page' },
+                { category: 'Form', action: 'fill', description: 'Fill form fields' },
+                { category: 'Form', action: 'submit', description: 'Submit form' },
+                { category: 'Interaction', action: 'click', description: 'Click elements' },
+                { category: 'Interaction', action: 'hover', description: 'Hover interactions' },
+                { category: 'Validation', action: 'assertVisible', description: 'Check element visibility' },
+                { category: 'Validation', action: 'assertText', description: 'Verify text content' },
+                { category: 'API', action: 'request', description: 'API request tests' },
+                { category: 'Data', action: 'extract', description: 'Data extraction tests' }
+            ];
+
+            testScenarios.forEach((scenario, index) => {
+                setTimeout(() => {
+                    addTestResult(scenario.category, scenario.action, scenario.description);
+                    if (index === testScenarios.length - 1) {
+                        displayTestResults();
+                    }
+                }, (index + 1) * 200);
+            });
+        }
+
+        function displayTestResults() {
+            const resultsDiv = document.getElementById('test-results');
+            const contentDiv = document.getElementById('results-content');
+            
+            resultsDiv.classList.remove('hidden');
+            
+            const summary = testResults.reduce((acc, result) => {
+                acc[result.category] = (acc[result.category] || 0) + 1;
+                return acc;
+            }, {});
+
+            let html = '<div class="grid grid-cols-2 gap-4 mb-4">';
+            Object.entries(summary).forEach(([category, count]) => {
+                html += `<div class="bg-blue-100 p-2 rounded"><strong>${category}:</strong> ${count} tests</div>`;
+            });
+            html += '</div>';
+
+            html += '<div class="space-y-2">';
+            testResults.forEach(result => {
+                html += `
+                    <div class="flex justify-between items-center p-2 border rounded">
+                        <span><strong>${result.category}</strong> - ${result.description}</span>
+                        <span class="text-green-600 font-semibold">${result.status}</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            contentDiv.innerHTML = html;
+        }
+
+        function exportToCSV() {
+            if (testResults.length === 0) {
+                alert('No test results to export. Please run tests first.');
+                return;
+            }
+
+            const csvHeaders = ['Timestamp', 'Category', 'Action', 'Description', 'Status', 'Data'];
+            const csvRows = [csvHeaders.join(',')];
+
+            testResults.forEach(result => {
+                const row = [
+                    result.timestamp,
+                    result.category,
+                    result.action,
+                    `"${result.description}"`,
+                    result.status,
+                    result.data ? `"${JSON.stringify(result.data)}"` : ''
+                ];
+                csvRows.push(row.join(','));
+            });
+
+            const csvContent = csvRows.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `test-results-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            addTestResult('Export', 'csv', 'Test results exported to CSV');
+        }
+
+        // Initialize
+        console.log('Demo Test Page Loaded');
+        addTestResult('System', 'init', 'Demo page initialized');
+    </script>
+</body>
+</html>

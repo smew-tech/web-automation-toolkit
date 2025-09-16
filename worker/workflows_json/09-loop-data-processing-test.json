@@ -1,0 +1,139 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "set_product_count_1",
+      "type": "setVariable",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "name": "productCount",
+        "value": "3"
+      },
+      "displayName": "set_product_count_1"
+    },
+    {
+      "id": "foreach_products_1",
+      "type": "forEach",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "list": "3"
+      },
+      "displayName": "foreach_products_1"
+    },
+    {
+      "id": "extract_each_title_1",
+      "type": "getText",
+      "x": 200,
+      "y": 600,
+      "params": {
+        "selector": ".product-item:nth-child(${currentIndex}) .title",
+        "variable": "currentProductTitle"
+      },
+      "displayName": "extract_each_title_1"
+    },
+    {
+      "id": "extract_each_price_1",
+      "type": "getText",
+      "x": 400,
+      "y": 600,
+      "params": {
+        "selector": ".product-item:nth-child(${currentIndex}) .price",
+        "variable": "currentProductPrice"
+      },
+      "displayName": "extract_each_price_1"
+    },
+    {
+      "id": "validate_product_1",
+      "type": "if",
+      "x": 600,
+      "y": 600,
+      "params": {
+        "leftOperand": "${currentProductTitle}",
+        "operator": "notEmpty",
+        "rightOperand": "",
+        "logicalOperator": "and",
+        "secondCondition": "${currentProductPrice} contains \"$\"",
+        "description": "Validate each product has title and price"
+      },
+      "displayName": "validate_product_1"
+    },
+    {
+      "id": "cache_product_data_1",
+      "type": "sessionCache",
+      "x": 400,
+      "y": 780,
+      "params": {
+        "cacheName": "product_${currentIndex}",
+        "variableCapture": "${currentProductTitle} -> title\n${currentProductPrice} -> price",
+        "systemData": "current_index -> ${currentIndex}"
+      },
+      "displayName": "cache_product_data_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "set_product_count_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "set_product_count_1",
+      "fromPort": "out_bottom",
+      "toNode": "foreach_products_1",
+      "toPort": "in"
+    },
+    {
+      "fromNode": "foreach_products_1",
+      "fromPort": "loopBody",
+      "toNode": "extract_each_title_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_each_title_1",
+      "fromPort": "out_right",
+      "toNode": "extract_each_price_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "extract_each_price_1",
+      "fromPort": "out_right",
+      "toNode": "validate_product_1",
+      "toPort": "in"
+    },
+    {
+      "fromNode": "validate_product_1",
+      "fromPort": "then",
+      "toNode": "cache_product_data_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

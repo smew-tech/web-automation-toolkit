@@ -40,21 +40,64 @@ SMEW Automation Toolkit is a powerful workflow automation creation tool that all
 # Control Flow
 
 ## <i class="fas fa-code-branch" style="color: #6366f1;"></i> if - Condition
-**Purpose**: Create conditional branching in workflow based on boolean expression.
+**Purpose**: Create conditional branching in workflow based on node data comparison.
 
 ### Parameters
-- **condition** (text): Condition expression to evaluate
-  - *Examples*: `variable1 == "success"`, `count > 5`, `status != "error"`
+- **leftOperand** (text): Left side value for comparison (use `${variableName}`)
+- **operator** (select): Comparison operator (equals, notEquals, greater, contains, etc.)
+- **rightOperand** (text): Right side value (variable reference or literal value)
+- **logicalOperator** (select): Combine with second condition (AND, OR, none)
+- **secondCondition** (textarea): Additional condition for complex logic
+- **description** (text): Human-readable description of the condition
 
 ### JSON Format
 ```json
 {
-  "id": "node-123",
+  "id": "condition_1",
   "type": "if",
   "x": 100,
   "y": 200,
   "params": {
-    "condition": "pageTitle == \"Welcome\""
+    "leftOperand": "${phoneNumber}",
+    "operator": "equals",
+    "rightOperand": "0123456789",
+    "logicalOperator": "and",
+    "secondCondition": "${apiStatus} equals \"success\"",
+    "description": "Check valid phone and API success"
+  }
+}
+```
+
+### Ports
+- **Input**: Receives from previous node
+- **Output Then**: Executes when condition is TRUE
+- **Output Else**: Executes when condition is FALSE
+
+## <i class="fas fa-project-diagram" style="color: #3b82f6;"></i> advancedCondition - Advanced Condition
+**Purpose**: Handle complex logic with multiple conditions and custom expressions.
+
+### Parameters
+- **conditions** (textarea): List of conditions to evaluate
+- **logicExpression** (text): Custom logic expression using condition numbers
+- **evaluationMode** (select): How to evaluate conditions (all, any, custom)
+- **onTrueAction** (select): Action when condition is true
+- **onFalseAction** (select): Action when condition is false
+- **description** (text): Description of the logic
+
+### JSON Format
+```json
+{
+  "id": "advancedCondition_1",
+  "type": "advancedCondition",
+  "x": 300,
+  "y": 200,
+  "params": {
+    "conditions": "{{sessionCache_1.phone}} equals \"0123456789\"\n{{apiRequest_1.status}} equals \"success\"\n{{processResponse_1.user_id}} > 0",
+    "logicExpression": "(1 AND 2) OR 3",
+    "evaluationMode": "custom",
+    "onTrueAction": "continue",
+    "onFalseAction": "stop",
+    "description": "Complex login validation logic"
   }
 }
 ```
@@ -430,7 +473,7 @@ SMEW Automation Toolkit is a powerful workflow automation creation tool that all
 ### JSON Format
 ```json
 {
-  "id": "node-501",
+  "id": "getText_1",
   "type": "getText",
   "x": 100,
   "y": 700,
@@ -452,7 +495,7 @@ SMEW Automation Toolkit is a powerful workflow automation creation tool that all
 ### JSON Format
 ```json
 {
-  "id": "node-502",
+  "id": "getAttribute_1",
   "type": "getAttribute",
   "x": 300,
   "y": 700,
@@ -474,7 +517,7 @@ SMEW Automation Toolkit is a powerful workflow automation creation tool that all
 ### JSON Format
 ```json
 {
-  "id": "node-503",
+  "id": "inputText_1",
   "type": "getInputValue",
   "x": 500,
   "y": 700,
@@ -494,12 +537,224 @@ SMEW Automation Toolkit is a powerful workflow automation creation tool that all
 ### JSON Format
 ```json
 {
-  "id": "node-504",
+  "id": "screenshot_1",
   "type": "screenshot",
   "x": 700,
   "y": 700,
   "params": {
     "filename": "page-screenshot.png"
+  }
+}
+```
+
+## <i class="fas fa-memory" style="color: #f97316;"></i> sessionCache - Session Cache
+**Purpose**: Store session data from inputs and variables for use in workflow.
+
+### Parameters
+- **cacheName** (text): Name for the cache container
+- **inputCapture** (textarea): Map input elements to cache keys (`#selector -> key`)
+- **variableCapture** (textarea): Reference variables (`${variableName} -> key`)
+- **systemData** (textarea): System data to capture (`current_url -> page_url`)
+- **customData** (textarea): Custom static data (`browser_type -> chrome`)
+
+### JSON Format
+```json
+{
+  "id": "sessionCache_1",
+  "type": "sessionCache",
+  "x": 900,
+  "y": 700,
+  "params": {
+    "cacheName": "user_session",
+    "inputCapture": "#phoneNumber -> phone\n#email -> email",
+    "variableCapture": "${extractedText} -> extracted_text",
+    "systemData": "current_url -> page_url\ntimestamp -> login_time",
+    "customData": "browser_type -> chrome\nsource -> automation"
+  }
+}
+```
+
+## <i class="fas fa-paper-plane" style="color: #3b82f6;"></i> customApiRequest - Custom API Request
+**Purpose**: Send HTTP requests using data from variables with template-based body.
+
+### Parameters
+- **method** (select): HTTP method (GET, POST, PUT, DELETE)
+- **url** (text): API endpoint URL
+- **headers** (textarea): Request headers in JSON format
+- **bodyTemplate** (textarea): Request body template using `${variableName}` references
+- **variableReferences** (textarea): List of variables used
+- **responseVariable** (text): Variable name to store response
+- **responseMapping** (textarea): Map response fields to variables
+
+### JSON Format
+```json
+{
+  "id": "apiRequest_1",
+  "type": "customApiRequest",
+  "x": 100,
+  "y": 800,
+  "params": {
+    "method": "POST",
+    "url": "https://api.example.com/user/register",
+    "headers": "{\n  \"Content-Type\": \"application/json\"\n}",
+    "bodyTemplate": "{\n  \"phone\": \"${phoneNumber}\",\n  \"loginTime\": \"${loginTime}\"\n}",
+    "variableReferences": "${phoneNumber}\n${loginTime}",
+    "responseVariable": "api_response",
+    "responseMapping": "data.userId -> user_id\ndata.status -> api_status"
+  }
+}
+```
+
+## <i class="fas fa-cogs" style="color: #10b981;"></i> responseProcessor - Response Processor
+**Purpose**: Process API responses with validation and data extraction.
+
+### Parameters
+- **inputSource** (text): Node reference for input data (`{{nodeId.field}}`)
+- **extractAndSave** (textarea): Extract response fields and save to cache
+- **outputCacheName** (text): Cache name for processed results
+- **validationRules** (textarea): Validation rules (REQUIRED, NOT_EMPTY, EQUALS, etc.)
+- **onValidationFail** (select): Action when validation fails
+
+### JSON Format
+```json
+{
+  "id": "processResponse_1",
+  "type": "responseProcessor",
+  "x": 300,
+  "y": 800,
+  "params": {
+    "inputSource": "{{apiRequest_1.response}}",
+    "extractAndSave": "data.userId -> user_id\ndata.status -> api_status",
+    "outputCacheName": "processed_data",
+    "validationRules": "REQUIRED: data.userId\nEQUALS: data.status -> success",
+    "onValidationFail": "stop"
+  }
+}
+```
+
+## <i class="fas fa-hdd" style="color: #8b5cf6;"></i> storageSettings - Storage Settings
+**Purpose**: Store data from multiple nodes to database and/or Excel files.
+
+### Parameters
+- **storageType** (select): Storage destination (database, excel, both)
+- **inputSources** (textarea): List of node references for data sources
+- **databaseConfig** (textarea): Database connection settings
+- **excelConfig** (textarea): Excel file configuration
+- **dataMapping** (textarea): Map node data to storage columns
+- **onSuccess** (select): Action when storage succeeds
+
+### JSON Format
+```json
+{
+  "id": "storageSettings_1",
+  "type": "storageSettings",
+  "x": 500,
+  "y": 800,
+  "params": {
+    "storageType": "both",
+    "inputSources": "{{sessionCache_1}}\n{{processResponse_1}}",
+    "databaseConfig": "Server: localhost:3306\nDatabase: userdb",
+    "excelConfig": "File: /path/to/users.xlsx\nSheet: UserData",
+    "dataMapping": "{{sessionCache_1.phone}} -> phone_column\n{{processResponse_1.user_id}} -> user_id_column",
+    "onSuccess": "continue"
+  }
+}
+```
+
+## Node Validation
+
+## <i class="fas fa-search" style="color: #06b6d4;"></i> checkNodeExists - Check Node Exists
+**Purpose**: Verify that a specific node exists in the workflow.
+
+### Parameters
+- **nodeId** (text): ID of the node to check
+- **outputField** (text): Specific output field to verify (optional)
+- **onNotExists** (select): Action when node/field doesn't exist
+
+### JSON Format
+```json
+{
+  "id": "checkNodeExists_1",
+  "type": "checkNodeExists",
+  "x": 700,
+  "y": 800,
+  "params": {
+    "nodeId": "sessionCache_1",
+    "outputField": "phone",
+    "onNotExists": "stop"
+  }
+}
+```
+
+## <i class="fas fa-check-circle" style="color: #14b8a6;"></i> checkNodeValue - Check Node Value
+**Purpose**: Validate the value of a specific node's output.
+
+### Parameters
+- **nodeReference** (text): Node reference to validate (`{{nodeId.field}}`)
+- **operator** (select): Comparison operator (equals, notEquals, contains, etc.)
+- **expectedValue** (text): Value to compare against
+- **onValidationFail** (select): Action when validation fails
+
+### JSON Format
+```json
+{
+  "id": "checkNodeValue_1",
+  "type": "checkNodeValue",
+  "x": 900,
+  "y": 800,
+  "params": {
+    "nodeReference": "{{sessionCache_1.phone}}",
+    "operator": "notEmpty",
+    "expectedValue": "0123456789",
+    "onValidationFail": "stop"
+  }
+}
+```
+
+## <i class="fas fa-list" style="color: #6366f1;"></i> getNodeList - Get Node List
+**Purpose**: Get a list of all nodes in the workflow, optionally filtered by type.
+
+### Parameters
+- **filterByType** (select): Filter nodes by their type (all, sessionCache, etc.)
+- **outputFormat** (select): Format for the output (list, json, count)
+- **saveToVariable** (text): Variable name to store the result
+
+### JSON Format
+```json
+{
+  "id": "getNodeList_1",
+  "type": "getNodeList",
+  "x": 100,
+  "y": 900,
+  "params": {
+    "filterByType": "sessionCache",
+    "outputFormat": "list",
+    "saveToVariable": "nodeList"
+  }
+}
+```
+
+## <i class="fas fa-shield-alt" style="color: #10b981;"></i> validateNodeData - Validate Node Data
+**Purpose**: Perform comprehensive validation on multiple node references.
+
+### Parameters
+- **nodeReferences** (textarea): List of node references to validate
+- **validationRules** (textarea): Complex validation rules with patterns
+- **onValidationPass** (select): Action when validation passes
+- **onValidationFail** (select): Action when validation fails
+
+### JSON Format
+```json
+{
+  "id": "validateNodeData_1",
+  "type": "validateNodeData",
+  "x": 300,
+  "y": 900,
+  "params": {
+    "nodeReferences": "{{sessionCache_1.phone}}\n{{apiRequest_1.response}}",
+    "validationRules": "REQUIRED: {{sessionCache_1.phone}}\nMATCH_PATTERN: {{sessionCache_1.phone}} -> /^\\d{10}$/",
+    "onValidationPass": "continue",
+    "onValidationFail": "stop"
   }
 }
 ```
@@ -1059,6 +1314,9 @@ SMEW Automation Toolkit is a powerful workflow automation creation tool that all
 
 ---
 
+
+---
+
 # General Guidelines
 
 ## Workflow Design Principles
@@ -1378,7 +1636,7 @@ start → setVariable(specialChars, !@#$%^&*) → fill(input, ${specialChars}) �
 - Test thoroughly before deployment
 - Have rollback plan
 
-## Performance Optimization
+## Workflow Performance Optimization
 
 ### 1. Minimize Waits
 ```javascript
@@ -1407,6 +1665,7 @@ assertVisible(element1) AND assertText(element2) AND assertAttribute(element3)
 // Group related actions
 fill(field1) → fill(field2) → fill(field3) → click(submit)
 ```
+
 
 ## Common Patterns
 

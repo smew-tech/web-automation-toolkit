@@ -1,0 +1,200 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "clear_form_1",
+      "type": "click",
+      "x": 400,
+      "y": 320,
+      "params": {
+        "selector": "#clear-form"
+      },
+      "displayName": "clear_form_1"
+    },
+    {
+      "id": "fill_username_1",
+      "type": "fill",
+      "x": 400,
+      "y": 460,
+      "params": {
+        "selector": "#username",
+        "value": "comprehensive_test_user"
+      },
+      "displayName": "fill_username_1"
+    },
+    {
+      "id": "fill_email_1",
+      "type": "fill",
+      "x": 400,
+      "y": 600,
+      "params": {
+        "selector": "#email",
+        "value": "comprehensive@test.com"
+      },
+      "displayName": "fill_email_1"
+    },
+    {
+      "id": "fill_phone_1",
+      "type": "fill",
+      "x": 400,
+      "y": 740,
+      "params": {
+        "selector": "#phoneNumber",
+        "value": "0987654321"
+      },
+      "displayName": "fill_phone_1"
+    },
+    {
+      "id": "fill_password_1",
+      "type": "fill",
+      "x": 400,
+      "y": 880,
+      "params": {
+        "selector": "#password",
+        "value": "securePassword123"
+      },
+      "displayName": "fill_password_1"
+    },
+    {
+      "id": "select_country_1",
+      "type": "selectOption",
+      "x": 400,
+      "y": 1020,
+      "params": {
+        "selector": "#country",
+        "value": "vietnam"
+      },
+      "displayName": "select_country_1"
+    },
+    {
+      "id": "check_terms_1",
+      "type": "setCheckboxState",
+      "x": 400,
+      "y": 1160,
+      "params": {
+        "selector": "#agree-terms",
+        "state": "check"
+      },
+      "displayName": "check_terms_1"
+    },
+    {
+      "id": "check_newsletter_1",
+      "type": "setCheckboxState",
+      "x": 400,
+      "y": 1300,
+      "params": {
+        "selector": "#newsletter",
+        "state": "check"
+      },
+      "displayName": "check_newsletter_1"
+    },
+    {
+      "id": "submit_form_1",
+      "type": "click",
+      "x": 400,
+      "y": 1440,
+      "params": {
+        "selector": "#submit-button"
+      },
+      "displayName": "submit_form_1"
+    },
+    {
+      "id": "verify_success_1",
+      "type": "assertVisible",
+      "x": 400,
+      "y": 1580,
+      "params": {
+        "selector": ".success-message:not(.hidden)"
+      },
+      "displayName": "verify_success_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "clear_form_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "clear_form_1",
+      "fromPort": "out_bottom",
+      "toNode": "fill_username_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_username_1",
+      "fromPort": "out_bottom",
+      "toNode": "fill_email_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_email_1",
+      "fromPort": "out_bottom",
+      "toNode": "fill_phone_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_phone_1",
+      "fromPort": "out_bottom",
+      "toNode": "fill_password_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "fill_password_1",
+      "fromPort": "out_bottom",
+      "toNode": "select_country_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "select_country_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_terms_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_terms_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_newsletter_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_newsletter_1",
+      "fromPort": "out_bottom",
+      "toNode": "submit_form_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "submit_form_1",
+      "fromPort": "out_bottom",
+      "toNode": "verify_success_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

@@ -1,0 +1,132 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 100,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 100,
+      "y": 250,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "assert_menu_hidden_1",
+      "type": "assertNotVisible",
+      "x": 100,
+      "y": 450,
+      "params": {
+        "selector": "#hover-menu:not(.hidden)"
+      },
+      "displayName": "assert_menu_hidden_1"
+    },
+    {
+      "id": "hover_trigger_1",
+      "type": "hover",
+      "x": 100,
+      "y": 650,
+      "params": {
+        "selector": "#hover-trigger"
+      },
+      "displayName": "hover_trigger_1"
+    },
+    {
+      "id": "wait_menu_appear_1",
+      "type": "waitElement",
+      "x": 100,
+      "y": 850,
+      "params": {
+        "selector": "#hover-menu:not(.hidden)",
+        "timeout": 2000
+      },
+      "displayName": "wait_menu_appear_1"
+    },
+    {
+      "id": "assert_menu_visible_1",
+      "type": "assertVisible",
+      "x": 100,
+      "y": 1050,
+      "params": {
+        "selector": "#hover-menu:not(.hidden)"
+      },
+      "displayName": "assert_menu_visible_1"
+    },
+    {
+      "id": "count_menu_items_1",
+      "type": "assertElementCount",
+      "x": 100,
+      "y": 1250,
+      "params": {
+        "selector": ".menu-item",
+        "count": 3
+      },
+      "displayName": "count_menu_items_1"
+    },
+    {
+      "id": "extract_menu_text_1",
+      "type": "getText",
+      "x": 100,
+      "y": 1450,
+      "params": {
+        "selector": ".menu-item:first-child",
+        "variable": "menuItemText"
+      },
+      "displayName": "extract_menu_text_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_left"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "assert_menu_hidden_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "assert_menu_hidden_1",
+      "fromPort": "out_bottom",
+      "toNode": "hover_trigger_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "hover_trigger_1",
+      "fromPort": "out_bottom",
+      "toNode": "wait_menu_appear_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "wait_menu_appear_1",
+      "fromPort": "out_bottom",
+      "toNode": "assert_menu_visible_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "assert_menu_visible_1",
+      "fromPort": "out_bottom",
+      "toNode": "count_menu_items_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "count_menu_items_1",
+      "fromPort": "out_bottom",
+      "toNode": "extract_menu_text_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

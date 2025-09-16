@@ -1,0 +1,147 @@
+{
+  "nodes": [
+    {
+      "id": "start_1",
+      "type": "start",
+      "x": 400,
+      "y": 50,
+      "params": {},
+      "displayName": "start_1"
+    },
+    {
+      "id": "goto_1",
+      "type": "goto",
+      "x": 400,
+      "y": 180,
+      "params": {
+        "url": "file:///path/to/examples/demo-test.html"
+      },
+      "displayName": "goto_1"
+    },
+    {
+      "id": "check_page_speed_1",
+      "type": "checkPageSpeed",
+      "x": 200,
+      "y": 320,
+      "params": {},
+      "displayName": "check_page_speed_1"
+    },
+    {
+      "id": "check_console_errors_1",
+      "type": "checkConsoleErrors",
+      "x": 400,
+      "y": 320,
+      "params": {},
+      "displayName": "check_console_errors_1"
+    },
+    {
+      "id": "check_memory_1",
+      "type": "checkMemoryUsage",
+      "x": 600,
+      "y": 320,
+      "params": {},
+      "displayName": "check_memory_1"
+    },
+    {
+      "id": "check_broken_links_1",
+      "type": "checkBrokenLinks",
+      "x": 200,
+      "y": 500,
+      "params": {},
+      "displayName": "check_broken_links_1"
+    },
+    {
+      "id": "check_images_1",
+      "type": "checkImageLoading",
+      "x": 400,
+      "y": 500,
+      "params": {},
+      "displayName": "check_images_1"
+    },
+    {
+      "id": "check_accessibility_1",
+      "type": "checkAccessibility",
+      "x": 600,
+      "y": 500,
+      "params": {},
+      "displayName": "check_accessibility_1"
+    },
+    {
+      "id": "check_seo_1",
+      "type": "checkSEO",
+      "x": 300,
+      "y": 680,
+      "params": {},
+      "displayName": "check_seo_1"
+    },
+    {
+      "id": "final_screenshot_1",
+      "type": "screenshot",
+      "x": 500,
+      "y": 680,
+      "params": {
+        "filename": "performance-audit-complete.png"
+      },
+      "displayName": "final_screenshot_1"
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "start_1",
+      "fromPort": "out",
+      "toNode": "goto_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "goto_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_page_speed_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_page_speed_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_console_errors_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_console_errors_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_memory_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_memory_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_broken_links_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_broken_links_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_images_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_images_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_accessibility_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_accessibility_1",
+      "fromPort": "out_bottom",
+      "toNode": "check_seo_1",
+      "toPort": "in_top"
+    },
+    {
+      "fromNode": "check_seo_1",
+      "fromPort": "out_bottom",
+      "toNode": "final_screenshot_1",
+      "toPort": "in_top"
+    }
+  ],
+  "panX": 0,
+  "panY": 0,
+  "scale": 1
+}

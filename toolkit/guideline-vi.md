@@ -40,21 +40,64 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 # Điều Khiển
 
 ## <i class="fas fa-code-branch" style="color: #6366f1;"></i> if - Điều Kiện
-**Công dụng**: Tạo điều kiện rẽ nhánh trong workflow dựa trên boolean expression.
+**Công dụng**: Tạo điều kiện rẽ nhánh trong workflow dựa trên so sánh dữ liệu biến.
 
 ### Parameters
-- **condition** (text): Biểu thức điều kiện để đánh giá
-  - *Ví dụ*: `variable1 == "success"`, `count > 5`, `status != "error"`
+- **leftOperand** (text): Giá trị bên trái để so sánh (sử dụng `${tenBien}`)
+- **operator** (select): Toán tử so sánh (equals, notEquals, greater, contains, etc.)
+- **rightOperand** (text): Giá trị bên phải (tham chiếu biến hoặc giá trị literal)
+- **logicalOperator** (select): Kết hợp với điều kiện thứ hai (AND, OR, none)
+- **secondCondition** (textarea): Điều kiện bổ sung cho logic phức tạp
+- **description** (text): Mô tả có thể đọc được của điều kiện
 
 ### JSON Format
 ```json
 {
-  "id": "node-123",
+  "id": "condition_1",
   "type": "if",
   "x": 100,
   "y": 200,
   "params": {
-    "condition": "pageTitle == \"Welcome\""
+    "leftOperand": "${soDienThoai}",
+    "operator": "equals",
+    "rightOperand": "0123456789",
+    "logicalOperator": "and",
+    "secondCondition": "${trangThaiAPI} equals \"success\"",
+    "description": "Kiểm tra số điện thoại hợp lệ và API thành công"
+  }
+}
+```
+
+### Ports
+- **Input**: Nhận từ node trước
+- **Output Then**: Thực thi khi điều kiện TRUE
+- **Output Else**: Thực thi khi điều kiện FALSE
+
+## <i class="fas fa-project-diagram" style="color: #3b82f6;"></i> advancedCondition - Điều Kiện Nâng Cao
+**Công dụng**: Xử lý logic phức tạp với nhiều điều kiện và biểu thức tùy chỉnh.
+
+### Parameters
+- **conditions** (textarea): Danh sách điều kiện để đánh giá
+- **logicExpression** (text): Biểu thức logic tùy chỉnh sử dụng số thứ tự điều kiện
+- **evaluationMode** (select): Cách đánh giá điều kiện (all, any, custom)
+- **onTrueAction** (select): Hành động khi điều kiện đúng
+- **onFalseAction** (select): Hành động khi điều kiện sai
+- **description** (text): Mô tả của logic
+
+### JSON Format
+```json
+{
+  "id": "advancedCondition_1",
+  "type": "advancedCondition",
+  "x": 300,
+  "y": 200,
+  "params": {
+    "conditions": "{{sessionCache_1.phone}} equals \"0123456789\"\n{{apiRequest_1.status}} equals \"success\"\n{{processResponse_1.user_id}} > 0",
+    "logicExpression": "(1 AND 2) OR 3",
+    "evaluationMode": "custom",
+    "onTrueAction": "continue",
+    "onFalseAction": "stop",
+    "description": "Logic xác thực đăng nhập phức tạp"
   }
 }
 ```
@@ -430,7 +473,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ### JSON Format
 ```json
 {
-  "id": "node-501",
+  "id": "getText_1",
   "type": "getText",
   "x": 100,
   "y": 700,
@@ -452,7 +495,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ### JSON Format
 ```json
 {
-  "id": "node-502",
+  "id": "getAttribute_1",
   "type": "getAttribute",
   "x": 300,
   "y": 700,
@@ -474,7 +517,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ### JSON Format
 ```json
 {
-  "id": "node-503",
+  "id": "inputText_1",
   "type": "getInputValue",
   "x": 500,
   "y": 700,
@@ -494,7 +537,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ### JSON Format
 ```json
 {
-  "id": "node-504",
+  "id": "screenshot_1",
   "type": "screenshot",
   "x": 700,
   "y": 700,
@@ -504,12 +547,224 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
+## <i class="fas fa-memory" style="color: #f97316;"></i> sessionCache - Session Cache
+**Công dụng**: Lưu trữ dữ liệu session từ inputs và biến để sử dụng trong workflow.
+
+### Parameters
+- **cacheName** (text): Tên cho container cache
+- **inputCapture** (textarea): Ánh xạ input elements thành cache keys (`#selector -> key`)
+- **variableCapture** (textarea): Tham chiếu biến (`${tenBien} -> key`)
+- **systemData** (textarea): Dữ liệu hệ thống để thu thập (`current_url -> page_url`)
+- **customData** (textarea): Dữ liệu tĩnh tùy chỉnh (`browser_type -> chrome`)
+
+### JSON Format
+```json
+{
+  "id": "sessionCache_1",
+  "type": "sessionCache",
+  "x": 900,
+  "y": 700,
+  "params": {
+    "cacheName": "user_session",
+    "inputCapture": "#phoneNumber -> phone\n#email -> email",
+    "variableCapture": "${textTrichXuat} -> extracted_text",
+    "systemData": "current_url -> page_url\ntimestamp -> login_time",
+    "customData": "browser_type -> chrome\nsource -> automation"
+  }
+}
+```
+
+## <i class="fas fa-paper-plane" style="color: #3b82f6;"></i> customApiRequest - Custom API Request
+**Công dụng**: Gửi HTTP requests sử dụng dữ liệu từ biến với template-based body.
+
+### Parameters
+- **method** (select): HTTP method (GET, POST, PUT, DELETE)
+- **url** (text): URL API endpoint
+- **headers** (textarea): Request headers ở định dạng JSON
+- **bodyTemplate** (textarea): Template request body sử dụng tham chiếu `${tenBien}`
+- **variableReferences** (textarea): Danh sách biến được sử dụng
+- **responseVariable** (text): Tên biến để lưu response
+- **responseMapping** (textarea): Ánh xạ response fields thành biến
+
+### JSON Format
+```json
+{
+  "id": "apiRequest_1",
+  "type": "customApiRequest",
+  "x": 100,
+  "y": 800,
+  "params": {
+    "method": "POST",
+    "url": "https://api.example.com/user/register",
+    "headers": "{\n  \"Content-Type\": \"application/json\"\n}",
+    "bodyTemplate": "{\n  \"phone\": \"${soDienThoai}\",\n  \"loginTime\": \"${thoiGianDangNhap}\"\n}",
+    "variableReferences": "${soDienThoai}\n${thoiGianDangNhap}",
+    "responseVariable": "api_response",
+    "responseMapping": "data.userId -> user_id\ndata.status -> api_status"
+  }
+}
+```
+
+## <i class="fas fa-cogs" style="color: #10b981;"></i> responseProcessor - Xử Lý Response
+**Công dụng**: Xử lý API response với validation và trích xuất dữ liệu.
+
+### Parameters
+- **inputSource** (text): Tham chiếu node cho dữ liệu input (`{{nodeId.field}}`)
+- **extractAndSave** (textarea): Trích xuất response fields và lưu vào cache
+- **outputCacheName** (text): Tên cache cho kết quả đã xử lý
+- **validationRules** (textarea): Quy tắc validation (REQUIRED, NOT_EMPTY, EQUALS, etc.)
+- **onValidationFail** (select): Hành động khi validation thất bại
+
+### JSON Format
+```json
+{
+  "id": "processResponse_1",
+  "type": "responseProcessor",
+  "x": 300,
+  "y": 800,
+  "params": {
+    "inputSource": "{{apiRequest_1.response}}",
+    "extractAndSave": "data.userId -> user_id\ndata.status -> api_status",
+    "outputCacheName": "processed_data",
+    "validationRules": "REQUIRED: data.userId\nEQUALS: data.status -> success",
+    "onValidationFail": "stop"
+  }
+}
+```
+
+## <i class="fas fa-hdd" style="color: #8b5cf6;"></i> storageSettings - Cài Đặt Lưu Trữ
+**Công dụng**: Lưu trữ dữ liệu từ nhiều nodes vào database và/hoặc file Excel.
+
+### Parameters
+- **storageType** (select): Đích lưu trữ (database, excel, both)
+- **inputSources** (textarea): Danh sách tham chiếu node cho nguồn dữ liệu
+- **databaseConfig** (textarea): Cài đặt kết nối database
+- **excelConfig** (textarea): Cấu hình file Excel
+- **dataMapping** (textarea): Ánh xạ dữ liệu node thành cột lưu trữ
+- **onSuccess** (select): Hành động khi lưu trữ thành công
+
+### JSON Format
+```json
+{
+  "id": "storageSettings_1",
+  "type": "storageSettings",
+  "x": 500,
+  "y": 800,
+  "params": {
+    "storageType": "both",
+    "inputSources": "{{sessionCache_1}}\n{{processResponse_1}}",
+    "databaseConfig": "Server: localhost:3306\nDatabase: userdb",
+    "excelConfig": "File: /path/to/users.xlsx\nSheet: UserData",
+    "dataMapping": "{{sessionCache_1.phone}} -> phone_column\n{{processResponse_1.user_id}} -> user_id_column",
+    "onSuccess": "continue"
+  }
+}
+```
+
+## Node Validation
+
+## <i class="fas fa-search" style="color: #06b6d4;"></i> checkNodeExists - Kiểm Tra Node Tồn Tại
+**Công dụng**: Xác minh rằng một node cụ thể tồn tại trong workflow.
+
+### Parameters
+- **nodeId** (text): ID của node cần kiểm tra
+- **outputField** (text): Field output cụ thể để xác minh (tùy chọn)
+- **onNotExists** (select): Hành động khi node/field không tồn tại
+
+### JSON Format
+```json
+{
+  "id": "checkNodeExists_1",
+  "type": "checkNodeExists",
+  "x": 700,
+  "y": 800,
+  "params": {
+    "nodeId": "sessionCache_1",
+    "outputField": "phone",
+    "onNotExists": "stop"
+  }
+}
+```
+
+## <i class="fas fa-check-circle" style="color: #14b8a6;"></i> checkNodeValue - Kiểm Tra Giá Trị Node
+**Công dụng**: Validate giá trị output của node cụ thể.
+
+### Parameters
+- **nodeReference** (text): Tham chiếu node để validate (`{{nodeId.field}}`)
+- **operator** (select): Toán tử so sánh (equals, notEquals, contains, etc.)
+- **expectedValue** (text): Giá trị để so sánh
+- **onValidationFail** (select): Hành động khi validation thất bại
+
+### JSON Format
+```json
+{
+  "id": "checkNodeValue_1",
+  "type": "checkNodeValue",
+  "x": 900,
+  "y": 800,
+  "params": {
+    "nodeReference": "{{sessionCache_1.phone}}",
+    "operator": "notEmpty",
+    "expectedValue": "0123456789",
+    "onValidationFail": "stop"
+  }
+}
+```
+
+## <i class="fas fa-list" style="color: #6366f1;"></i> getNodeList - Lấy Danh Sách Node
+**Công dụng**: Lấy danh sách tất cả nodes trong workflow, tùy chọn lọc theo type.
+
+### Parameters
+- **filterByType** (select): Lọc nodes theo type (all, sessionCache, etc.)
+- **outputFormat** (select): Định dạng output (list, json, count)
+- **saveToVariable** (text): Tên biến để lưu kết quả
+
+### JSON Format
+```json
+{
+  "id": "getNodeList_1",
+  "type": "getNodeList",
+  "x": 100,
+  "y": 900,
+  "params": {
+    "filterByType": "sessionCache",
+    "outputFormat": "list",
+    "saveToVariable": "nodeList"
+  }
+}
+```
+
+## <i class="fas fa-shield-alt" style="color: #10b981;"></i> validateNodeData - Validate Dữ Liệu Node
+**Công dụng**: Thực hiện validation toàn diện trên nhiều tham chiếu node.
+
+### Parameters
+- **nodeReferences** (textarea): Danh sách tham chiếu node để validate
+- **validationRules** (textarea): Quy tắc validation phức tạp với patterns
+- **onValidationPass** (select): Hành động khi validation thành công
+- **onValidationFail** (select): Hành động khi validation thất bại
+
+### JSON Format
+```json
+{
+  "id": "validateNodeData_1",
+  "type": "validateNodeData",
+  "x": 300,
+  "y": 900,
+  "params": {
+    "nodeReferences": "{{sessionCache_1.phone}}\n{{apiRequest_1.response}}",
+    "validationRules": "REQUIRED: {{sessionCache_1.phone}}\nMATCH_PATTERN: {{sessionCache_1.phone}} -> /^\\d{10}$/",
+    "onValidationPass": "continue",
+    "onValidationFail": "stop"
+  }
+}
+```
+
 ---
 
-# Kiểm Tra Cơ Bản
+# Assertion Cơ Bản
 
-## <i class="fas fa-eye" style="color: #10b981;"></i> assertVisible - Kiểm Tra Hiển Thị
-**Công dụng**: Xác minh element có hiển thị trên trang không.
+## <i class="fas fa-eye" style="color: #10b981;"></i> assertVisible - Assert Hiển Thị
+**Công dụng**: Xác minh element hiển thị trên trang.
 
 ### Parameters
 - **selector** (selector): CSS selector của element cần kiểm tra
@@ -527,8 +782,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-check-double" style="color: #eab308;"></i> assertText - Kiểm Tra Văn Bản
-**Công dụng**: Xác minh text content của element.
+## <i class="fas fa-check-double" style="color: #eab308;"></i> assertText - Assert Text
+**Công dụng**: Xác minh nội dung text của element.
 
 ### Parameters
 - **selector** (selector): CSS selector của element
@@ -543,12 +798,12 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
   "y": 800,
   "params": {
     "selector": "h1",
-    "text": "Welcome to Dashboard"
+    "text": "Chào Mừng Đến Dashboard"
   }
 }
 ```
 
-## <i class="fas fa-link" style="color: #3b82f6;"></i> assertURL - Kiểm Tra URL
+## <i class="fas fa-link" style="color: #3b82f6;"></i> assertURL - Assert URL
 **Công dụng**: Xác minh URL hiện tại của trang.
 
 ### Parameters
@@ -567,11 +822,11 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-heading" style="color: #8b5cf6;"></i> assertTitle - Kiểm Tra Tiêu Đề
-**Công dụng**: Xác minh title của trang.
+## <i class="fas fa-heading" style="color: #8b5cf6;"></i> assertTitle - Assert Title
+**Công dụng**: Xác minh tiêu đề trang.
 
 ### Parameters
-- **title** (text): Title mong đợi
+- **title** (text): Tiêu đề mong đợi
 
 ### JSON Format
 ```json
@@ -581,12 +836,12 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
   "x": 700,
   "y": 800,
   "params": {
-    "title": "Dashboard - My App"
+    "title": "Dashboard - Ứng Dụng Của Tôi"
   }
 }
 ```
 
-## <i class="fas fa-tags" style="color: #f97316;"></i> assertAttribute - Kiểm Tra Thuộc Tính
+## <i class="fas fa-tags" style="color: #f97316;"></i> assertAttribute - Assert Thuộc Tính
 **Công dụng**: Xác minh giá trị thuộc tính của element.
 
 ### Parameters
@@ -604,13 +859,13 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
   "params": {
     "selector": "input",
     "attribute": "placeholder",
-    "value": "Enter username"
+    "value": "Nhập tên người dùng"
   }
 }
 ```
 
-## <i class="fas fa-list-ol" style="color: #6366f1;"></i> assertElementCount - Kiểm Tra Số Lượng Phần Tử
-**Công dụng**: Xác minh số lượng elements matching selector.
+## <i class="fas fa-list-ol" style="color: #6366f1;"></i> assertElementCount - Assert Số Lượng Element
+**Công dụng**: Xác minh số lượng elements khớp với selector.
 
 ### Parameters
 - **selector** (selector): CSS selector của elements
@@ -630,7 +885,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-eye-slash" style="color: #ef4444;"></i> assertNotVisible - Kiểm Tra Không Hiển Thị
+## <i class="fas fa-eye-slash" style="color: #ef4444;"></i> assertNotVisible - Assert Không Hiển Thị
 **Công dụng**: Xác minh element không hiển thị hoặc không tồn tại.
 
 ### Parameters
@@ -649,8 +904,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-toggle-on" style="color: #14b8a6;"></i> assertEnabled - Kiểm Tra Kích Hoạt
-**Công dụng**: Xác minh element có thể tương tác được.
+## <i class="fas fa-toggle-on" style="color: #14b8a6;"></i> assertEnabled - Assert Kích Hoạt
+**Công dụng**: Xác minh element có thể tương tác.
 
 ### Parameters
 - **selector** (selector): CSS selector của element
@@ -668,7 +923,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-toggle-off" style="color: #6b7280;"></i> assertDisabled - Kiểm Tra Vô Hiệu Hóa
+## <i class="fas fa-toggle-off" style="color: #6b7280;"></i> assertDisabled - Assert Vô Hiệu
 **Công dụng**: Xác minh element bị vô hiệu hóa.
 
 ### Parameters
@@ -687,8 +942,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-check-square" style="color: #10b981;"></i> assertChecked - Kiểm Tra Đã Chọn
-**Công dụng**: Xác minh checkbox/radio đã được chọn.
+## <i class="fas fa-check-square" style="color: #10b981;"></i> assertChecked - Assert Được Check
+**Công dụng**: Xác minh checkbox/radio được check.
 
 ### Parameters
 - **selector** (selector): CSS selector của checkbox/radio
@@ -706,8 +961,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-square" style="color: #ec4899;"></i> assertUnchecked - Kiểm Tra Chưa Chọn
-**Công dụng**: Xác minh checkbox/radio chưa được chọn.
+## <i class="fas fa-square" style="color: #ec4899;"></i> assertUnchecked - Assert Không Check
+**Công dụng**: Xác minh checkbox/radio không được check.
 
 ### Parameters
 - **selector** (selector): CSS selector của checkbox/radio
@@ -725,8 +980,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-search" style="color: #06b6d4;"></i> assertContainsText - Kiểm Tra Chứa Văn Bản
-**Công dụng**: Xác minh element chứa text nhất định.
+## <i class="fas fa-search" style="color: #06b6d4;"></i> assertContainsText - Assert Chứa Text
+**Công dụng**: Xác minh element chứa text cụ thể.
 
 ### Parameters
 - **selector** (selector): CSS selector của element
@@ -741,7 +996,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
   "y": 1000,
   "params": {
     "selector": ".message",
-    "text": "success"
+    "text": "thành công"
   }
 }
 ```
@@ -750,7 +1005,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 
 # Trạng Thái Element
 
-## <i class="fab fa-css3-alt" style="color: #8b5cf6;"></i> assertCSSProperty - Kiểm Tra Thuộc Tính CSS
+## <i class="fab fa-css3-alt" style="color: #8b5cf6;"></i> assertCSSProperty - Assert Thuộc Tính CSS
 **Công dụng**: Xác minh giá trị thuộc tính CSS của element.
 
 ### Parameters
@@ -777,8 +1032,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 
 # Chất Lượng Trang
 
-## <i class="fas fa-clipboard-check" style="color: #f59e0b;"></i> validateForm - Kiểm Tra Form
-**Công dụng**: Kiểm tra tính hợp lệ của form validation.
+## <i class="fas fa-clipboard-check" style="color: #f59e0b;"></i> validateForm - Validate Form
+**Công dụng**: Kiểm tra tính hợp lệ validation của form.
 
 ### Parameters
 - **selector** (selector): CSS selector của form
@@ -796,7 +1051,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-unlink" style="color: #f43f5e;"></i> checkBrokenLinks - Kiểm Tra Liên Kết Lỗi
+## <i class="fas fa-unlink" style="color: #f43f5e;"></i> checkBrokenLinks - Kiểm Tra Broken Links
 **Công dụng**: Kiểm tra các liên kết bị hỏng trên trang.
 
 ### JSON Format
@@ -811,7 +1066,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ```
 
 ## <i class="fas fa-image" style="color: #84cc16;"></i> checkImageLoading - Kiểm Tra Tải Ảnh
-**Công dụng**: Kiểm tra tất cả ảnh có tải thành công không.
+**Công dụng**: Kiểm tra tất cả ảnh tải thành công hay không.
 
 ### JSON Format
 ```json
@@ -852,8 +1107,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-universal-access" style="color: #10b981;"></i> checkAccessibility - Kiểm Tra Khả Năng Tiếp Cận
-**Công dụng**: Kiểm tra tính accessibility của trang web.
+## <i class="fas fa-universal-access" style="color: #10b981;"></i> checkAccessibility - Kiểm Tra Khả Năng Truy Cập
+**Công dụng**: Kiểm tra khả năng truy cập của trang web.
 
 ### JSON Format
 ```json
@@ -882,13 +1137,13 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 
 ---
 
-# Kiểm Tra Nâng Cao
+# Testing Nâng Cao
 
 ## <i class="fas fa-ban" style="color: #ef4444;"></i> interceptNetwork - Chặn Network
 **Công dụng**: Chặn và kiểm soát network requests.
 
 ### Parameters
-- **url** (text): URL pattern cần chặn
+- **url** (text): Pattern URL để chặn
 - **method** (text): HTTP method (GET, POST, etc.)
 
 ### JSON Format
@@ -905,11 +1160,11 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-cloud" style="color: #8b5cf6;"></i> mockAPI - Giả Lập API
+## <i class="fas fa-cloud" style="color: #8b5cf6;"></i> mockAPI - Mock API
 **Công dụng**: Tạo mock response cho API calls.
 
 ### Parameters
-- **url** (text): URL pattern của API
+- **url** (text): Pattern URL API
 - **response** (text): Mock response JSON
 
 ### JSON Format
@@ -932,7 +1187,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ### Parameters
 - **name** (text): Tên cookie
 - **value** (text): Giá trị cookie
-- **domain** (text): Domain (optional)
+- **domain** (text): Domain (tùy chọn)
 
 ### JSON Format
 ```json
@@ -950,7 +1205,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ```
 
 ## <i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i> checkConsoleErrors - Kiểm Tra Console Errors
-**Công dụng**: Kiểm tra có lỗi JavaScript trong console không.
+**Công dụng**: Kiểm tra JavaScript errors trong console.
 
 ### JSON Format
 ```json
@@ -963,8 +1218,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 }
 ```
 
-## <i class="fas fa-memory" style="color: #3b82f6;"></i> checkMemoryUsage - Kiểm Tra Bộ Nhớ
-**Công dụng**: Kiểm tra mức sử dụng bộ nhớ của trang.
+## <i class="fas fa-memory" style="color: #3b82f6;"></i> checkMemoryUsage - Kiểm Tra Sử Dụng Memory
+**Công dụng**: Kiểm tra mức sử dụng memory của trang.
 
 ### JSON Format
 ```json
@@ -982,7 +1237,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 
 ### Parameters
 - **key** (text): Key cần kiểm tra
-- **value** (text): Giá trị mong đợi (optional)
+- **value** (text): Giá trị mong đợi (tùy chọn)
 
 ### JSON Format
 ```json
@@ -1003,7 +1258,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 
 ### Parameters
 - **key** (text): Key cần kiểm tra
-- **value** (text): Giá trị mong đợi (optional)
+- **value** (text): Giá trị mong đợi (tùy chọn)
 
 ### JSON Format
 ```json
@@ -1039,7 +1294,7 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ```
 
 ## <i class="fas fa-wifi" style="color: #eab308;"></i> simulateNetworkCondition - Mô Phỏng Điều Kiện Mạng
-**Công dụng**: Mô phỏng điều kiện mạng chậm hoặc mất kết nối.
+**Công dụng**: Mô phỏng mạng chậm hoặc điều kiện offline.
 
 ### Parameters
 - **condition** (text): Loại điều kiện (slow3g, fast3g, offline)
@@ -1059,6 +1314,9 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 
 ---
 
+
+---
+
 # Hướng Dẫn Chung
 
 ## Nguyên Tắc Thiết Kế Workflow
@@ -1073,8 +1331,8 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 ### 2. Quản Lý Biến
 - **Đặt tên**: Sử dụng tên biến có ý nghĩa (`userName`, `productCount`)
 - **Scope**: Biến có thể sử dụng trong tất cả nodes sau khi được tạo
-- **Reference**: Sử dụng `${variableName}` để tham chiếu biến
-- **Type**: Hỗ trợ string, number, boolean, array
+- **Reference**: Sử dụng `${tenBien}` để tham chiếu biến
+- **Types**: Hỗ trợ string, number, boolean, array
 
 ### 3. Selector Strategy
 - **Ưu tiên ID**: `#unique-id` (độ ưu tiên cao nhất)
@@ -1119,9 +1377,9 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 
 ---
 
-# Advanced Techniques
+# Kỹ Thuật Nâng Cao
 
-## Dynamic Content Handling
+## Xử Lý Nội Dung Động
 
 ### 1. Chờ Dynamic Elements
 ```javascript
@@ -1129,9 +1387,9 @@ SMEW Automation Toolkit là công cụ tạo workflow automation mạnh mẽ, ch
 waitElement → assertVisible → click
 ```
 
-### 2. Handling AJAX Requests
+### 2. Xử Lý AJAX Requests
 - Sử dụng `waitElement` cho loading indicators
-- Chờ elements xuất hiện sau khi AJAX complete
+- Chờ elements xuất hiện sau khi AJAX hoàn thành
 - Kiểm tra network requests với `interceptNetwork`
 
 ### 3. Scroll và Lazy Loading
@@ -1140,9 +1398,9 @@ waitElement → assertVisible → click
 hover(trigger) → waitElement(content) → getText
 ```
 
-## Complex Workflows
+## Workflows Phức Tạp
 
-### 1. Multi-Step Forms
+### 1. Forms Nhiều Bước
 ```javascript
 start → goto(page1) → fill(step1) → click(next) → 
 waitElement(page2) → fill(step2) → click(next) →
@@ -1150,26 +1408,26 @@ waitElement(page3) → fill(step3) → click(submit) →
 assertText(success)
 ```
 
-### 2. Data-Driven Testing
+### 2. Testing Dựa Trên Dữ Liệu
 ```javascript
 start → setVariable(testData) → forEach(testData) →
 fill(${currentItem.field}) → click(submit) →
 assertText(${currentItem.expected})
 ```
 
-### 3. Cross-Page Workflows
+### 3. Workflows Cross-Page
 ```javascript
 start → goto(page1) → getText(data) → setVariable(extractedData) →
 goto(page2) → fill(${extractedData}) → click(submit) →
 assertURL(resultPage)
 ```
 
-## API Integration
+## Tích Hợp API
 
 ### 1. Mock API Responses
 ```javascript
 start → mockAPI(endpoint, mockData) → goto(page) →
-// Page sẽ nhận mock data thay vì real API
+// Trang sẽ nhận mock data thay vì API thật
 assertText(mockData.result)
 ```
 
@@ -1180,12 +1438,12 @@ goto(page) → // Kiểm tra request được gửi
 assertVisible(loadingIndicator)
 ```
 
-## Performance Optimization
+## Tối Ưu Hiệu Suất
 
-### 1. Efficient Waiting
+### 1. Chờ Hiệu Quả
 - Sử dụng `waitElement` thay vì `waitTimeout` khi có thể
 - Đặt timeout ngắn nhưng hợp lý
-- Combine multiple checks trong một assertion
+- Kết hợp nhiều checks trong một assertion
 
 ### 2. Batch Operations
 ```javascript
@@ -1198,20 +1456,20 @@ assertElementCount(.required-element, 3)
 
 ---
 
-# Troubleshooting
+# Xử Lý Sự Cố
 
-## Lỗi Thường Gặp
+## Vấn Đề Thường Gặp
 
-### 1. Element Not Found
-**Triệu chứng**: "Element not found" error
+### 1. Không Tìm Thấy Element
+**Triệu chứng**: Lỗi "Element not found"
 **Nguyên nhân**:
 - Selector không chính xác
-- Element chưa load xong
+- Element chưa tải hoàn toàn
 - Element bị ẩn bởi CSS
 
 **Giải pháp**:
 ```javascript
-// Thêm wait trước khi thao tác
+// Thêm wait trước khi tương tác
 waitElement(selector) → click(selector)
 
 // Kiểm tra selector trong DevTools
@@ -1221,86 +1479,86 @@ waitElement(selector) → click(selector)
 screenshot(debug-image) → click(selector)
 ```
 
-### 2. Timeout Issues
-**Triệu chứng**: Workflow bị timeout
+### 2. Vấn Đề Timeout
+**Triệu chứng**: Workflow timeout
 **Nguyên nhân**:
-- Network chậm
-- JavaScript execution chậm
-- Element load chậm
+- Mạng chậm
+- JavaScript thực thi chậm
+- Element tải chậm
 
 **Giải pháp**:
 ```javascript
-// Tăng timeout cho specific operations
-waitElement(selector, 30000) // 30 seconds
+// Tăng timeout cho operations cụ thể
+waitElement(selector, 30000) // 30 giây
 
-// Sử dụng network simulation
+// Sử dụng mô phỏng mạng
 simulateNetworkCondition(fast3g) → goto(page)
 
-// Kiểm tra page speed
+// Kiểm tra tốc độ trang
 checkPageSpeed() → screenshot(performance-debug)
 ```
 
-### 3. Variable Issues
-**Triệu chứng**: Variable không hoạt động đúng
+### 3. Vấn Đề Biến
+**Triệu chứng**: Biến không hoạt động đúng
 **Nguyên nhân**:
-- Variable chưa được set
-- Syntax không đúng
-- Scope issues
+- Biến chưa được set
+- Syntax không chính xác
+- Vấn đề scope
 
 **Giải pháp**:
 ```javascript
-// Kiểm tra variable được set đúng
+// Kiểm tra biến được set đúng
 getText(element, myVar) → comment(Variable set: ${myVar})
 
-// Debug variable value
+// Debug giá trị biến
 setVariable(debugVar, ${myVar}) → screenshot(var-debug)
 
-// Ensure variable exists before use
+// Đảm bảo biến tồn tại trước khi sử dụng
 if(${myVar} != null) → fill(input, ${myVar})
 ```
 
-### 4. Assertion Failures
-**Triệu chứng**: Assertions fail khi không mong đợi
+### 4. Assertion Thất Bại
+**Triệu chứng**: Assertions thất bại bất ngờ
 **Nguyên nhân**:
-- Data thay đổi
-- Timing issues
-- Environment differences
+- Dữ liệu thay đổi
+- Vấn đề timing
+- Sự khác biệt environment
 
 **Giải pháp**:
 ```javascript
-// Sử dụng partial text matching
+// Sử dụng matching text một phần
 assertContainsText(element, partial-text) thay vì assertText(element, exact-text)
 
-// Thêm wait before assertion
+// Thêm wait trước assertion
 waitElement(element) → assertVisible(element)
 
-// Use screenshots for debugging
+// Sử dụng screenshots để debug
 screenshot(before-assertion) → assertText(element, expected)
 ```
 
-## Debug Techniques
+## Kỹ Thuật Debug
 
-### 1. Screenshot Strategy
+### 1. Chiến Lược Screenshot
 ```javascript
-// At key points
+// Tại các điểm quan trọng
 start → screenshot(01-start) → goto(page) → 
 screenshot(02-page-loaded) → fill(input) → 
 screenshot(03-form-filled) → click(submit) → 
 screenshot(04-after-submit)
 ```
 
-### 2. Console Monitoring
+### 2. Monitor Console
 ```javascript
-// Check for JavaScript errors
+// Kiểm tra JavaScript errors
 checkConsoleErrors() → screenshot(console-state)
 
 // Monitor network requests
 interceptNetwork(*) → goto(page) → screenshot(network-debug)
 ```
 
-### 3. Step-by-Step Verification
+### 3. Xác Minh Từng Bước
 ```javascript
-// Verify each step
+// Xác minh mỗi bước
 start → assertVisible(startPage) → 
 click(button) → assertVisible(nextPage) → 
 fill(input) → assertAttribute(input, value, expected)
@@ -1308,25 +1566,25 @@ fill(input) → assertAttribute(input, value, expected)
 
 ---
 
-# Mẹo Sử Dụng
+# Mẹo và Thủ Thuật
 
-## Workflow Development
+## Phát Triển Workflow
 
-### 1. Phát Triển Từng Bước
+### 1. Phát Triển Tăng Dần
 - Bắt đầu với workflow đơn giản
-- Test từng node một trước khi kết nối
-- Thêm complexity dần dần
-- Luôn có backup của working version
+- Test mỗi node trước khi kết nối
+- Thêm độ phức tạp dần dần
+- Luôn giữ backup của phiên bản hoạt động
 
 ### 2. Tổ Chức Node
 - Sắp xếp nodes theo logic flow
 - Sử dụng `comment` nodes để giải thích
-- Nhóm related nodes gần nhau
-- Sử dụng consistent naming
+- Nhóm các nodes liên quan lại với nhau
+- Sử dụng naming nhất quán
 
-### 3. Reusability
+### 3. Tính Tái Sử Dụng
 ```javascript
-// Tạo reusable patterns
+// Tạo patterns có thể tái sử dụng
 // Login pattern: goto → fill(username) → fill(password) → click(login) → waitElement(dashboard)
 
 // Navigation pattern: click(menu) → waitElement(submenu) → click(item)
@@ -1334,7 +1592,7 @@ fill(input) → assertAttribute(input, value, expected)
 // Form validation pattern: fill(invalid) → click(submit) → assertVisible(error)
 ```
 
-## Testing Strategies
+## Chiến Lược Testing
 
 ### 1. Happy Path Testing
 ```javascript
@@ -1358,29 +1616,29 @@ start → setVariable(longText, very-long-string) → fill(input, ${longText}) �
 start → setVariable(specialChars, !@#$%^&*) → fill(input, ${specialChars}) → click(submit)
 ```
 
-## Maintenance Tips
+## Mẹo Maintenance
 
-### 1. Regular Updates
+### 1. Cập Nhật Thường Xuyên
 - Cập nhật selectors khi UI thay đổi
-- Test workflows trên môi trường mới
-- Review và optimize performance
-- Update expected values khi cần
+- Test workflows trên environments mới
+- Review và tối ưu hiệu suất
+- Cập nhật expected values khi cần
 
 ### 2. Documentation
 - Sử dụng `comment` nodes để document workflow
-- Ghi chú về business logic
-- Document known issues và workarounds
-- Maintain changelog cho major updates
+- Ghi chú business logic
+- Document các vấn đề đã biết và workarounds
+- Maintain changelog cho các cập nhật lớn
 
 ### 3. Version Control
 - Export workflows thường xuyên
-- Backup trước khi thay đổi lớn
-- Test thoroughly trước khi deploy
-- Có rollback plan
+- Backup trước các thay đổi lớn
+- Test kỹ lưỡng trước khi deploy
+- Có kế hoạch rollback
 
-## Performance Optimization
+## Tối Ưu Hiệu Suất Workflow
 
-### 1. Minimize Waits
+### 1. Giảm Thiểu Waits
 ```javascript
 // Thay vì:
 waitTimeout(5000) → click(button)
@@ -1389,24 +1647,25 @@ waitTimeout(5000) → click(button)
 waitElement(button) → click(button)
 ```
 
-### 2. Efficient Selectors
+### 2. Selectors Hiệu Quả
 ```javascript
-// Fast selectors
-#id               // Fastest
-.class            // Fast
-[data-testid]     // Good
-.parent > .child  // Moderate
-.complex .nested .selector  // Slow
+// Selectors nhanh
+#id               // Nhanh nhất
+.class            // Nhanh
+[data-testid]     // Tốt
+.parent > .child  // Trung bình
+.complex .nested .selector  // Chậm
 ```
 
 ### 3. Batch Operations
 ```javascript
-// Combine assertions
+// Kết hợp assertions
 assertVisible(element1) AND assertText(element2) AND assertAttribute(element3)
 
-// Group related actions
+// Nhóm các actions liên quan
 fill(field1) → fill(field2) → fill(field3) → click(submit)
 ```
+
 
 ## Common Patterns
 
